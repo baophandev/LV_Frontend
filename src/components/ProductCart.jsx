@@ -9,7 +9,7 @@ const ProductCart = ({ id ,image, name, price }) => {
         <Link to={`/product/${id}`}>
           <img
             className="w-full h-full rounded-md"
-            src={image}
+            src={`data:image/png;base64,${image}`}
             alt=""
             style={{
               objectFit: "cover",

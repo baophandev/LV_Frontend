@@ -52,7 +52,7 @@ export const Home = () => {
           <ProductCart
             key={product.id}
             id={product.id}
-            image={"https://placehold.co/600x400"}
+            image={product.images[0]?.data}
             name={product.name}
             price={product.price}
           ></ProductCart>

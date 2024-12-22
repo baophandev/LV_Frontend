@@ -24,8 +24,9 @@ const labels = {
 
 export const ProductDetail = () => {
   const [amount, setAmount] = useState(1);
+  const [imageIndex, setImageIndex] = useState(0);
   const dispatch = useDispatch();
-  const product = useSelector((state) => state.product.products);
+  const product = useSelector((state) => state.product?.products);
   const status = useSelector((state) => state.product.status);
   const error = useSelector((state) => state.product.error);
   const { productId } = useParams();
@@ -45,41 +46,40 @@ export const ProductDetail = () => {
     );
   return (
     <div className="w-2/3 border border-gray-200 rounded-md p-5">
-      <div className="flex gap-10">
+      <div className="flex gap-7">
         <div className="flex gap-1">
-          <div className="w-60 h-60">
-            <img
-              className="w-full h-full"
-              src={"https://placehold.co/600x400"}
-              style={{ objectFit: "cover" }}
-              alt="Ảnh lỗi"
-            />
+          <div className="w-64 h-64 border rounded-md">
+            {product.images && product.images.length > 0 ? (
+              <img
+                className="w-full h-full rounded-md "
+                src={`data:image/png;base64,${product.images[imageIndex].data}`}
+                alt={product.name}
+                style={{ objectFit: "cover" }}
+              />
+            ) : (
+              <img
+                className="w-full h-full rounded-md"
+                src={"https://placehold.co/600x400"}
+                style={{ objectFit: "cover" }}
+                alt="Ảnh lỗi"
+              />
+            )}
           </div>
           <div className="flex flex-col gap-1">
-            <div className="w-16 h-16">
-              <img
-                className="w-full h-full"
-                src={"https://placehold.co/600x400"}
-                style={{ objectFit: "cover" }}
-                alt="Ảnh lỗi"
-              />
-            </div>
-            <div className="w-16 h-16">
-              <img
-                className="w-full h-full"
-                src={"https://placehold.co/600x400"}
-                style={{ objectFit: "cover" }}
-                alt="Ảnh lỗi"
-              />
-            </div>
-            <div className="w-16 h-16">
-              <img
-                className="w-full h-full"
-                src={"https://placehold.co/600x400"}
-                style={{ objectFit: "cover" }}
-                alt="Ảnh lỗi"
-              />
-            </div>
+            {product.images?.map((image, index) => (
+              <div
+                key={index}
+                className="w-16 h-16"
+                onClick={() => setImageIndex(index)}
+              >
+                <img
+                  className="w-full h-full border rounded-md"
+                  src={`data:image/png;base64,${image.data}`}
+                  style={{ objectFit: "cover" }}
+                  alt="Ảnh lỗi"
+                />
+              </div>
+            ))}
           </div>
         </div>
         <div className="flex flex-col gap-3">

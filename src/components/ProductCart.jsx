@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const ProductCart = ({ id ,image, name, price }) => {
   return (
-    <div className=" w-40 sm:w-52 sm:h-64 mb-4">
+    <div className=" w-40 sm:w-52 sm:h-72 mb-4 shadow hover:shadow-md rounded-md p-2 pb-5">
       <div className="w-full h-3/4">
         <Link to={`/product/${id}`}>
           <img

@@ -8,6 +8,7 @@ import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutl
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
+import UpSizeImage from "../components/UpSizeImage";
 
 const labels = {
   0.5: "Useless",
@@ -25,6 +26,7 @@ const labels = {
 export const ProductDetail = () => {
   const [amount, setAmount] = useState(1);
   const [imageIndex, setImageIndex] = useState(0);
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const product = useSelector((state) => state.product?.products);
   const status = useSelector((state) => state.product.status);
@@ -44,18 +46,32 @@ export const ProductDetail = () => {
         Đã có lỗi xảy ra
       </div>
     );
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    }
+
+
   return (
     <div className="w-2/3 border border-gray-200 rounded-md p-5">
       <div className="flex gap-7">
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           <div className="w-64 h-64 border rounded-md">
             {product.images && product.images.length > 0 ? (
-              <img
-                className="w-full h-full rounded-md "
-                src={`data:image/png;base64,${product.images[imageIndex].data}`}
-                alt={product.name}
-                style={{ objectFit: "cover" }}
-              />
+              <>
+                <img
+                  className="w-full h-full rounded-md cursor-pointer"
+                  src={`data:image/png;base64,${product.images[imageIndex].data}`}
+                  alt={product.name}
+                  style={{ objectFit: "contain" }}
+                  onClick={handleClickOpen}
+                />
+                <UpSizeImage open={open} handleClose={handleClose} images={product.images} imageNumber={imageIndex}></UpSizeImage>
+              </>
             ) : (
               <img
                 className="w-full h-full rounded-md"
@@ -65,11 +81,15 @@ export const ProductDetail = () => {
               />
             )}
           </div>
-          <div className="flex flex-col gap-1">
+          <div
+            className={`flex flex-col gap-1 h-64 ${
+              product.images?.length > 4 ? "overflow-y-scroll" : ""
+            }`}
+          >
             {product.images?.map((image, index) => (
               <div
                 key={index}
-                className="w-16 h-16"
+                className="w-16 h-16 cursor-pointer"
                 onClick={() => setImageIndex(index)}
               >
                 <img

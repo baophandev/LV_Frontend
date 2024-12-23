@@ -6,8 +6,9 @@ const axiosInstance = axios.create({
 });
 
 export const fetchProducstApi = async ({ pageNumber = 0, pageSize = 0 }) => {
-  const response = await axiosInstance.get("/product/active", {
+  const response = await axiosInstance.get("/product/status", {
     params: {
+      status: 'ACTIVE',
       page: pageNumber,
       size: pageSize,
     },
@@ -18,6 +19,7 @@ export const fetchProducstApi = async ({ pageNumber = 0, pageSize = 0 }) => {
 export const fetchProducstByCategoryIdApi = async ({categoryId, pageNumber = 0, pageSize = 0 }) => {
   const response = await axiosInstance.get( `product/category/${categoryId}`, {
     params: {
+      status: 'ACTIVE',
       page: pageNumber,
       size: pageSize,
     },

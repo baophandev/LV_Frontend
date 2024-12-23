@@ -6,7 +6,17 @@ const axiosInstance = axios.create({
 });
 
 export const fetchProducstApi = async ({ pageNumber = 0, pageSize = 0 }) => {
-  const response = await axiosInstance.get("/product", {
+  const response = await axiosInstance.get("/product/active", {
+    params: {
+      page: pageNumber,
+      size: pageSize,
+    },
+  });
+  return response.data;
+};
+
+export const fetchProducstByCategoryIdApi = async ({categoryId, pageNumber = 0, pageSize = 0 }) => {
+  const response = await axiosInstance.get( `product/category/${categoryId}`, {
     params: {
       page: pageNumber,
       size: pageSize,

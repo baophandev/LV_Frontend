@@ -42,7 +42,15 @@ const router = createBrowserRouter([
                 Component: ProductDetail
               }
             }
-
+          },
+          {
+            path: "category/:categoryId",
+            async lazy(){
+              let {Category} = await import("../pages/Category");
+              return {
+                Component: Category
+              }
+            }
           }
         ],
       },

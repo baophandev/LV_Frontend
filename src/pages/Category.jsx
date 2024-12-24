@@ -52,7 +52,7 @@ export const Category = () => {
     );
   return (
     <div className="p-5 w-full sm:w-2/3">
-      <div className="shadow p-5 text-sky-500 rounded-md mb-4 font-medium">
+      <div className="shadow shadow-cyan-200 p-5 text-sky-500 rounded-md mb-4 font-medium bg-white">
         DANH SÁCH SẢN PHẨM:{" "}
         <span className="font-medium">
           {categorys.find((category) => category.id === categoryId)?.name}

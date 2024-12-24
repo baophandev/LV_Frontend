@@ -57,8 +57,11 @@ export const ProductDetail = () => {
 
 
   return (
-    <div className="w-2/3 border border-gray-200 rounded-md p-5">
-      <div className="flex gap-7">
+    <div className="w-2/3 p-5">
+      <div className="shadow shadow-cyan-200 p-5 text-sky-500 rounded-md mb-4 font-medium bg-white">
+        {product?.name}
+      </div>
+      <div className="flex gap-7 shadow p-2 rounded-md bg-white">
         <div className="flex gap-2">
           <div className="w-64 h-64 border rounded-md">
             {product.images && product.images.length > 0 ? (
@@ -70,7 +73,12 @@ export const ProductDetail = () => {
                   style={{ objectFit: "contain" }}
                   onClick={handleClickOpen}
                 />
-                <UpSizeImage open={open} handleClose={handleClose} images={product.images} imageNumber={imageIndex}></UpSizeImage>
+                <UpSizeImage
+                  open={open}
+                  handleClose={handleClose}
+                  images={product.images}
+                  imageNumber={imageIndex}
+                ></UpSizeImage>
               </>
             ) : (
               <img
@@ -103,7 +111,6 @@ export const ProductDetail = () => {
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          <div className="text-lg">{product?.name}</div>
           <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
             <Rating
               name="text-feedback"
@@ -169,8 +176,8 @@ export const ProductDetail = () => {
           </div>
         </div>
       </div>
-      <div className="mt-5">
-        <p className="text-gray-600 ">{product.description}</p>
+      <div className="mt-3 shadow rounded-md bg-white shadow-cyan-200 p-5 text-gray-700">
+        <p className="">{product.description}</p>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const ProductCart = ({ id ,image, name, price }) => {
   return (
-    <div className=" w-40 sm:w-52 sm:h-72 mb-4 shadow hover:shadow-md rounded-md p-2 pb-5">
+    <div className="bg-white w-40 sm:w-52 sm:h-72 mb-4 shadow hover:shadow-md rounded-md p-2 pb-5">
       <div className="w-full h-3/4">
         <Link to={`/product/${id}`}>
           <img
@@ -22,11 +22,11 @@ const ProductCart = ({ id ,image, name, price }) => {
           <Link
             to={`/product/${id}`}
             style={{ color: ThemeColor.MAIN_GREEN }}
-            className="line-clamp-2"
+            className="line-clamp-2 text-sky-400"
           >
             {name}
           </Link>
-          <div className="font-extralight">
+          <div className="font-extraligh text-yellow-400" >
             {price?.toLocaleString("vi-VN") || "0"}đ
           </div>
         </div>

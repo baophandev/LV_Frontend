@@ -139,6 +139,21 @@ export const ProductDetail = () => {
           >
             {product?.price?.toLocaleString("vi-VN") || "0"}đ
           </div>
+          <div className="flex gap-2">
+            {product && product.variants && product.variants.length > 0 ? (
+              product.variants.map((variant, index) => (
+                <button
+                  key={index}
+                  className="text-gray-700 px-4 py-1 shadow-cyan-200 rounded-md shadow focus:bg-sky-500 focus:text-white"
+                >
+                  <div>{variant?.color}</div>
+                  <div>{variant?.price?.toLocaleString("vi-VN") || "0"}đ</div>
+                </button>
+              ))
+            ) : (
+              <p>{}</p>
+            )}
+          </div>
           <div className="flex gap-1">
             <p>
               Số lượng: <span> </span>

@@ -139,7 +139,7 @@ export const ProductDetail = () => {
           >
             {product?.price?.toLocaleString("vi-VN") || "0"}đ
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {product && product.variants && product.variants.length > 0 ? (
               product.variants.map((variant, index) => (
                 <button
@@ -151,7 +151,7 @@ export const ProductDetail = () => {
                 </button>
               ))
             ) : (
-              <p>{}</p>
+              <p className="text-sky-400 italic">Không có lựa chọn màu sắc</p>
             )}
           </div>
           <div className="flex gap-1">

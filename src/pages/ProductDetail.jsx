@@ -61,9 +61,9 @@ export const ProductDetail = () => {
       <div className="shadow shadow-cyan-200 p-5 text-sky-500 rounded-md mb-4 font-medium bg-white">
         {product?.name}
       </div>
-      <div className="flex gap-7 shadow p-2 rounded-md bg-white">
-        <div className="flex gap-2">
-          <div className="w-64 h-64 border rounded-md">
+      <div className="flex gap-7 shadow p-2 rounded-md bg-white ">
+        <div className="flex justify-center gap-2 w-2/5">
+          <div className="w-[85%] h-64 border rounded-md">
             {product.images && product.images.length > 0 ? (
               <>
                 <img
@@ -90,20 +90,20 @@ export const ProductDetail = () => {
             )}
           </div>
           <div
-            className={`flex flex-col gap-1 h-64 ${
+            className={`flex flex-col gap-1 w-[15%] h-64 ${
               product.images?.length > 4 ? "overflow-y-scroll" : ""
             }`}
           >
             {product.images?.map((image, index) => (
               <div
                 key={index}
-                className="w-16 h-16 cursor-pointer"
+                className="w-full h-16 cursor-pointer"
                 onClick={() => setImageIndex(index)}
               >
                 <img
                   className="w-full h-full border rounded-md"
                   src={`data:image/png;base64,${image.data}`}
-                  style={{ objectFit: "cover" }}
+                  style={{ objectFit: "contain" }}
                   alt="Ảnh lỗi"
                 />
               </div>

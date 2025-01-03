@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 import UpSizeImage from "../components/UpSizeImage";
+import AttributeTable from "../components/AttributeTable";
 
 const labels = {
   0.5: "Useless",
@@ -193,6 +194,9 @@ export const ProductDetail = () => {
       </div>
       <div className="mt-3 shadow rounded-md bg-white shadow-cyan-200 p-5 text-gray-700">
         <p className="">{product.description}</p>
+      </div>
+      <div className="mt-3 shadow rounded-md bg-white shadow-cyan-200 p-5 text-gray-700">
+        <AttributeTable></AttributeTable>
       </div>
     </div>
   );

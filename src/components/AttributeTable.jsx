@@ -28,9 +28,9 @@ const AttributeTable = ({ productId }) => {
   }, [productId]);
 
   return (
-    <div className="rounded-md p-4 bg-slate-800">
+    <div className="rounded-md p-4 bg-slate-700">
       <div className="flex flex-wrap gap-2">
-        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-700">
+        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-600">
           <div className="flex items-center gap-1 ">
             <AppSettingsAltIcon> </AppSettingsAltIcon>
             <span>Hệ điều hành:</span>
@@ -39,7 +39,7 @@ const AttributeTable = ({ productId }) => {
             {attribute.os || "Không có thông tin"}
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-700">
+        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-600">
           <div className="flex items-center gap-1">
             <SelectAllIcon> </SelectAllIcon>
             <span>CPU (Chíp):</span>
@@ -48,7 +48,7 @@ const AttributeTable = ({ productId }) => {
             {attribute.cpu || "Không có thông tin"}
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-700">
+        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-600">
           <div className="flex items-center gap-1">
             <BorderStyleIcon> </BorderStyleIcon>
             <span>RAM:</span>
@@ -57,7 +57,7 @@ const AttributeTable = ({ productId }) => {
             {attribute.ram || "Không có thông tin"}
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-700">
+        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-600">
           <div className="flex items-center gap-1">
             <SourceOutlinedIcon> </SourceOutlinedIcon>
             <span>ROM:</span>
@@ -66,7 +66,7 @@ const AttributeTable = ({ productId }) => {
             {attribute.rom || "Không có thông tin"}
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-700">
+        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-600">
           <div className="flex items-center gap-1">
             <CameraOutlinedIcon> </CameraOutlinedIcon>
             <span>Camera:</span>
@@ -75,7 +75,7 @@ const AttributeTable = ({ productId }) => {
             {attribute.camera || "Không có thông tin"}
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-700">
+        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-600">
           <div className="flex items-center gap-1">
             <Battery0BarOutlinedIcon> </Battery0BarOutlinedIcon>
             <span>Pin:</span>
@@ -84,7 +84,7 @@ const AttributeTable = ({ productId }) => {
             {attribute.pin || "Không có thông tin"}
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-700">
+        <div className="flex flex-col items-center justify-center text-white p-5 rounded-md bg-slate-600">
           <div className="flex items-center gap-1">
             <SimCardOutlinedIcon> </SimCardOutlinedIcon>
             <span>Sim:</span>

@@ -12,7 +12,7 @@ const NotFound = () => {
         <div className="flex justify-center items-center mt-32">
           <img src={Not} alt="" className="w-96" />
         </div>
-        <div className="flex justify-center items-center text-bold mb-10">
+        <div className="flex justify-center items-center text-bold mb-10 text-white">
           TRANG KHÔNG TỒN TẠI !! Quay lại
           <Link
             to="/"

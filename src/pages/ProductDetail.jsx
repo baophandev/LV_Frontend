@@ -59,10 +59,10 @@ export const ProductDetail = () => {
 
   return (
     <div className="w-2/3 p-5">
-      <div className="p-5 text-yellow-400 rounded-md mb-4 font-medium bg-slate-800">
+      <div className="p-5 text-yellow-400 rounded-md mb-2 font-medium bg-slate-700">
         {product?.name}
       </div>
-      <div className="flex gap-7 p-2 py-5 rounded-md bg-slate-800">
+      <div className="flex gap-7 p-2 py-5 rounded-md bg-slate-700">
         <div className="flex justify-center gap-2 w-2/5">
           <div
             className="w-[85%] h-64 rounded-md"
@@ -71,7 +71,7 @@ export const ProductDetail = () => {
             {product.images && product.images.length > 0 ? (
               <>
                 <img
-                  className="w-full h-full rounded-md cursor-pointer bg-slate-700"
+                  className="w-full h-full rounded-md cursor-pointer bg-slate-600"
                   src={`data:image/png;base64,${product.images[imageIndex].data}`}
                   alt={product.name}
                   style={{ objectFit: "contain" }}
@@ -101,7 +101,7 @@ export const ProductDetail = () => {
             {product.images?.map((image, index) => (
               <div
                 key={index}
-                className="w-full h-16 cursor-pointer rounded-md bg-slate-700"
+                className="w-full h-16 cursor-pointer rounded-md bg-slate-600"
                 style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
                 onClick={() => setImageIndex(index)}
               >
@@ -118,7 +118,7 @@ export const ProductDetail = () => {
         <div className="flex flex-col gap-3 ">
           <div className="flex gap-2 flex-wrap ">
             <button
-              className="text-white px-4 py-1 rounded-md shadow-md relative bg-slate-700"
+              className="text-white px-4 py-1 rounded-md shadow-md relative bg-slate-600"
               style={{
                 border: "1px solid #007580",
               }}
@@ -139,7 +139,7 @@ export const ProductDetail = () => {
               product.variants.map((variant, index) => (
                 <button
                   key={index}
-                  className="text-white px-4 py-1 rounded-md shadow-md bg-slate-700"
+                  className="text-white px-4 py-1 rounded-md shadow-md bg-slate-600"
                 >
                   <div style={{ color: ThemeColor.BLUE }}>{variant?.color}</div>
                   <div className="text-yellow-300">
@@ -158,12 +158,11 @@ export const ProductDetail = () => {
             <div className="flex gap-3">
               <input
                 type="number"
-                className="w-12 text-center text-white rounded outline-none shadow-inner shadow-gray-800"
+                className="w-12 text-center text-white rounded outline-none bg-slate-600 shadow"
                 value={amount}
                 onChange={(e) =>
                   setAmount(Math.max(1, parseInt(e.target.value) || 1))
                 }
-                style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
               />
             </div>
           </div>
@@ -180,19 +179,19 @@ export const ProductDetail = () => {
               ></AddShoppingCartOutlinedIcon>
               Thêm vào giỏ hàng
             </button>
-            <button className="py-1 px-2 rounded-md shadow-md bg-slate-700">
+            <button className="py-1 px-2 rounded-md shadow-md bg-slate-600">
               Mua ngay
             </button>
           </div>
         </div>
       </div>
-      <div className="mt-3 rounded-md  p-5 text-white bg-slate-800">
+      <div className="mt-2 rounded-md  p-5 text-white bg-slate-700">
         <p className="">{product.description}</p>
       </div>
-      <div className="mt-3 rounded-md bg-slate-800 ">
+      <div className="mt-2 rounded-md ">
         <AttributeTable productId={product.id}></AttributeTable>
       </div>
-      <div className="mt-3 rounded-md p-5 text-gray-700 bg-slate-800">
+      <div className="mt-2 rounded-md p-5 text-gray-700 bg-slate-700">
         <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
           <Rating
             name="text-feedback"

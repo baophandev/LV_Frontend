@@ -31,16 +31,14 @@ const Header = () => {
         left: 0,
         right: 0,
         zIndex: 9999,
-        background:
-          "radial-gradient(circle at 50% 0%, rgba(30, 8, 110, 0.4) 0%, #121215 40%), radial-gradient(circle at top left, rgba(128, 0, 128, 0.4) 10%, transparent 30%)",
-        backgroundColor: "#121215",
       }}
+      className="bg-slate-800"
     >
       <div className="p-2 flex flex-wrap justify-evenly items-center">
         <Link to="/">
           <img src={Logo} alt="Logo" className="w-32 hidden md:block" />
         </Link>
-        <div className=" p-1 px-2 rounded-md shadow-inner shadow-gray-800">
+        <div className=" p-1 px-2 rounded-md shadow-inner shadow-gray-800 bg-slate-700">
           <input
             className="outline-none bg-transparent"
             spellCheck="false"
@@ -80,7 +78,7 @@ const Header = () => {
           </Link>
         </div>
       </div>
-      <div className="p-1 flex flex-wrap justify-around items-center bg-slate-800">
+      <div className="p-1 flex flex-wrap justify-around items-center bg-slate-900">
         <div className="flex gap-4 justify-center items-center">
           {/* <SplitGroup></SplitGroup> */}
           {categorys?.map((category) => (

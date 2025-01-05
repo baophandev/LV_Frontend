@@ -35,28 +35,36 @@ const router = createBrowserRouter([
             },
           },
           {
-            path: 'product/:productId',
-            async lazy(){
-              let {ProductDetail} = await import("../pages/ProductDetail");
+            path: "product/:productId",
+            async lazy() {
+              let { ProductDetail } = await import("../pages/ProductDetail");
               return {
-                Component: ProductDetail
-              }
-            }
+                Component: ProductDetail,
+              };
+            },
           },
           {
             path: "category/:categoryId",
-            async lazy(){
-              let {Category} = await import("../pages/Category");
+            async lazy() {
+              let { Category } = await import("../pages/Category");
               return {
-                Component: Category
-              }
-            }
-          }
+                Component: Category,
+              };
+            },
+          },
+          {
+            path: "cart",
+            async lazy() {
+              let { Cart } = await import("../pages/Cart");
+              return {
+                Component: Cart,
+              };
+            },
+          },
         ],
       },
     ],
   },
-
 ]);
 
 export default router;

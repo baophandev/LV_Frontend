@@ -1,6 +1,4 @@
-import { Button } from "@mui/material";
 import Logo from "../assets/Logo.png";
-import ThemeColor from "../constant/theme";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -33,18 +31,16 @@ const Header = () => {
         left: 0,
         right: 0,
         zIndex: 9999,
+        background:
+          "radial-gradient(circle at 50% 0%, rgba(30, 8, 110, 0.4) 0%, #121215 40%), radial-gradient(circle at top left, rgba(128, 0, 128, 0.4) 10%, transparent 30%)",
+        backgroundColor: "#121215",
       }}
     >
-      <div
-        className="p-2 flex flex-wrap justify-evenly items-center"
-        style={{
-          backgroundColor: ThemeColor.MAIN_GREEN,
-        }}
-      >
+      <div className="p-2 flex flex-wrap justify-evenly items-center">
         <Link to="/">
           <img src={Logo} alt="Logo" className="w-32 hidden md:block" />
         </Link>
-        <div className=" p-1 px-2 rounded-md shadow-inner shadow-gray-800" style={{backgroundColor:ThemeColor.DARK_GREEN}}>
+        <div className=" p-1 px-2 rounded-md shadow-inner shadow-gray-800">
           <input
             className="outline-none bg-transparent"
             spellCheck="false"
@@ -62,53 +58,42 @@ const Header = () => {
           </button>
         </div>
         <div className="flex gap-2">
-          <Button
-            sx={{
-              backgroundColor: ThemeColor.DARK_GREEN,
-            }}
-            className=" flex px-2 py-1 gap-2 rounded-md shadow-md"
+          <Link
+            to={"/cart"}
+            className=" flex px-2 py-1 gap-2 rounded-md bg-slate-700"
           >
             <ShoppingCartOutlinedIcon
               sx={{
                 color: "white",
               }}
             />
-            <div
-              className="w-6 rounded-full flex justify-center items-center text-white shadow-md"
-              style={{
-                backgroundColor: ThemeColor.MAIN_GREEN,
-              }}
-            >
+            <div className="w-6 rounded-full flex justify-center items-center text-white shadow-md">
               1
             </div>
-          </Button>
-          <Button
-            sx={{
-              backgroundColor: ThemeColor.DARK_GREEN,
-            }}
-            className="p-1 rounded-md shadow-md"
-          >
+          </Link>
+          <Link className="p-1 rounded-md bg-slate-700">
             <PersonOutlineOutlinedIcon
               sx={{
-                color : "white",
+                color: "white",
               }}
             />
-          </Button>
+          </Link>
         </div>
       </div>
-      <div className="p-1 flex flex-wrap justify-around items-center" style={{backgroundColor: ThemeColor.DARK_GREEN  }}>
+      <div className="p-1 flex flex-wrap justify-around items-center bg-slate-800">
         <div className="flex gap-4 justify-center items-center">
           {/* <SplitGroup></SplitGroup> */}
           {categorys?.map((category) => (
-            <Link className="hover:text-sky-700 text-white" to={`/category/${category.id}`}>
+            <Link
+              className="hover:text-sky-700 text-white"
+              to={`/category/${category.id}`}
+            >
               {category.name}
             </Link>
           ))}
         </div>
         <div className="text-white">
-          <LocalPhoneIcon
-            sx={{ color: "white" }}
-          ></LocalPhoneIcon>
+          <LocalPhoneIcon sx={{ color: "white" }}></LocalPhoneIcon>
           Liên hệ: (+84)789668217
         </div>
       </div>

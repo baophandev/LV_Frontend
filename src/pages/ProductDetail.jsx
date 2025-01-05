@@ -59,16 +59,10 @@ export const ProductDetail = () => {
 
   return (
     <div className="w-2/3 p-5">
-      <div
-        className="shadow-inner shadow-gray-800 p-5 text-yellow-400 rounded-md mb-4 font-medium"
-        style={{ backgroundColor: ThemeColor.DARK_GREEN }}
-      >
+      <div className="p-5 text-yellow-400 rounded-md mb-4 font-medium bg-slate-800">
         {product?.name}
       </div>
-      <div
-        className="flex gap-7 p-2 py-5 rounded-md shadow-inner shadow-gray-800 "
-        style={{ backgroundColor: ThemeColor.DARK_GREEN }}
-      >
+      <div className="flex gap-7 p-2 py-5 rounded-md bg-slate-800">
         <div className="flex justify-center gap-2 w-2/5">
           <div
             className="w-[85%] h-64 rounded-md"
@@ -77,7 +71,7 @@ export const ProductDetail = () => {
             {product.images && product.images.length > 0 ? (
               <>
                 <img
-                  className="w-full h-full rounded-md cursor-pointer shadow-md"
+                  className="w-full h-full rounded-md cursor-pointer bg-slate-700"
                   src={`data:image/png;base64,${product.images[imageIndex].data}`}
                   alt={product.name}
                   style={{ objectFit: "contain" }}
@@ -107,7 +101,7 @@ export const ProductDetail = () => {
             {product.images?.map((image, index) => (
               <div
                 key={index}
-                className="w-full h-16 cursor-pointer rounded-md shadow-md"
+                className="w-full h-16 cursor-pointer rounded-md bg-slate-700"
                 style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
                 onClick={() => setImageIndex(index)}
               >
@@ -124,15 +118,19 @@ export const ProductDetail = () => {
         <div className="flex flex-col gap-3 ">
           <div className="flex gap-2 flex-wrap ">
             <button
-              className="text-white px-4 py-1 rounded-md shadow-md relative"
+              className="text-white px-4 py-1 rounded-md shadow-md relative bg-slate-700"
               style={{
-                backgroundColor: ThemeColor.MAIN_GREEN,
                 border: "1px solid #007580",
               }}
             >
               <div style={{ color: ThemeColor.BLUE }}>1TB</div>
               <div className="text-yellow-300">23.000.000đ</div>
-              <div className="absolute top-0 left-1"><CheckCircleIcon sx={{color: ThemeColor.BLUE}} fontSize = "small"></CheckCircleIcon></div>
+              <div className="absolute top-0 left-1">
+                <CheckCircleIcon
+                  sx={{ color: ThemeColor.BLUE }}
+                  fontSize="small"
+                ></CheckCircleIcon>
+              </div>
             </button>
           </div>
           <div className="text-white">Chọn màu sắc :</div>
@@ -141,8 +139,7 @@ export const ProductDetail = () => {
               product.variants.map((variant, index) => (
                 <button
                   key={index}
-                  className="text-white px-4 py-1 rounded-md shadow-md"
-                  style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
+                  className="text-white px-4 py-1 rounded-md shadow-md bg-slate-700"
                 >
                   <div style={{ color: ThemeColor.BLUE }}>{variant?.color}</div>
                   <div className="text-yellow-300">
@@ -183,28 +180,19 @@ export const ProductDetail = () => {
               ></AddShoppingCartOutlinedIcon>
               Thêm vào giỏ hàng
             </button>
-            <button
-              className="py-1 px-2 rounded-md shadow-md"
-              style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
-            >
+            <button className="py-1 px-2 rounded-md shadow-md bg-slate-700">
               Mua ngay
             </button>
           </div>
         </div>
       </div>
-      <div
-        className="mt-3 rounded-md  p-5 text-white shadow-inner shadow-gray-800"
-        style={{ backgroundColor: ThemeColor.DARK_GREEN }}
-      >
+      <div className="mt-3 rounded-md  p-5 text-white bg-slate-800">
         <p className="">{product.description}</p>
       </div>
-      <div className="mt-3 rounded-md text-gray-700 ">
+      <div className="mt-3 rounded-md bg-slate-800 ">
         <AttributeTable productId={product.id}></AttributeTable>
       </div>
-      <div
-        className="mt-3 rounded-md p-5 text-gray-700 shadow-inner shadow-gray-800"
-        style={{ backgroundColor: ThemeColor.DARK_GREEN }}
-      >
+      <div className="mt-3 rounded-md p-5 text-gray-700 bg-slate-800">
         <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
           <Rating
             name="text-feedback"

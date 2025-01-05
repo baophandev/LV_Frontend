@@ -26,17 +26,16 @@ const Footer = () => {
 
   return (
     <>
-      <div
-        className="flex justify-evenly p-8 "
-        style={{ backgroundColor: ThemeColor.DARK_GREEN }}
-      >
+      <div className="flex justify-evenly p-8 ">
         <div className="flex flex-col gap-2">
           <img src={Logo} alt="Logo" className="w-32" />
           <div className="text-white">
             Comfoty nhà cung cấp nội thất <br />
             hàng đầu Việt Nam
             <br />
-            <span className="text-gray-400">2/47/19 An Hòa, Ninh Kiều, TP. Cần Thơ</span>
+            <span className="text-gray-400">
+              2/47/19 An Hòa, Ninh Kiều, TP. Cần Thơ
+            </span>
           </div>
           <div className="flex gap-2">
             <Link>
@@ -69,12 +68,7 @@ const Footer = () => {
           </Link>
         </div>
       </div>
-      <div
-        className="flex justify-center text-white py-1"
-        style={{
-          backgroundColor: ThemeColor.MAIN_GREEN,
-        }}
-      >
+      <div className="flex justify-center text-white py-1 bg-slate-800">
         <CopyrightOutlinedIcon
           sx={{
             color: "white",

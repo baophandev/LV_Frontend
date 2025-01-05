@@ -32,3 +32,8 @@ export const fetchProductApi = async (productId) => {
   const response = await axiosInstance.get(`/product/${productId}`);
   return response.data
 }
+
+export const fetchAttributeApi = async (productId) => {
+  const response = await axiosInstance.get(`/product/${productId}/attribute`);
+  return response.data
+}

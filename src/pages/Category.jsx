@@ -1,17 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
 import ProductCart from "../components/ProductCart";
 import { useEffect } from "react";
-import { fetchProductsByCategoryId, setPage } from "../redux/slices/productSlice";
+import {
+  fetchProductsByCategoryId,
+  setPage,
+} from "../redux/slices/productSlice";
 import Loading from "../components/Loading";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Pagination from "@mui/material/Pagination";
 import { useParams } from "react-router";
+import ThemeColor from "../constant/theme";
 // import Carousel from "../components/Carousel";
 
 export const Category = () => {
   const dispatch = useDispatch();
-  const {categoryId} = useParams();
+  const { categoryId } = useParams();
   const products = useSelector(
     (state) => state.product.products?.content || []
   );
@@ -52,7 +56,10 @@ export const Category = () => {
     );
   return (
     <div className="p-5 w-full sm:w-2/3">
-      <div className="shadow shadow-cyan-200 p-5 text-sky-500 rounded-md mb-4 font-medium bg-white">
+      <div
+        className="shadow shadow-cyan-200 p-5 text-yellow-400 rounded-md mb-4 font-medium"
+        style={{ backgroundColor: ThemeColor.DARK_GREEN }}
+      >
         DANH SÁCH SẢN PHẨM:{" "}
         <span className="font-medium">
           {categorys.find((category) => category.id === categoryId)?.name}
@@ -65,7 +72,7 @@ export const Category = () => {
             id={product.id}
             image={product.images[0]?.data}
             name={product.name}
-            price={product.price}
+            price={product.variants[0]?.price}
           ></ProductCart>
         ))}
       </div>

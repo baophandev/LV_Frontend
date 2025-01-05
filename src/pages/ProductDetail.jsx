@@ -10,6 +10,7 @@ import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 import UpSizeImage from "../components/UpSizeImage";
 import AttributeTable from "../components/AttributeTable";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const labels = {
   0.5: "Useless",
@@ -48,27 +49,35 @@ export const ProductDetail = () => {
       </div>
     );
 
-    const handleClose = () => {
-        setOpen(false);
-    }
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-    const handleClickOpen = () => {
-      setOpen(true);
-    }
-
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
   return (
     <div className="w-2/3 p-5">
-      <div className="shadow shadow-cyan-200 p-5 text-sky-500 rounded-md mb-4 font-medium bg-white">
+      <div
+        className="shadow-inner shadow-gray-800 p-5 text-yellow-400 rounded-md mb-4 font-medium"
+        style={{ backgroundColor: ThemeColor.DARK_GREEN }}
+      >
         {product?.name}
       </div>
-      <div className="flex gap-7 shadow p-2 rounded-md bg-white ">
+      <div
+        className="flex gap-7 p-2 py-5 rounded-md shadow-inner shadow-gray-800 "
+        style={{ backgroundColor: ThemeColor.DARK_GREEN }}
+      >
         <div className="flex justify-center gap-2 w-2/5">
-          <div className="w-[85%] h-64 border rounded-md">
+          <div
+            className="w-[85%] h-64 rounded-md"
+            style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
+          >
             {product.images && product.images.length > 0 ? (
               <>
                 <img
-                  className="w-full h-full rounded-md cursor-pointer"
+                  className="w-full h-full rounded-md cursor-pointer shadow-md"
                   src={`data:image/png;base64,${product.images[imageIndex].data}`}
                   alt={product.name}
                   style={{ objectFit: "contain" }}
@@ -98,11 +107,12 @@ export const ProductDetail = () => {
             {product.images?.map((image, index) => (
               <div
                 key={index}
-                className="w-full h-16 cursor-pointer"
+                className="w-full h-16 cursor-pointer rounded-md shadow-md"
+                style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
                 onClick={() => setImageIndex(index)}
               >
                 <img
-                  className="w-full h-full border rounded-md"
+                  className="w-full h-full rounded-md"
                   src={`data:image/png;base64,${image.data}`}
                   style={{ objectFit: "contain" }}
                   alt="Ảnh lỗi"
@@ -111,44 +121,33 @@ export const ProductDetail = () => {
             ))}
           </div>
         </div>
-        <div className="flex flex-col gap-3">
-          <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
-            <Rating
-              name="text-feedback"
-              value={3.5}
-              readOnly
-              precision={0.5}
-              emptyIcon={
-                <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
-              }
-            />
-            <Box
-              sx={{
-                ml: 1,
-                backgroundColor: ThemeColor.LIGHT_GRAY,
-                padding: "1px",
-                borderRadius: "5px",
-                color: "Gray",
+        <div className="flex flex-col gap-3 ">
+          <div className="flex gap-2 flex-wrap ">
+            <button
+              className="text-white px-4 py-1 rounded-md shadow-md relative"
+              style={{
+                backgroundColor: ThemeColor.MAIN_GREEN,
+                border: "1px solid #007580",
               }}
             >
-              {labels[3.5]}
-            </Box>
-          </Box>
-          <div
-            className="font-bold text-yellow-500"
-            style={{ color: ThemeColor.MAIN_GREEN }}
-          >
-            {product?.price?.toLocaleString("vi-VN") || "0"}đ
+              <div style={{ color: ThemeColor.BLUE }}>1TB</div>
+              <div className="text-yellow-300">23.000.000đ</div>
+              <div className="absolute top-0 left-1"><CheckCircleIcon sx={{color: ThemeColor.BLUE}} fontSize = "small"></CheckCircleIcon></div>
+            </button>
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div className="text-white">Chọn màu sắc :</div>
+          <div className="flex gap-2 flex-wrap ">
             {product && product.variants && product.variants.length > 0 ? (
               product.variants.map((variant, index) => (
                 <button
                   key={index}
-                  className="text-gray-700 px-4 py-1 shadow-cyan-200 rounded-md shadow focus:bg-sky-500 focus:text-white"
+                  className="text-white px-4 py-1 rounded-md shadow-md"
+                  style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
                 >
-                  <div>{variant?.color}</div>
-                  <div>{variant?.price?.toLocaleString("vi-VN") || "0"}đ</div>
+                  <div style={{ color: ThemeColor.BLUE }}>{variant?.color}</div>
+                  <div className="text-yellow-300">
+                    {variant?.price?.toLocaleString("vi-VN") || "0"}đ
+                  </div>
                 </button>
               ))
             ) : (
@@ -156,35 +155,36 @@ export const ProductDetail = () => {
             )}
           </div>
           <div className="flex gap-1">
-            <p>
+            <p className="text-white">
               Số lượng: <span> </span>
             </p>
             <div className="flex gap-3">
               <input
                 type="number"
-                className="w-12 text-center border border-gray-300 rounded outline-none"
+                className="w-12 text-center text-white rounded outline-none shadow-inner shadow-gray-800"
                 value={amount}
                 onChange={(e) =>
                   setAmount(Math.max(1, parseInt(e.target.value) || 1))
                 }
+                style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
               />
             </div>
           </div>
           <div className="text-white flex gap-1">
             <button
-              className="py-1 px-2 rounded-md"
+              className="py-1 px-2 rounded-md text-white shadow-md"
               style={{
                 border: "1px solid #007580",
-                color: ThemeColor.DARK_GREEN,
+                color: ThemeColor.BLUE,
               }}
             >
               <AddShoppingCartOutlinedIcon
-                sx={{ color: ThemeColor.MAIN_GREEN }}
+                sx={{ color: ThemeColor.BLUE }}
               ></AddShoppingCartOutlinedIcon>
               Thêm vào giỏ hàng
             </button>
             <button
-              className="py-1 px-2 rounded-md"
+              className="py-1 px-2 rounded-md shadow-md"
               style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
             >
               Mua ngay
@@ -192,11 +192,41 @@ export const ProductDetail = () => {
           </div>
         </div>
       </div>
-      <div className="mt-3 shadow rounded-md bg-white shadow-cyan-200 p-5 text-gray-700">
+      <div
+        className="mt-3 rounded-md  p-5 text-white shadow-inner shadow-gray-800"
+        style={{ backgroundColor: ThemeColor.DARK_GREEN }}
+      >
         <p className="">{product.description}</p>
       </div>
-      <div className="mt-3 shadow rounded-md bg-white shadow-cyan-200 p-5 text-gray-700">
-        <AttributeTable></AttributeTable>
+      <div className="mt-3 rounded-md text-gray-700 ">
+        <AttributeTable productId={product.id}></AttributeTable>
+      </div>
+      <div
+        className="mt-3 rounded-md p-5 text-gray-700 shadow-inner shadow-gray-800"
+        style={{ backgroundColor: ThemeColor.DARK_GREEN }}
+      >
+        <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
+          <Rating
+            name="text-feedback"
+            value={3.5}
+            readOnly
+            precision={0.5}
+            emptyIcon={
+              <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
+            }
+          />
+          <Box
+            sx={{
+              ml: 1,
+              backgroundColor: ThemeColor.LIGHT_GRAY,
+              padding: "1px",
+              borderRadius: "5px",
+              color: "Gray",
+            }}
+          >
+            {labels[3.5]}
+          </Box>
+        </Box>
       </div>
     </div>
   );

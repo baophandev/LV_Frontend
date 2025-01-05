@@ -38,15 +38,15 @@ const Header = () => {
       <div
         className="p-2 flex flex-wrap justify-evenly items-center"
         style={{
-          backgroundColor: ThemeColor.LIGHT_GRAY,
+          backgroundColor: ThemeColor.MAIN_GREEN,
         }}
       >
         <Link to="/">
           <img src={Logo} alt="Logo" className="w-32 hidden md:block" />
         </Link>
-        <div className="bg-white p-1 px-2 rounded-md">
+        <div className=" p-1 px-2 rounded-md shadow-inner shadow-gray-800" style={{backgroundColor:ThemeColor.DARK_GREEN}}>
           <input
-            className="outline-none"
+            className="outline-none bg-transparent"
             spellCheck="false"
             placeholder="Tìm kiếm..."
             type="text"
@@ -64,19 +64,19 @@ const Header = () => {
         <div className="flex gap-2">
           <Button
             sx={{
-              backgroundColor: "white",
+              backgroundColor: ThemeColor.DARK_GREEN,
             }}
-            className=" flex px-2 py-1 gap-2 rounded-md"
+            className=" flex px-2 py-1 gap-2 rounded-md shadow-md"
           >
             <ShoppingCartOutlinedIcon
               sx={{
-                color: ThemeColor.DARK_GREEN,
+                color: "white",
               }}
             />
             <div
-              className="w-6 rounded-full flex justify-center items-center text-white"
+              className="w-6 rounded-full flex justify-center items-center text-white shadow-md"
               style={{
-                backgroundColor: ThemeColor.DARK_GREEN,
+                backgroundColor: ThemeColor.MAIN_GREEN,
               }}
             >
               1
@@ -84,30 +84,30 @@ const Header = () => {
           </Button>
           <Button
             sx={{
-              backgroundColor: "white",
+              backgroundColor: ThemeColor.DARK_GREEN,
             }}
-            className="p-1 rounded-md"
+            className="p-1 rounded-md shadow-md"
           >
             <PersonOutlineOutlinedIcon
               sx={{
-                color: ThemeColor.DARK_GREEN,
+                color : "white",
               }}
             />
           </Button>
         </div>
       </div>
-      <div className="p-1 flex flex-wrap justify-around items-center border border-b-gray bg-white">
+      <div className="p-1 flex flex-wrap justify-around items-center" style={{backgroundColor: ThemeColor.DARK_GREEN  }}>
         <div className="flex gap-4 justify-center items-center">
           {/* <SplitGroup></SplitGroup> */}
           {categorys?.map((category) => (
-            <Link className="hover:text-sky-700" to={`/category/${category.id}`}>
+            <Link className="hover:text-sky-700 text-white" to={`/category/${category.id}`}>
               {category.name}
             </Link>
           ))}
         </div>
-        <div>
+        <div className="text-white">
           <LocalPhoneIcon
-            sx={{ color: ThemeColor.MAIN_GREEN }}
+            sx={{ color: "white" }}
           ></LocalPhoneIcon>
           Liên hệ: (+84)789668217
         </div>

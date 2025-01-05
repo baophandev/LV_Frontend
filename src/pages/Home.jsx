@@ -54,7 +54,7 @@ export const Home = () => {
             id={product.id}
             image={product.images[0]?.data}
             name={product.name}
-            price={product.price}
+            price={product.variants[0]?.price}
           ></ProductCart>
         ))}
       </div>

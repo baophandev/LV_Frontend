@@ -26,14 +26,17 @@ const Footer = () => {
 
   return (
     <>
-      <div className="flex justify-evenly p-8 border border-gray-200">
+      <div
+        className="flex justify-evenly p-8 "
+        style={{ backgroundColor: ThemeColor.DARK_GREEN }}
+      >
         <div className="flex flex-col gap-2">
           <img src={Logo} alt="Logo" className="w-32" />
-          <div className="text-gray-500">
+          <div className="text-white">
             Comfoty nhà cung cấp nội thất <br />
             hàng đầu Việt Nam
             <br />
-            2/47/19 An Hòa, Ninh Kiều, TP. Cần Thơ
+            <span className="text-gray-400">2/47/19 An Hòa, Ninh Kiều, TP. Cần Thơ</span>
           </div>
           <div className="flex gap-2">
             <Link>
@@ -53,12 +56,17 @@ const Footer = () => {
         <div className="flex flex-col">
           <div className="text-gray-500 ">Danh mục sản phẩm</div>
           {categorys?.map((category) => (
-            <Link to={`/category/${category.name}`}>{category.name}</Link>
+            <Link className="text-white" to={`/category/${category.name}`}>
+              {category.name}
+            </Link>
           ))}
         </div>
         <div className="flex flex-col">
           <div className="text-gray-500">Hỗ trợ</div>
-          <Link>Hỗ trợ <br />Giúp đở</Link>
+          <Link className="text-white">
+            Hỗ trợ <br />
+            Giúp đở
+          </Link>
         </div>
       </div>
       <div

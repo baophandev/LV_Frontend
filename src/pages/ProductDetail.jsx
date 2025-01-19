@@ -59,19 +59,13 @@ export const ProductDetail = () => {
 
   return (
     <div className="w-2/3 p-5">
-      <div className="p-5 text-yellow-400 rounded-md mb-2 font-medium bg-slate-700">
-        {product?.name}
-      </div>
-      <div className="flex gap-7 p-2 py-5 rounded-md bg-slate-700">
-        <div className="flex justify-center gap-2 w-2/5">
-          <div
-            className="w-[85%] h-64 rounded-md"
-            style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
-          >
+      <div className="flex gap-7 p-2 py-5 rounded-md">
+        <div className="flex justify-center gap-2 w-1/2">
+          <div className="w-[85%] h-80 rounded-md bg-gray-200">
             {product.images && product.images.length > 0 ? (
               <>
                 <img
-                  className="w-full h-full rounded-md cursor-pointer bg-slate-600"
+                  className="w-full h-full rounded-md cursor-pointer"
                   src={`data:image/png;base64,${product.images[imageIndex].data}`}
                   alt={product.name}
                   style={{ objectFit: "contain" }}
@@ -94,14 +88,14 @@ export const ProductDetail = () => {
             )}
           </div>
           <div
-            className={`flex flex-col gap-1 w-[15%] h-64 ${
+            className={`flex flex-col gap-1 w-[20%] h-64 ${
               product.images?.length > 4 ? "overflow-y-scroll" : ""
             }`}
           >
             {product.images?.map((image, index) => (
               <div
                 key={index}
-                className="w-full h-16 cursor-pointer rounded-md bg-slate-600"
+                className="w-full h-24 cursor-pointer rounded-md bg-gray-200"
                 style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
                 onClick={() => setImageIndex(index)}
               >
@@ -116,15 +110,42 @@ export const ProductDetail = () => {
           </div>
         </div>
         <div className="flex flex-col gap-3 ">
-          <div className="flex gap-2 flex-wrap ">
+          <div className="uppercase text-2xl font-extrabold">
+            {product?.name}
+          </div>
+          <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
+            <Rating
+              name="text-feedback"
+              value={3.5}
+              readOnly
+              precision={0.5}
+              emptyIcon={
+                <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
+              }
+            />
+            <Box
+              sx={{
+                ml: 1,
+                backgroundColor: ThemeColor.LIGHT_GRAY,
+                padding: "1px",
+                borderRadius: "5px",
+                color: "Gray",
+              }}
+            >
+              {labels[3.5]}
+            </Box>
+          </Box>
+          <div className="flex gap-2 flex-wrap pb-2 border-b border-b-gray-200">
             <button
-              className="text-white px-4 py-1 rounded-md shadow-md relative bg-slate-600"
+              className="text-white px-4 py-1 rounded-md relative"
               style={{
                 border: "1px solid #007580",
               }}
             >
-              <div style={{ color: ThemeColor.BLUE }}>1TB</div>
-              <div className="text-yellow-300">23.000.000đ</div>
+              <div className="font-medium" style={{ color: ThemeColor.BLUE }}>
+                1TB
+              </div>
+              <div className="font-medium text-yellow-400">23.000.000đ</div>
               <div className="absolute top-0 left-1">
                 <CheckCircleIcon
                   sx={{ color: ThemeColor.BLUE }}
@@ -133,16 +154,21 @@ export const ProductDetail = () => {
               </div>
             </button>
           </div>
-          <div className="text-white">Chọn màu sắc :</div>
-          <div className="flex gap-2 flex-wrap ">
+          <div className="text-gray-400">Chọn màu sắc:</div>
+          <div className="flex gap-2 flex-wrap border-b border-b-gray-200 pb-2">
             {product && product.variants && product.variants.length > 0 ? (
               product.variants.map((variant, index) => (
                 <button
                   key={index}
-                  className="text-white px-4 py-1 rounded-md shadow-md bg-slate-600"
+                  className="text-white px-4 py-1 rounded-md border border-teal-800"
                 >
-                  <div style={{ color: ThemeColor.BLUE }}>{variant?.color}</div>
-                  <div className="text-yellow-300">
+                  <div
+                    className="font-medium"
+                    style={{ color: ThemeColor.BLUE }}
+                  >
+                    {variant?.color}
+                  </div>
+                  <div className="text-yellow-400 font-medium">
                     {variant?.price?.toLocaleString("vi-VN") || "0"}đ
                   </div>
                 </button>
@@ -151,69 +177,39 @@ export const ProductDetail = () => {
               <p className="text-sky-400 italic">Không có lựa chọn màu sắc</p>
             )}
           </div>
-          <div className="flex gap-1">
-            <p className="text-white">
-              Số lượng: <span> </span>
-            </p>
-            <div className="flex gap-3">
-              <input
-                type="number"
-                className="w-12 text-center text-white rounded outline-none bg-slate-600 shadow"
-                value={amount}
-                onChange={(e) =>
-                  setAmount(Math.max(1, parseInt(e.target.value) || 1))
-                }
-              />
-            </div>
-          </div>
+
           <div className="text-white flex gap-1">
+            <div className="flex gap-1">
+              <div className="flex gap-3">
+                <input
+                  type="number"
+                  className="w-48 text-center text-black rounded-2xl outline-noneshadow bg-gray-200"
+                  value={amount}
+                  onChange={(e) =>
+                    setAmount(Math.max(1, parseInt(e.target.value) || 1))
+                  }
+                />
+              </div>
+            </div>
             <button
-              className="py-1 px-2 rounded-md text-white shadow-md"
+              className="py-1 px-6  text-white rounded-2xl"
               style={{
-                border: "1px solid #007580",
-                color: ThemeColor.BLUE,
+                backgroundColor: ThemeColor.MAIN_GRREN
               }}
             >
               <AddShoppingCartOutlinedIcon
-                sx={{ color: ThemeColor.BLUE }}
+                sx={{ color: "white" }}
               ></AddShoppingCartOutlinedIcon>
               Thêm vào giỏ hàng
-            </button>
-            <button className="py-1 px-2 rounded-md shadow-md bg-slate-600">
-              Mua ngay
             </button>
           </div>
         </div>
       </div>
-      <div className="mt-2 rounded-md  p-5 text-white bg-slate-700">
+      <div className="mt-2 rounded-md  p-5 text-gray-600 italic">
         <p className="">{product.description}</p>
       </div>
       <div className="mt-2 rounded-md ">
         <AttributeTable productId={product.id}></AttributeTable>
-      </div>
-      <div className="mt-2 rounded-md p-5 text-gray-700 bg-slate-700">
-        <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
-          <Rating
-            name="text-feedback"
-            value={3.5}
-            readOnly
-            precision={0.5}
-            emptyIcon={
-              <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
-            }
-          />
-          <Box
-            sx={{
-              ml: 1,
-              backgroundColor: ThemeColor.LIGHT_GRAY,
-              padding: "1px",
-              borderRadius: "5px",
-              color: "Gray",
-            }}
-          >
-            {labels[3.5]}
-          </Box>
-        </Box>
       </div>
     </div>
   );

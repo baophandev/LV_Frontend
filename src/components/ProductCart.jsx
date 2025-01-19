@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 
 const ProductCart = ({ id, image, name, price }) => {
   return (
-    <div className=" w-40 sm:w-52 sm:h-72 mb-4 rounded-md p-2 pb-5 bg-slate-700 shadow-md" 
+    <div className=" w-40 sm:w-52 sm:h-72 mb-4 rounded-md pb-5" 
     >
-      <div className="w-full h-3/4 shadow-md">
+      <div className="w-full h-3/4 mb-2">
         <Link to={`/product/${id}`}>
           <img
             className="w-full h-full rounded-md"
@@ -18,16 +18,16 @@ const ProductCart = ({ id, image, name, price }) => {
           />
         </Link>
       </div>
-      <div className=" flex justify-around">
-        <div>
-          <Link to={`/product/${id}`} className="line-clamp-2 text-white">
+      <div className=" flex ">
+        <div className="">
+          <Link to={`/product/${id}`} className="line-clamp-2 mb-1" style={{color: ThemeColor.MAIN_GRREN}}>
             {name}
           </Link>
-          <div className="font-extraligh text-yellow-400">
+          <div className="font-medium text-yellow-400">
             {price?.toLocaleString("vi-VN") || "0"}đ
           </div>
         </div>
-        <button>
+        <button className="ml-auto">
           <AddShoppingCartOutlinedIcon
             sx={{
               color: "white",

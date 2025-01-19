@@ -8,6 +8,7 @@ import { Link } from "react-router";
 import { fetchCategorys } from "../redux/slices/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import ThemeColor from "../constant/theme";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -32,13 +33,15 @@ const Header = () => {
         right: 0,
         zIndex: 9999,
       }}
-      className="bg-slate-800"
     >
-      <div className="p-2 flex flex-wrap justify-evenly items-center">
+      <div
+        className="p-2 flex flex-wrap justify-evenly items-center"
+        style={{ backgroundColor: ThemeColor.LIGHT_GRAY }}
+      >
         <Link to="/">
           <img src={Logo} alt="Logo" className="w-32 hidden md:block" />
         </Link>
-        <div className=" p-1 px-2 rounded-md shadow-inner shadow-gray-800 bg-slate-700">
+        <div className=" p-1 px-2 rounded-md shadow-inner bg-white">
           <input
             className="outline-none bg-transparent"
             spellCheck="false"
@@ -58,40 +61,46 @@ const Header = () => {
         <div className="flex gap-2">
           <Link
             to={"/cart"}
-            className=" flex px-2 py-1 gap-2 rounded-md bg-slate-700"
+            className=" flex px-2 py-1 gap-2 rounded-md bg-white"
           >
             <ShoppingCartOutlinedIcon
               sx={{
-                color: "white",
+                color: ThemeColor.DARK_GREEN,
               }}
             />
-            <div className="w-6 rounded-full flex justify-center items-center text-white shadow-md">
+            <div
+              className="w-6 rounded-full flex justify-center items-center shadow-md text-white"
+              style={{ backgroundColor: ThemeColor.DARK_GREEN }}
+            >
               1
             </div>
           </Link>
-          <Link className="p-1 rounded-md bg-slate-700">
+          <Link className="p-1 rounded-md bg-white">
             <PersonOutlineOutlinedIcon
               sx={{
-                color: "white",
+                color: ThemeColor.DARK_GREEN,
               }}
             />
           </Link>
         </div>
       </div>
-      <div className="p-1 flex flex-wrap justify-around items-center bg-slate-900">
-        <div className="flex gap-4 justify-center items-center">
+      <div className="p-1 flex flex-wrap justify-around items-center border-b border-b-gray-200 bg-white">
+        <div
+          className="flex gap-4 justify-center items-center"
+          style={{ color: ThemeColor.DARK_GREEN }}
+        >
           {/* <SplitGroup></SplitGroup> */}
           {categorys?.map((category) => (
             <Link
-              className="hover:text-sky-700 text-white"
+              className="hover:text-sky-700"
               to={`/category/${category.id}`}
             >
               {category.name}
             </Link>
           ))}
         </div>
-        <div className="text-white">
-          <LocalPhoneIcon sx={{ color: "white" }}></LocalPhoneIcon>
+        <div className="">
+          <LocalPhoneIcon sx={{ color: ThemeColor.DARK_GREEN }}></LocalPhoneIcon>
           Liên hệ: (+84)789668217
         </div>
       </div>

@@ -26,10 +26,10 @@ const Footer = () => {
 
   return (
     <>
-      <div className="flex justify-evenly p-8 bg-slate-900">
+      <div className="flex justify-evenly p-8 border-t border-t-slate-200">
         <div className="flex flex-col gap-2">
           <img src={Logo} alt="Logo" className="w-32" />
-          <div className="text-white">
+          <div className="text-gray-400">
             Comfoty nhà cung cấp nội thất <br />
             hàng đầu Việt Nam
             <br />
@@ -37,13 +37,15 @@ const Footer = () => {
               2/47/19 An Hòa, Ninh Kiều, TP. Cần Thơ
             </span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <Link>
               <FacebookOutlinedIcon
                 sx={{
                   color: ThemeColor.DARK_GREEN,
                 }}
               ></FacebookOutlinedIcon>
+            </Link>
+            <Link>
               <InstagramIcon
                 sx={{
                   color: ThemeColor.DARK_GREEN,
@@ -53,28 +55,24 @@ const Footer = () => {
           </div>
         </div>
         <div className="flex flex-col">
-          <div className="text-gray-500 ">Danh mục sản phẩm</div>
+          <div className="text-gray-500">Danh mục sản phẩm</div>
           {categorys?.map((category) => (
-            <Link className="text-white" to={`/category/${category.name}`}>
+            <Link className="" to={`/category/${category.name}`}>
               {category.name}
             </Link>
           ))}
         </div>
         <div className="flex flex-col">
           <div className="text-gray-500">Hỗ trợ</div>
-          <Link className="text-white">
+          <Link className="">
             Hỗ trợ <br />
             Giúp đở
           </Link>
         </div>
       </div>
-      <div className="flex justify-center text-white py-1 bg-slate-800">
-        <CopyrightOutlinedIcon
-          sx={{
-            color: "white",
-          }}
-        ></CopyrightOutlinedIcon>
-        2025 - Designed & Develop by Phan Gia Bảo B2110114
+      <div className="flex h-16 justify-center text-gray-500 py-1 items-center border-t border-t-slate-200">
+        <CopyrightOutlinedIcon fontSize="small"></CopyrightOutlinedIcon>
+        2025 - Designed & Develop by <span className="font-medium ml-2 text-black">Phan Gia Bảo B2110114</span>
       </div>
     </>
   );

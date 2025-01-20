@@ -10,7 +10,7 @@ export const Cart = () => {
   const dispacth = useDispatch();
   const { cart, status, error } = useSelector((state) => state.cart);
   const cartData = cart?.data?.items || [];
-  const userId = "12345678-90ab-cdef-1234-567890abcdef";
+  const userId = "U001";
 
   useEffect(() => {
     if (status === "idle") {
@@ -22,14 +22,17 @@ export const Cart = () => {
 
   return (
     <div className="w-2/3 p-5 min-h-screen">
-      <div className=" p-5 text-yellow-400 rounded-md mb-4 font-medium bg-slate-700">
+      <div
+        className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold"
+        style={{ backgroundColor: ThemeColor.LIGHT_GRAY, color: ThemeColor.MAIN_GRREN }}
+      >
         Giỏ hàng
       </div>
       {cartData.length > 0 ? (
         cartData.map((item, index) => (
           <div
             key={index}
-            className="flex p-5 rounded-md items-center gap-2 shadow bg-slate-700 mb-1"
+            className="flex p-5 items-center gap-2 mb-1 border-b border-b-gray-200"
           >
             <input type="checkbox" />
             <img
@@ -43,14 +46,14 @@ export const Cart = () => {
             >
               {item.productName}
             </Link>
-            <div className="text-white w-64">{item.productColor}</div>
-            <div className="text-white w-32">{item.price}</div>
+            <div className=" w-64">{item.productColor}</div>
+            <div className=" w-32">{item.price}</div>
             <input
-              className="w-14 bg-transparent text-white shadow-inner shadow-gray-800 px-2 rounded-md"
+              className=""
               type="number"
               value={"2"}
             />
-            <div className="text-white w-32">{item.price}*2</div>
+            <div className=" w-32">{item.price}*2</div>
             <div className="text-red-500">Xóa</div>
           </div>
         ))
@@ -61,13 +64,14 @@ export const Cart = () => {
       )}
       {error && <div className="text-red-500">Đã có lỗi xảy ra {error}</div>}
       <div
-        className="bg-slate-300 fixed z-100 w-2/3 bottom-2 rounded-md p-2"
+        className="bg-gray-100 text-lg fixed z-100 w-2/3 bottom-5 rounded-md p-5 font-extrabold uppercase"
         style={{
           left: "50%",
           transform: "translateX(-50%)",
+          color: ThemeColor.MAIN_GRREN
         }}
       >
-        Tổng thanh toán: 
+        Tổng thanh toán:
       </div>
     </div>
   );

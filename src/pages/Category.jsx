@@ -56,8 +56,13 @@ export const Category = () => {
     );
   return (
     <div className="p-5 w-full sm:w-2/3">
-      <div className=" p-5 text-cyan-700 rounded-md mb-4" style={{backgroundColor: ThemeColor.LIGHT_GRAY}}> 
-        Danh mục {">"} {" "}
+      <div
+        className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold"
+        style={{
+          backgroundColor: ThemeColor.LIGHT_GRAY,
+          color: ThemeColor.MAIN_GRREN,
+        }}
+      >
         <span className="">
           {categorys.find((category) => category.id === categoryId)?.name}
         </span>

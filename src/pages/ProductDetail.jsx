@@ -194,7 +194,7 @@ export const ProductDetail = () => {
             <button
               className="py-1 px-6  text-white rounded-2xl"
               style={{
-                backgroundColor: ThemeColor.MAIN_GRREN
+                backgroundColor: ThemeColor.MAIN_GRREN,
               }}
             >
               <AddShoppingCartOutlinedIcon
@@ -205,10 +205,9 @@ export const ProductDetail = () => {
           </div>
         </div>
       </div>
-      <div className="mt-2 rounded-md  p-5 text-gray-600 italic">
+      <div className="mt-2 rounded-md  p-5 text-gray-700 bg-gray-100">
+        <div className="uppercase text-2xl font-extrabold ">Mô tả: </div>
         <p className="">{product.description}</p>
-      </div>
-      <div className="mt-2 rounded-md ">
         <AttributeTable productId={product.id}></AttributeTable>
       </div>
     </div>

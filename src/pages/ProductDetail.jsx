@@ -11,6 +11,7 @@ import StarIcon from "@mui/icons-material/Star";
 import UpSizeImage from "../components/UpSizeImage";
 import AttributeTable from "../components/AttributeTable";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ReviewCard from "../components/ReviewCard";
 
 const labels = {
   0.5: "Useless",
@@ -209,6 +210,13 @@ export const ProductDetail = () => {
         <div className="uppercase text-2xl font-extrabold ">Mô tả: </div>
         <p className="">{product.description}</p>
         <AttributeTable productId={product.id}></AttributeTable>
+      </div>
+      <div className="mt-3 pt-3 border-t border-b-gray-200">
+        <div className="uppercase text-2xl font-extrabold text-gray-700 ">
+          Đánh giá của người mua:{" "}
+        </div>
+        <ReviewCard></ReviewCard>
+        <ReviewCard></ReviewCard>
       </div>
     </div>
   );

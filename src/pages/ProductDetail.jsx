@@ -217,6 +217,11 @@ export const ProductDetail = () => {
         </div>
         <ReviewCard></ReviewCard>
         <ReviewCard></ReviewCard>
+        <div className="w-full flex justify-center mt-3">
+          <div className="px-5 py-2 rounded-2xl text-center text-gray-700 cursor-pointer border border-gray-200 w-1/3">
+            Hiển thị thêm
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import NotFound from "../pages/404";
+import AuthLayout from "../layout/AuthLayout";
 
 // import Home from "../pages/Home";
 
@@ -14,6 +15,21 @@ const router = createBrowserRouter([
     errorElement: <NotFound></NotFound>,
     children: [
       {
+        path: "login",
+        element: <AuthLayout />,
+        children: [
+          {
+            index: true,
+            async lazy() {
+              let { Login } = await import("../pages/Login");
+              return {
+                Component: Login,
+              };
+            },
+          },
+        ],
+      },
+      {
         element: <MainLayout />,
         children: [
           {
@@ -22,15 +38,6 @@ const router = createBrowserRouter([
               let { Home } = await import("../pages/Home");
               return {
                 Component: Home,
-              };
-            },
-          },
-          {
-            path: "login",
-            async lazy() {
-              let { Login } = await import("../pages/Login");
-              return {
-                Component: Login,
               };
             },
           },

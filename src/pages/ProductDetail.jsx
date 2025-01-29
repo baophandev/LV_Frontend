@@ -172,6 +172,12 @@ export const ProductDetail = () => {
                   <div className="text-yellow-400 font-medium">
                     {variant?.price?.toLocaleString("vi-VN") || "0"}đ
                   </div>
+                  <div className="text-gray-400">
+                    Đã bán: {variant?.sold || 0}
+                  </div>
+                  <div className="text-gray-400">
+                    Còn lại: {variant?.stock || 0}
+                  </div>
                 </button>
               ))
             ) : (

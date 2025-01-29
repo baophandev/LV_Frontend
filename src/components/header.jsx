@@ -1,8 +1,11 @@
 import Logo from "../assets/Logo.png";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 // import SplitGroup from "./SlpitGroup";
 import { Link } from "react-router";
 import { fetchCategorys } from "../redux/slices/categorySlice";
@@ -23,6 +26,15 @@ const Header = () => {
   }, [status, dispatch]);
 
   console.log(error);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div
@@ -75,13 +87,39 @@ const Header = () => {
               1
             </div>
           </Link>
-          <Link className="p-1 rounded-md bg-white">
-            <PersonOutlineOutlinedIcon
-              sx={{
-                color: ThemeColor.DARK_GREEN,
+          <div className="p-1 rounded-md bg-white">
+            <Button
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+            >
+              Dashboard
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
               }}
-            />
-          </Link>
+              sx={{
+                zIndex: 9999
+              }}
+            >
+              <MenuItem onClick={handleClose}>
+                <Link to={"/login"}>Tài khoản</Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link to={"/login"}>Đăng nhập</Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link to={"/login"}>Đăng xuất</Link>
+              </MenuItem>
+            </Menu>
+          </div>
         </div>
       </div>
       <div className="p-1 flex flex-wrap justify-around items-center border-b border-b-gray-200 bg-white">
@@ -100,7 +138,9 @@ const Header = () => {
           ))}
         </div>
         <div className="">
-          <LocalPhoneIcon sx={{ color: ThemeColor.DARK_GREEN }}></LocalPhoneIcon>
+          <LocalPhoneIcon
+            sx={{ color: ThemeColor.DARK_GREEN }}
+          ></LocalPhoneIcon>
           Liên hệ: (+84)789668217
         </div>
       </div>

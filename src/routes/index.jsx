@@ -30,6 +30,21 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "register",
+        element: <AuthLayout />,
+        children: [
+          {
+            index: true,
+            async lazy() {
+              let { Register } = await import("../pages/Register");
+              return {
+                Component: Register,
+              };
+            },
+          },
+        ],
+      },
+      {
         element: <MainLayout />,
         children: [
           {

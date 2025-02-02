@@ -12,18 +12,29 @@ import { fetchCategorys } from "../redux/slices/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import ThemeColor from "../constant/theme";
+import { getMyInfo, logout } from "../redux/slices/userSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
   const categorys = useSelector((state) => state.categorys.categorys);
   const status = useSelector((state) => state.categorys.status);
   const error = useSelector((state) => state.categorys.error);
+  const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchCategorys());
+      if (token) {
+        dispatch(getMyInfo(token));
+      }
     }
-  }, [status, dispatch]);
+  }, [status, dispatch, token]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    window.location.reload();
+  };
 
   console.log(error);
 
@@ -95,7 +106,7 @@ const Header = () => {
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
             >
-              Dashboard
+              {user.displayName || "Dashboard"}
             </Button>
             <Menu
               id="basic-menu"
@@ -106,17 +117,18 @@ const Header = () => {
                 "aria-labelledby": "basic-button",
               }}
               sx={{
-                zIndex: 9999
+                zIndex: 9999,
               }}
             >
               <MenuItem onClick={handleClose}>
-                <Link to={"/login"}>Tài khoản</Link>
+                <Link to={"/"}>Tài khoản</Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link to={"/login"}>Đăng nhập</Link>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Link to={"/login"}>Đăng xuất</Link>
+                {Object.keys(user).length === 0 ? (
+                  <Link to={"/login"}>Đăng nhập</Link>
+                ) : (
+                  <Link className="text-red-500" onClick={handleLogout}>Đăng xuất</Link>
+                )}
               </MenuItem>
             </Menu>
           </div>

@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { loginApi } from "../api/authApi";
-import { setAuthToken } from "../redux/slices/authSlice";
 
 export const Login = () => {
 
   const [phoneNumber, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     setLoading(true);
@@ -17,8 +14,8 @@ export const Login = () => {
       const response = await loginApi(phoneNumber, password);
 
       if(response.success){
-        dispatch(setAuthToken(response.data.token));
-        alert("Đăng nhập thành công!");
+        localStorage.setItem("authToken", response.data.token);
+        window.location.href = "/";
       }else{
         alert("Đăng nhập thất bại!" + response.message);
       }

@@ -83,6 +83,15 @@ const router = createBrowserRouter([
               };
             },
           },
+          {
+            path: "user/account",
+            async lazy() {
+              let { PersonalPage } = await import("../pages/PersonalPage");
+              return {
+                Component: PersonalPage,
+              };
+            },
+          },
         ],
       },
     ],

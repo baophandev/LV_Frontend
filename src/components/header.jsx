@@ -99,15 +99,19 @@ const Header = () => {
             </div>
           </Link>
           <div className="p-1 rounded-md bg-white">
-            <Button
-              id="basic-button"
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-            >
-              {user.displayName || "Dashboard"}
-            </Button>
+            {Object.keys(user).length === 0 ? (
+              <Link to={"/login"}>Đăng nhập</Link>
+            ) : (
+              <Button
+                id="basic-button"
+                aria-controls={open ? "basic-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                onClick={handleClick}
+              >
+                {user.displayName || "Tài khoản"}
+              </Button>
+            )}
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -121,14 +125,14 @@ const Header = () => {
               }}
             >
               <MenuItem onClick={handleClose}>
-                <Link to={"/"}>Tài khoản</Link>
+                  <Link to={"/user/account"} className="text-sky-600" >
+                    Tài khoản
+                  </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                {Object.keys(user).length === 0 ? (
-                  <Link to={"/login"}>Đăng nhập</Link>
-                ) : (
-                  <Link className="text-red-500" onClick={handleLogout}>Đăng xuất</Link>
-                )}
+                  <Link className="text-red-500" onClick={handleLogout}>
+                    Đăng xuất
+                  </Link>
               </MenuItem>
             </Menu>
           </div>

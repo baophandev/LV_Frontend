@@ -92,6 +92,17 @@ const router = createBrowserRouter([
               };
             },
           },
+          {
+            path: "user/address",
+            async lazy() {
+              let { PersonalAddressPage } = await import(
+                "../pages/PersonalAddressPage"
+              );
+              return {
+                Component: PersonalAddressPage,
+              };
+            },
+          },
         ],
       },
     ],

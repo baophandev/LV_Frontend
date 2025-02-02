@@ -17,3 +17,19 @@ export const getMyInfoApi = async (token) => {
         throw error;
     }
 }
+
+export const getUserAddressApi = async ({ token, userId }) => {
+  try {
+    const response = await axiosInstance.get("/address", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        userId: userId,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

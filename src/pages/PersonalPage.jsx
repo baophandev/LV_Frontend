@@ -60,7 +60,7 @@ export const PersonalPage = () => {
             <div className="uppercase  font-bold text-slate-500">
               Quản lý hồ sơ
             </div>
-            <div className="border-b border-gray-300 text-sm text-gray-400">
+            <div className="border-b border-gray-300 text-sm text-gray-400 pb-1">
               Quản lý thông tin hồ sơ để bảo mật tài khoản
             </div>
             <div className="flex justify-around">

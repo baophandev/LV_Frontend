@@ -12,7 +12,7 @@ import { fetchCategorys } from "../redux/slices/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import ThemeColor from "../constant/theme";
-import { getMyInfo, logout } from "../redux/slices/userSlice";
+import { getMyInfo, getUserAddress, logout } from "../redux/slices/userSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -29,7 +29,14 @@ const Header = () => {
         dispatch(getMyInfo(token));
       }
     }
-  }, [status, dispatch, token]);
+  }, [status, dispatch, token, user]);
+
+  useEffect(() => {
+    if(user.id && token){
+      dispatch(getUserAddress({token, userId: user.id}));
+    }
+  }, [user.id, token, dispatch]);
+
 
   const handleLogout = () => {
     dispatch(logout());
@@ -125,14 +132,14 @@ const Header = () => {
               }}
             >
               <MenuItem onClick={handleClose}>
-                  <Link to={"/user/account"} className="text-sky-600" >
-                    Tài khoản
-                  </Link>
+                <Link to={"/user/account"} className="text-sky-600">
+                  Tài khoản
+                </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                  <Link className="text-red-500" onClick={handleLogout}>
-                    Đăng xuất
-                  </Link>
+                <Link className="text-red-500" onClick={handleLogout}>
+                  Đăng xuất
+                </Link>
               </MenuItem>
             </Menu>
           </div>

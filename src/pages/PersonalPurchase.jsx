@@ -4,6 +4,7 @@ import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import OrderCard from "../components/OrderCard";
 
 const buttonClickedStyle = "text-sky-400 font-semibold border-b-2 border-sky-400";
 const buttons = ["Tất cả", "Chờ xác nhận", "Đang giao", "Đã giao", "Đã hủy"];
@@ -29,25 +30,25 @@ export const PersonalPurchase = () => {
             backgroundColor: ThemeColor.LIGHT_GRAY,
           }}
         >
-          <Link className="font-medium text-slate-700  items-center flex cursor-pointer mb-2">
+          <Link className=" text-slate-700  items-center flex cursor-pointer mb-2">
             <PermIdentityOutlinedIcon />
             Tài khoản của tôi
           </Link>
           <Link
             to={"/user/account"}
-            className="font-medium  items-center flex cursor-pointer text-slate-700 hover:text-sky-400 mb-2 ml-4"
+            className="  items-center flex cursor-pointer text-slate-700 hover:text-sky-400 mb-2 ml-4"
           >
             Hồ sơ
           </Link>
           <Link
             to={"/user/address"}
-            className="font-medium   text-sky-400 items-center flex cursor-pointer mb-2 ml-4 "
+            className=" text-slate-700 hover:text-sky-400  items-center flex cursor-pointer mb-2 ml-4 "
           >
             Địa chỉ
           </Link>
           <Link
             to={"/user/purchase"}
-            className="font-medium text-slate-700 items-center flex cursor-pointer hover:text-sky-400"
+            className=" text-sky-400 items-center flex cursor-pointer "
           >
             <AssignmentOutlinedIcon />
             Đơn mua
@@ -73,6 +74,10 @@ export const PersonalPurchase = () => {
                 {label}
               </button>
             ))}
+          </div>
+          <div className="w-full mt-2">
+            <OrderCard />
+            <OrderCard />
           </div>
         </div>
       </div>

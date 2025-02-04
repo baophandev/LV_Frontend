@@ -137,6 +137,11 @@ const Header = () => {
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
+                <Link to={"/user/purchase"} className="text-sky-600">
+                  Đơn mua
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
                 <Link className="text-red-500" onClick={handleLogout}>
                   Đăng xuất
                 </Link>

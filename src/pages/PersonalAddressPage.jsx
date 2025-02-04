@@ -27,25 +27,25 @@ export const PersonalAddressPage = () => {
             backgroundColor: ThemeColor.LIGHT_GRAY,
           }}
         >
-          <Link className="font-medium text-slate-700  items-center flex cursor-pointer mb-2">
+          <Link className=" text-slate-700  items-center flex cursor-pointer mb-2">
             <PermIdentityOutlinedIcon />
             Tài khoản của tôi
           </Link>
           <Link
             to={"/user/account"}
-            className="font-medium  items-center flex cursor-pointer text-slate-700 hover:text-sky-400 mb-2 ml-4"
+            className="  items-center flex cursor-pointer text-slate-700 hover:text-sky-400 mb-2 ml-4"
           >
             Hồ sơ
           </Link>
           <Link
             to={"/user/address"}
-            className="font-medium   text-sky-400 items-center flex cursor-pointer mb-2 ml-4 "
+            className=" text-sky-400 items-center flex cursor-pointer mb-2 ml-4 "
           >
             Địa chỉ
           </Link>
           <Link
             to={"/user/purchase"}
-            className="font-medium text-slate-700 items-center flex cursor-pointer hover:text-sky-400"
+            className=" text-slate-700 items-center flex cursor-pointer hover:text-sky-400"
           >
             <AssignmentOutlinedIcon />
             Đơn mua

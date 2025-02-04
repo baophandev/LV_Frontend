@@ -103,6 +103,17 @@ const router = createBrowserRouter([
               };
             },
           },
+          {
+            path: "user/purchase",
+            async lazy() {
+              let { PersonalPurchase } = await import(
+                "../pages/PersonalPurchase"
+              );
+              return {
+                Component: PersonalPurchase,
+              };
+            },
+          },
         ],
       },
     ],

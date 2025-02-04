@@ -3,12 +3,14 @@ import ThemeColor from "../constant/theme";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import { Link } from "react-router-dom";
-import AddressCard from "../components/AddressCard";
+import { useState } from "react";
 
-export const PersonalAddressPage = () => {
+const buttonClickedStyle = "text-sky-400 font-semibold border-b-2 border-sky-400";
+const buttons = ["Tất cả", "Chờ xác nhận", "Đang giao", "Đã giao", "Đã hủy"];
+
+export const PersonalPurchase = () => {
+  const [buttonClicked, setButtonClicked] = useState(0);
   const user = useSelector((state) => state.user.user);
-  const addressList = useSelector((state) => state.user.address) || [];
-
   return (
     <div className="p-5 w-full sm:w-2/3">
       <div
@@ -57,24 +59,21 @@ export const PersonalAddressPage = () => {
             backgroundColor: ThemeColor.LIGHT_GRAY,
           }}
         >
-          <div className="uppercase  font-bold text-slate-500">
-            Địa chỉ của tôi
+          <div className="bg-white w-full flex justify-around">
+            {buttons.map((label, index) => (
+              <button
+                key={index}
+                onClick={() => setButtonClicked(index)}
+                className={` p-1 ${
+                  buttonClicked === index
+                    ? buttonClickedStyle
+                    : "text-slate-700"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
-          <div className="border-b border-gray-300 text-sm text-gray-400 pb-1">
-            Quản lý thông tin địa chỉ giao hàng của bạn
-          </div>
-          <div>
-            <button className="py-2 text-sky-500">Thêm địa chỉ mới</button>
-          </div>
-          {addressList.length === 0 ? (
-            <div className="text-gray-400">Bạn chưa có địa chỉ nào</div>
-          ) : (
-            addressList.map((address) => (
-              <div className="">
-                <AddressCard address={address}></AddressCard>
-              </div>
-            ))
-          )}
         </div>
       </div>
     </div>

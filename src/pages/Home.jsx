@@ -13,21 +13,18 @@ export const Home = () => {
   const products = useSelector(
     (state) => state.product.products?.content || []
   );
-  const totalPages = useSelector(
-    (state) => state.product.page.totalPages 
-  );
+  const totalPages = useSelector((state) => state.product.page.totalPages);
   const currentPage = useSelector((state) => state.product.page.currentPage);
 
   const status = useSelector((state) => state.product.status);
   const error = useSelector((state) => state.product.error);
 
   useEffect(() => {
-    dispatch(fetchProducts({ pageNumber: currentPage, pageSize: 20}));
+    dispatch(fetchProducts({ pageNumber: currentPage, pageSize: 20 }));
   }, [dispatch, currentPage]);
 
-
   const handlePageClick = (page) => {
-    dispatch(setPage(page-1))
+    dispatch(setPage(page - 1));
   };
 
   console.log(error);

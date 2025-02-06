@@ -6,7 +6,6 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-// import SplitGroup from "./SlpitGroup";
 import { Link } from "react-router";
 import { fetchCategorys } from "../redux/slices/categorySlice";
 import { useDispatch, useSelector } from "react-redux";

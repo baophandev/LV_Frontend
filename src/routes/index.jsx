@@ -114,6 +114,17 @@ const router = createBrowserRouter([
               };
             },
           },
+          {
+            path: "/user/purchase/order/id",
+            async lazy() {
+              let { OrderDetail } = await import(
+                "../pages/OrderDetail"
+              );
+              return {
+                Component: OrderDetail,
+              };
+            },
+          },
         ],
       },
     ],

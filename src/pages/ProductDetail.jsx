@@ -12,6 +12,7 @@ import UpSizeImage from "../components/UpSizeImage";
 import AttributeTable from "../components/AttributeTable";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ReviewCard from "../components/ReviewCard";
+import { getVariantDiscount } from "../api/productApi";
 
 const labels = {
   0.5: "Useless",
@@ -33,16 +34,45 @@ export const ProductDetail = () => {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.product?.products);
   const status = useSelector((state) => state.product.status);
-  const error = useSelector((state) => state.product.error);
   const { productId } = useParams();
+  const [updatedProduct, setUpdatedProduct] = useState(null);
 
+  // Lấy dữ liệu sản phẩm từ Redux khi component mount
   useEffect(() => {
     dispatch(fetchProduct(productId));
   }, [dispatch, productId]);
 
-  console.log(error);
+  // Sau khi product được tải, cập nhật từng variant với trường discountValue
+  useEffect(() => {
+    if (product && product.variants && Array.isArray(product.variants)) {
+      const updateVariantsWithDiscount = async () => {
+        try {
+          const updatedVariants = await Promise.all(
+            product.variants.map(async (variant) => {
+              try {
+                const discountResponse = await getVariantDiscount(variant.id);
+                return {
+                  ...variant,
+                  discountValue: discountResponse.discountValue,
+                };
+              } catch (err) {
+                console.error(err);
+                return { ...variant, discountValue: 0 };
+              }
+            })
+          );
+          setUpdatedProduct({ ...product, variants: updatedVariants });
+        } catch (error) {
+          console.error("Lỗi khi cập nhật variants với discount: ", error);
+        }
+      };
+      updateVariantsWithDiscount();
+    }
+  }, [product]);
 
-  if (status === "loading") return <Loading></Loading>;
+  // Sử dụng product đã cập nhật nếu có, nếu không thì sử dụng product gốc từ Redux
+  const displayedProduct = updatedProduct || product;
+  if (status === "loading") return <Loading />;
   if (status === "failed")
     return (
       <div className="flex items-center justify-center text-red-700">
@@ -63,21 +93,21 @@ export const ProductDetail = () => {
       <div className="flex gap-7 p-2 py-5 rounded-md">
         <div className="flex justify-center gap-2 w-1/2">
           <div className="w-[85%] h-80 rounded-md bg-gray-200">
-            {product.images && product.images.length > 0 ? (
+            {displayedProduct?.images && displayedProduct.images.length > 0 ? (
               <>
                 <img
                   className="w-full h-full rounded-md cursor-pointer"
-                  src={`data:image/png;base64,${product.images[imageIndex].data}`}
-                  alt={product.name}
+                  src={`data:image/png;base64,${displayedProduct.images[imageIndex].data}`}
+                  alt={displayedProduct.name}
                   style={{ objectFit: "contain" }}
                   onClick={handleClickOpen}
                 />
                 <UpSizeImage
                   open={open}
                   handleClose={handleClose}
-                  images={product.images}
+                  images={displayedProduct.images}
                   imageNumber={imageIndex}
-                ></UpSizeImage>
+                />
               </>
             ) : (
               <img
@@ -90,10 +120,10 @@ export const ProductDetail = () => {
           </div>
           <div
             className={`flex flex-col gap-1 w-[20%] h-64 ${
-              product.images?.length > 4 ? "overflow-y-scroll" : ""
+              displayedProduct?.images?.length > 4 ? "overflow-y-scroll" : ""
             }`}
           >
-            {product.images?.map((image, index) => (
+            {displayedProduct?.images?.map((image, index) => (
               <div
                 key={index}
                 className="w-full h-24 cursor-pointer rounded-md bg-gray-200"
@@ -110,9 +140,9 @@ export const ProductDetail = () => {
             ))}
           </div>
         </div>
-        <div className="flex flex-col gap-3 ">
+        <div className="flex flex-col gap-3">
           <div className="uppercase text-2xl font-extrabold">
-            {product?.name}
+            {displayedProduct?.name}
           </div>
           <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
             <Rating
@@ -139,9 +169,7 @@ export const ProductDetail = () => {
           <div className="flex gap-2 flex-wrap pb-2 border-b border-b-gray-200">
             <button
               className="text-white px-4 py-1 rounded-md relative"
-              style={{
-                border: "1px solid #007580",
-              }}
+              style={{ border: "1px solid #007580" }}
             >
               <div className="font-medium" style={{ color: ThemeColor.BLUE }}>
                 1TB
@@ -151,17 +179,18 @@ export const ProductDetail = () => {
                 <CheckCircleIcon
                   sx={{ color: ThemeColor.BLUE }}
                   fontSize="small"
-                ></CheckCircleIcon>
+                />
               </div>
             </button>
           </div>
           <div className="text-gray-400">Chọn màu sắc:</div>
           <div className="flex gap-2 flex-wrap border-b border-b-gray-200 pb-2">
-            {product && product.variants && product.variants.length > 0 ? (
-              product.variants.map((variant, index) => (
+            {displayedProduct?.variants &&
+            displayedProduct.variants.length > 0 ? (
+              displayedProduct.variants.map((variant, index) => (
                 <button
                   key={index}
-                  className="text-white px-4 py-1 rounded-md border border-teal-800"
+                  className="text-white px-4 py-1 rounded-md border border-teal-800 text-sm"
                 >
                   <div
                     className="font-medium"
@@ -170,13 +199,31 @@ export const ProductDetail = () => {
                     {variant?.color}
                   </div>
                   <div className="text-yellow-400 font-medium">
-                    {variant?.price?.toLocaleString("vi-VN") || "0"}đ
+                    {variant.discountValue > 0
+                      ? // Tính giá sau giảm và chuyển về chuỗi định dạng "vi-VN" rồi nối thêm "đ"
+                        (
+                          variant.price *
+                          (1 - variant.discountValue / 100)
+                        ).toLocaleString("vi-VN") + "đ"
+                      : variant.price.toLocaleString("vi-VN") + "đ"}
                   </div>
-                  <div className="text-gray-400">
-                    Đã bán: {variant?.sold || 0}
-                  </div>
-                  <div className="text-gray-400">
-                    Còn lại: {variant?.stock || 0}
+                  {variant.discountValue > 0 && (
+                    <div className="flex gap-1 justify-center">
+                      <div className="text-slate-500 italic line-through">
+                        {variant.price.toLocaleString("vi-VN") + "đ"}
+                      </div>
+                      <div className="text-red-500">
+                        -{variant.discountValue}%
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex gap-2">
+                    <div className="text-gray-400 text-xs">
+                      Đã bán: {variant?.sold || 0}
+                    </div>
+                    <div className="text-gray-400 text-xs">
+                      Còn lại: {variant?.stock || 0}
+                    </div>
                   </div>
                 </button>
               ))
@@ -199,30 +246,25 @@ export const ProductDetail = () => {
               </div>
             </div>
             <button
-              className="py-1 px-6  text-white rounded-2xl"
-              style={{
-                backgroundColor: ThemeColor.MAIN_GRREN,
-              }}
+              className="py-1 px-6 text-white rounded-2xl"
+              style={{ backgroundColor: ThemeColor.MAIN_GRREN }}
             >
-              <AddShoppingCartOutlinedIcon
-                sx={{ color: "white" }}
-              ></AddShoppingCartOutlinedIcon>
+              <AddShoppingCartOutlinedIcon sx={{ color: "white" }} />
               Thêm vào giỏ hàng
             </button>
           </div>
         </div>
       </div>
-      <div className="mt-2 rounded-md  p-5 text-gray-700 bg-gray-100">
-        <div className="uppercase text-2xl font-extrabold ">Mô tả: </div>
-        <p className="">{product.description}</p>
-        <AttributeTable productId={product.id}></AttributeTable>
+      <div className="mt-2 rounded-md p-5 text-gray-700 bg-gray-100">
+        <div className="uppercase text-2xl font-extrabold">Mô tả: </div>
+        <p>{displayedProduct?.description}</p>
+        <AttributeTable productId={displayedProduct?.id} />
       </div>
       <div className="mt-3 pt-3 border-t border-b-gray-200">
-        <div className="uppercase text-2xl font-extrabold text-gray-700 ">
-          Đánh giá của người mua:{" "}
+        <div className="uppercase text-2xl font-extrabold text-gray-700">
+          Đánh giá của người mua:
         </div>
-        <ReviewCard></ReviewCard>
-        <ReviewCard></ReviewCard>
+        <ReviewCard />
         <div className="w-full flex justify-center mt-3">
           <div className="px-5 py-2 rounded-2xl text-center text-gray-700 cursor-pointer border border-gray-200 w-1/3">
             Hiển thị thêm

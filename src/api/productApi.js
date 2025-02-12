@@ -40,3 +40,14 @@ export const fetchAttributeApi = async (productId) => {
   const response = await axiosInstance.get(`/product/${productId}/attribute`);
   return response.data;
 };
+
+export const getVariantDiscount = async (variantId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/product/discount/getActive/${variantId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

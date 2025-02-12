@@ -14,19 +14,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ReviewCard from "../components/ReviewCard";
 import { getVariantDiscount } from "../api/productApi";
 
-const labels = {
-  0.5: "Useless",
-  1: "Useless+",
-  1.5: "Poor",
-  2: "Poor+",
-  2.5: "Ok",
-  3: "Ok+",
-  3.5: "Good",
-  4: "Good+",
-  4.5: "Excellent",
-  5: "Excellent+",
-};
-
 export const ProductDetail = () => {
   const [amount, setAmount] = useState(1);
   const [imageIndex, setImageIndex] = useState(0);
@@ -147,24 +134,13 @@ export const ProductDetail = () => {
           <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
             <Rating
               name="text-feedback"
-              value={3.5}
+              value={displayedProduct.rating}
               readOnly
-              precision={0.5}
+              precision={displayedProduct.rating}
               emptyIcon={
                 <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
               }
             />
-            <Box
-              sx={{
-                ml: 1,
-                backgroundColor: ThemeColor.LIGHT_GRAY,
-                padding: "1px",
-                borderRadius: "5px",
-                color: "Gray",
-              }}
-            >
-              {labels[3.5]}
-            </Box>
           </Box>
           <div className="flex gap-2 flex-wrap pb-2 border-b border-b-gray-200">
             <button

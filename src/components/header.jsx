@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import ThemeColor from "../constant/theme";
 import { getMyInfo, getUserAddress, logout } from "../redux/slices/userSlice";
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -64,7 +65,9 @@ const Header = () => {
       }}
     >
       <div
-        className="p-2 flex flex-wrap justify-evenly items-center"
+        className={`flex flex-wrap justify-evenly items-center ${
+          Object.keys(user).length === 0 ? "py-2" : ""
+        }`}
         style={{ backgroundColor: ThemeColor.LIGHT_GRAY }}
       >
         <Link to="/">
@@ -88,25 +91,29 @@ const Header = () => {
           </button>
         </div>
         <div className="flex gap-2">
-          <Link
-            to={"/cart"}
-            className=" flex px-2 py-1 gap-2 rounded-md bg-white"
-          >
-            <ShoppingCartOutlinedIcon
-              sx={{
-                color: ThemeColor.DARK_GREEN,
-              }}
-            />
-            <div
-              className="w-6 rounded-full flex justify-center items-center shadow-md text-white"
-              style={{ backgroundColor: ThemeColor.DARK_GREEN }}
+          <div className="flex justify-center items-center">
+            <Link
+              to={"/cart"}
+              className=" flex px-2 py-1 gap-2 rounded-md bg-white"
             >
-              1
-            </div>
-          </Link>
-          <div className="p-1 rounded-md bg-white">
+              <ShoppingCartOutlinedIcon
+                sx={{
+                  color: ThemeColor.DARK_GREEN,
+                }}
+              />
+              <div
+                className="w-6 rounded-full flex justify-center items-center shadow-md text-white"
+                style={{ backgroundColor: ThemeColor.DARK_GREEN }}
+              >
+                1
+              </div>
+            </Link>
+          </div>
+          <div className="p-1 rounded-md">
             {Object.keys(user).length === 0 ? (
-              <Link to={"/login"}>Đăng nhập</Link>
+              <Link className="bg-white p-2 rounded-md" to={"/login"}>
+                Đăng nhập
+              </Link>
             ) : (
               <Button
                 id="basic-button"
@@ -115,7 +122,15 @@ const Header = () => {
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
               >
-                {user.displayName || "Tài khoản"}
+                {user.avatar ? (
+                  <img
+                    className="w-10 h-10 rounded-full"
+                    src={`data:image/png;base64,${user.avatar?.data}`}
+                    alt="User Avatar"
+                  />
+                ) : (
+                  <AccountCircleOutlinedIcon></AccountCircleOutlinedIcon>
+                )}
               </Button>
             )}
             <Menu

@@ -29,9 +29,11 @@ export const ProductDetail = () => {
     dispatch(fetchProduct(productId));
   }, [dispatch, productId]);
 
-  // Sau khi product được tải, cập nhật từng variant với trường discountValue
+  // Cập nhật variants với discount nếu có dữ liệu product
   useEffect(() => {
-    if (product && product.variants && Array.isArray(product.variants)) {
+    if (!product) return; // Đảm bảo product không null hay undefined
+
+    if (Array.isArray(product.variants) && product.variants.length > 0) {
       const updateVariantsWithDiscount = async () => {
         try {
           const updatedVariants = await Promise.all(
@@ -40,7 +42,7 @@ export const ProductDetail = () => {
                 const discountResponse = await getVariantDiscount(variant.id);
                 return {
                   ...variant,
-                  discountValue: discountResponse.discountValue,
+                  discountValue: discountResponse?.discountValue || 0,
                 };
               } catch (err) {
                 console.error(err);
@@ -54,11 +56,15 @@ export const ProductDetail = () => {
         }
       };
       updateVariantsWithDiscount();
+    } else {
+      // Nếu không có variants, đảm bảo product vẫn được cập nhật với variants là []
+      setUpdatedProduct({ ...product, variants: [] });
     }
   }, [product]);
 
   // Sử dụng product đã cập nhật nếu có, nếu không thì sử dụng product gốc từ Redux
   const displayedProduct = updatedProduct || product;
+
   if (status === "loading") return <Loading />;
   if (status === "failed")
     return (
@@ -84,8 +90,8 @@ export const ProductDetail = () => {
               <>
                 <img
                   className="w-full h-full rounded-md cursor-pointer"
-                  src={`data:image/png;base64,${displayedProduct.images[imageIndex].data}`}
-                  alt={displayedProduct.name}
+                  src={`data:image/png;base64,${displayedProduct.images[imageIndex]?.data}`}
+                  alt={displayedProduct?.name || "Ảnh sản phẩm"}
                   style={{ objectFit: "contain" }}
                   onClick={handleClickOpen}
                 />
@@ -129,14 +135,14 @@ export const ProductDetail = () => {
         </div>
         <div className="flex flex-col gap-3">
           <div className="uppercase text-2xl font-extrabold">
-            {displayedProduct?.name}
+            {displayedProduct?.name || "Tên sản phẩm"}
           </div>
           <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
             <Rating
               name="text-feedback"
-              value={displayedProduct.rating}
+              value={displayedProduct?.rating || 0}
               readOnly
-              precision={displayedProduct.rating}
+              precision={0.5}
               emptyIcon={
                 <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
               }
@@ -172,21 +178,20 @@ export const ProductDetail = () => {
                     className="font-medium"
                     style={{ color: ThemeColor.BLUE }}
                   >
-                    {variant?.color}
+                    {variant?.color || "Không xác định"}
                   </div>
                   <div className="text-yellow-400 font-medium">
                     {variant.discountValue > 0
-                      ? // Tính giá sau giảm và chuyển về chuỗi định dạng "vi-VN" rồi nối thêm "đ"
-                        (
-                          variant.price *
+                      ? (
+                          (variant.price || 0) *
                           (1 - variant.discountValue / 100)
                         ).toLocaleString("vi-VN") + "đ"
-                      : variant.price.toLocaleString("vi-VN") + "đ"}
+                      : (variant.price || 0).toLocaleString("vi-VN") + "đ"}
                   </div>
                   {variant.discountValue > 0 && (
                     <div className="flex gap-1 justify-center">
                       <div className="text-slate-500 italic line-through">
-                        {variant.price.toLocaleString("vi-VN") + "đ"}
+                        {(variant.price || 0).toLocaleString("vi-VN") + "đ"}
                       </div>
                       <div className="text-red-500">
                         -{variant.discountValue}%
@@ -233,7 +238,7 @@ export const ProductDetail = () => {
       </div>
       <div className="mt-2 rounded-md p-5 text-gray-700 bg-gray-100">
         <div className="uppercase text-2xl font-extrabold">Mô tả: </div>
-        <p>{displayedProduct?.description}</p>
+        <p>{displayedProduct?.description || "Chưa có mô tả"}</p>
         <AttributeTable productId={displayedProduct?.id} />
       </div>
       <div className="mt-3 pt-3 border-t border-b-gray-200">

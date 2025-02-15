@@ -124,7 +124,7 @@ const Header = () => {
               >
                 {user.avatar ? (
                   <img
-                    className="w-10 h-10 rounded-full"
+                    className="w-10 h-10 rounded-full object-cover"
                     src={`data:image/png;base64,${user.avatar?.data}`}
                     alt="User Avatar"
                   />

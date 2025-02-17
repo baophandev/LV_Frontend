@@ -44,7 +44,7 @@ export const Home = () => {
   return (
     <div className="p-5 w-full sm:w-2/3">
       {/* <Carousel images={adImages}></Carousel> */}
-      <div className="w-full flex gap-2 flex-wrap items-center">
+      <div className="w-full flex flex-wrap items-center">
         {products?.map((product) => (
           <ProductCart
             key={product.id}

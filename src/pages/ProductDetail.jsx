@@ -12,7 +12,7 @@ import UpSizeImage from "../components/UpSizeImage";
 import AttributeTable from "../components/AttributeTable";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ReviewCard from "../components/ReviewCard";
-import { getVariantDiscount } from "../api/productApi";
+import { getProductReview, getVariantDiscount } from "../api/productApi";
 
 export const ProductDetail = () => {
   const [amount, setAmount] = useState(1);
@@ -23,6 +23,7 @@ export const ProductDetail = () => {
   const status = useSelector((state) => state.product.status);
   const { productId } = useParams();
   const [updatedProduct, setUpdatedProduct] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
   // Lấy dữ liệu sản phẩm từ Redux khi component mount
   useEffect(() => {
@@ -61,6 +62,23 @@ export const ProductDetail = () => {
       setUpdatedProduct({ ...product, variants: [] });
     }
   }, [product]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const reivews = await getProductReview({
+          pageNumber: 0,
+          pageSize: 6,
+          productId,
+        });
+        setReviews(reivews.content || []);
+      } catch (error) {
+        console.log(error);
+        setReviews([]);
+      }
+    };
+    fetchReviews();
+  }, [productId]);
 
   // Sử dụng product đã cập nhật nếu có, nếu không thì sử dụng product gốc từ Redux
   const displayedProduct = updatedProduct || product;
@@ -245,7 +263,13 @@ export const ProductDetail = () => {
         <div className="uppercase text-2xl font-extrabold text-gray-700">
           Đánh giá của người mua:
         </div>
-        <ReviewCard />
+        {reviews.length > 0 ? (
+          reviews.map((review) => (
+            <ReviewCard review={review}/>
+          ))
+        ) : (
+          <div>Không có đánh giá</div>
+        )}
         <div className="w-full flex justify-center mt-3">
           <div className="px-5 py-2 rounded-2xl text-center text-gray-700 cursor-pointer border border-gray-200 w-1/3">
             Hiển thị thêm

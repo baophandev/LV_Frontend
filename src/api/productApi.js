@@ -51,3 +51,18 @@ export const getVariantDiscount = async (variantId) => {
     throw error;
   }
 };
+
+export const getProductReview = async ({ pageNumber = 0, pageSize = 6, productId }) => {
+  try{
+    const response = await axiosInstance.get('/review', {
+      params:{
+        page: pageNumber,
+        size: pageSize,
+        productId: productId
+      }
+    })
+    return response.data;
+  }catch(error){
+    throw error;
+  }
+}

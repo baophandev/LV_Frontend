@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import ThemeColor from "../constant/theme";
 import { getMyInfo, getUserAddress, logout } from "../redux/slices/userSlice";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import LoginIcon from "@mui/icons-material/Login";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -111,8 +112,8 @@ const Header = () => {
           </div>
           <div className="p-1 rounded-md">
             {Object.keys(user).length === 0 ? (
-              <Link className="bg-white p-2 rounded-md" to={"/login"}>
-                Đăng nhập
+              <Link className="bg-sky-500 text-white p-2 rounded-md font-semibold" to={"/login"}>
+               <LoginIcon/> Đăng nhập
               </Link>
             ) : (
               <Button

@@ -1,10 +1,10 @@
-import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
+// import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import ThemeColor from "../constant/theme";
 import { Link } from "react-router-dom";
 
 const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
   return (
-    <div className=" w-40 sm:w-52 sm:h-72 mb-4 rounded-md pb-5 relative">
+    <div className=" w-40 sm:w-52 sm:h-72 mb-4 p-2 pb-5 relative border border-gray-200 hover:shadow-md">
       <div className="w-full h-3/4 mb-2">
         <Link to={`/product/${id}`}>
           <img
@@ -26,13 +26,12 @@ const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
           >
             {name}
           </Link>
-          <div className="font-medium text-yellow-400">
+          <div className="text-slate-600">
             {discountDisplayed > 0
               ? // Tính giá sau giảm và chuyển về chuỗi định dạng "vi-VN" rồi nối thêm "đ"
-                (
-                  price *
-                  (1 - discountDisplayed / 100)
-                ).toLocaleString("vi-VN") + "đ"
+                (price * (1 - discountDisplayed / 100)).toLocaleString(
+                  "vi-VN"
+                ) + "đ"
               : price.toLocaleString("vi-VN") + "đ"}
             {discountDisplayed > 0 && (
               <div className="flex gap-1 justify-center">
@@ -44,18 +43,8 @@ const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
             )}
           </div>
         </div>
-        <button className="ml-auto">
-          <AddShoppingCartOutlinedIcon
-            sx={{
-              color: "white",
-              backgroundColor: ThemeColor.BLUE,
-              padding: "2px",
-              borderRadius: "5px",
-            }}
-          ></AddShoppingCartOutlinedIcon>
-        </button>
       </div>
-      <div className="absolute top-0 left-0 bg-red-500 px-2 text-white rounded-tl-md">
+      <div className="absolute top-0 left-0 bg-red-500 px-2 text-white rounded-br-md">
         -{discountDisplayed}%
       </div>
     </div>

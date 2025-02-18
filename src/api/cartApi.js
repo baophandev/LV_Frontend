@@ -5,13 +5,17 @@ const axiosInstance = axios.create({
   timeout: 10000,
 });
 
+const token = localStorage.getItem("authToken");
 
-export const fetchCartApi = async ({userId}) => {
-    try{
-        const response = await axiosInstance.get(`/cart/${userId}`);
-        return response.data;
-    }catch(error){
-        throw error;
-    }
-
-}
+export const fetchCartApi = async (userId) => {
+  try {
+    const response = await axiosInstance.get(`/cart/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

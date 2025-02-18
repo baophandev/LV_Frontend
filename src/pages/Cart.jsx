@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../redux/slices/cartSlice";
 import ThemeColor from "../constant/theme";
@@ -6,19 +6,31 @@ import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
 import { getVariantDiscount } from "../api/productApi";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import SelectAddressDialog from "../components/SelectAddressDialog";
 
 export const Cart = () => {
-  const dispacth = useDispatch();
-  const { cart, status, error } = useSelector((state) => state.cart);
+  const dispatch = useDispatch(); // Đúng chính tả
+  const { cart, status } = useSelector((state) => state.cart);
   const cartData = cart?.data?.items || [];
   const user = useSelector((state) => state.user.user);
   const userId = user.id;
   const [updatedCart, setUpdatedCart] = useState(null);
+  const [open, setOpen] = useState(false);
+  const addressList = useSelector((state) => state.user.address);
+  const memoizedAddressList = useMemo(() => addressList || [], [addressList]);
+
+  const [address, setAddress] = useState(null);
+
+  useEffect(() => {
+    if (memoizedAddressList.length > 0) {
+      setAddress(memoizedAddressList[0]);
+    }
+  }, [memoizedAddressList]);
   useEffect(() => {
     if (status === "idle" && userId) {
-      dispacth(fetchCart(userId));
+      dispatch(fetchCart(userId));
     }
-  }, [dispacth, status, userId]);
+  }, [dispatch, userId, status]);
 
   useEffect(() => {
     if (!cart?.data?.items || cart.data.items.length === 0) {
@@ -57,6 +69,13 @@ export const Cart = () => {
   const displayedCartItem =
     updatedCart?.items?.length > 0 ? updatedCart.items : cartData;
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   if (status === "loading") return <Loading></Loading>;
 
@@ -93,10 +112,7 @@ export const Cart = () => {
               src={`data:image/png;base64,${item.images[0].data}`}
               alt=""
             />
-            <Link
-              to={`/product/${item.productId}`}
-              className="w-2/5"
-            >
+            <Link to={`/product/${item.productId}`} className="w-2/5">
               {item.productName}
             </Link>
             <div className="w-1/6">{item.productColor}</div>
@@ -137,15 +153,58 @@ export const Cart = () => {
         </div>
       )}
       <div
-        className="bg-gray-100 text-lg fixed z-100 w-2/3 bottom-5 rounded-md p-5 font-extrabold uppercase"
+        className="bg-gray-100 fixed z-100 w-2/3 bottom-5 rounded-md p-5 flex items-center"
         style={{
           left: "50%",
           transform: "translateX(-50%)",
-          color: ThemeColor.MAIN_GRREN,
         }}
       >
-        Tổng thanh toán:
+        <div className="flex gap-2 border-r pr-3 ml-auto">
+          <div>Địa chỉ: </div>
+          <div className="text-slate-500">
+            {address ? (
+              <>
+                <div className="text-sm">
+                  {address.receiverName || ""}, {address.receiverPhone || ""}
+                </div>
+                <div className="text-sm">
+                  {address.detail || "-"} {", "}
+                  {address.ward || "-"} {", "}
+                  {address.district || "-"} {", "}
+                  {address.province || "-"} {"."}
+                </div>
+              </>
+            ) : (
+              <div className="text-gray-500 text-sm">Chưa có địa chỉ</div>
+            )}
+            <div
+              className="text-sky-500 text-sm cursor-pointer"
+              onClick={handleClickOpen}
+            >
+              Thay đổi
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-2 border-r px-2">
+          <div>Đã chọn: </div>
+          <div className="text-slate-500">2</div>
+        </div>
+        <div className="flex gap-2 px-2 border-r">
+          <div>Tổng thanh toán: </div>
+          <div className="text-slate-500">25.000.000đ</div>
+        </div>
+        <div className="px-2">
+          <button className="bg-sky-500 px-2 py-1 text-white rounded-md font-bold">
+            Đặt hàng
+          </button>
+        </div>
       </div>
+      <SelectAddressDialog
+        open={open}
+        handleClose={() => {
+          handleClose();
+        }}
+      ></SelectAddressDialog>
     </div>
   );
 };

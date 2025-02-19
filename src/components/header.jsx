@@ -14,6 +14,7 @@ import ThemeColor from "../constant/theme";
 import { getMyInfo, getUserAddress, logout } from "../redux/slices/userSlice";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import LoginIcon from "@mui/icons-material/Login";
+import { fetchCart } from "../redux/slices/cartSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,8 @@ const Header = () => {
   const error = useSelector((state) => state.categorys.error);
   const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.user.user);
+  const { count } = useSelector((state) => state.cart);
+  const userId = user.id;
 
   useEffect(() => {
     if (status === "idle") {
@@ -31,6 +34,12 @@ const Header = () => {
       }
     }
   }, [status, dispatch, token, user]);
+
+  useEffect(() => {
+      if (userId) {
+        dispatch(fetchCart(userId));
+      }
+    }, [dispatch, userId, status]);
 
   useEffect(() => {
     if(user.id && token){
@@ -106,14 +115,17 @@ const Header = () => {
                 className="w-6 rounded-full flex justify-center items-center shadow-md text-white"
                 style={{ backgroundColor: ThemeColor.DARK_GREEN }}
               >
-                1
+                {count || 0}
               </div>
             </Link>
           </div>
           <div className="p-1 rounded-md">
             {Object.keys(user).length === 0 ? (
-              <Link className="bg-sky-500 text-white p-2 rounded-md font-semibold" to={"/login"}>
-               <LoginIcon/> Đăng nhập
+              <Link
+                className="bg-sky-500 text-white p-2 rounded-md font-semibold"
+                to={"/login"}
+              >
+                <LoginIcon /> Đăng nhập
               </Link>
             ) : (
               <Button

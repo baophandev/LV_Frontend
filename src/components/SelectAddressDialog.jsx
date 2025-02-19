@@ -5,6 +5,7 @@ import Slide from "@mui/material/Slide";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import AddressCard from "./AddressCard";
+import { Link } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -23,6 +24,7 @@ const SelectAddressDialog = ({ open, handleClose, handleSetAddrress }) => {
       >
         <DialogContent>
           <div className="font-bold">Chọn địa chỉ nhận hàng: </div>
+          <Link to={"/user/address"} className="text-sm text-sky-500">Thêm địa chỉ mới</Link>
           {addressList.length === 0 ? (
             <div className="text-gray-400">Bạn chưa có địa chỉ nào</div>
           ) : (

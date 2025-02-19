@@ -10,6 +10,7 @@ const cartSlice = createSlice({
   name: "cart",
   initialState: {
     cart: {},
+    count: 0,
     status: "idle",
     error: null,
   },
@@ -22,6 +23,7 @@ const cartSlice = createSlice({
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.cart = action.payload;
+        state.count = Object.keys(action.payload?.data?.items || {}).length;
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.status = "failed";

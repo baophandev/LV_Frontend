@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCart } from "../redux/slices/cartSlice";
+import { useSelector } from "react-redux";
 import ThemeColor from "../constant/theme";
 import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
@@ -9,11 +8,8 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import SelectAddressDialog from "../components/SelectAddressDialog";
 
 export const Cart = () => {
-  const dispatch = useDispatch(); // Đúng chính tả
   const { cart, status } = useSelector((state) => state.cart);
   const cartData = cart?.data?.items || [];
-  const user = useSelector((state) => state.user.user);
-  const userId = user.id;
   const [updatedCart, setUpdatedCart] = useState(null);
   const [open, setOpen] = useState(false);
   const addressList = useSelector((state) => state.user.address);
@@ -37,11 +33,11 @@ export const Cart = () => {
     handleClose();
   };
 
-  useEffect(() => {
-    if (status === "idle" && userId) {
-      dispatch(fetchCart(userId));
-    }
-  }, [dispatch, userId, status]);
+  // useEffect(() => {
+  //   if (status === "idle" && userId) {
+  //     dispatch(fetchCart(userId));
+  //   }
+  // }, [dispatch, userId, status]);
 
   useEffect(() => {
     if (!cart?.data?.items || cart.data.items.length === 0) {

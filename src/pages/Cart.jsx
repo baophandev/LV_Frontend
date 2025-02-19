@@ -18,14 +18,25 @@ export const Cart = () => {
   const [open, setOpen] = useState(false);
   const addressList = useSelector((state) => state.user.address);
   const memoizedAddressList = useMemo(() => addressList || [], [addressList]);
+  const [count, setCount] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [selectedItems, setSelectedItems] = useState({}); // Lưu trạng thái checkbox
 
   const [address, setAddress] = useState(null);
+
+  console.log("Selected item: ", selectedItems)
 
   useEffect(() => {
     if (memoizedAddressList.length > 0) {
       setAddress(memoizedAddressList[0]);
     }
   }, [memoizedAddressList]);
+
+  const handleSetAddrress = (address) => {
+    setAddress(address);
+    handleClose();
+  };
+
   useEffect(() => {
     if (status === "idle" && userId) {
       dispatch(fetchCart(userId));
@@ -77,6 +88,34 @@ export const Cart = () => {
     setOpen(false);
   };
 
+  const handleSelectItem = (item, isChecked) => {
+    setSelectedItems((prev) => {
+      const updatedItems = { ...prev };
+      if (isChecked) {
+        updatedItems[item.itemId] = item;
+      } else {
+        delete updatedItems[item.itemId];
+      }
+      return updatedItems;
+    });
+  };
+
+  useEffect(() => {
+    setCount(Object.keys(selectedItems).length);
+  }, [selectedItems]);
+
+  useEffect(() => {
+    const total = Object.values(selectedItems).reduce(
+      (sum, item) =>
+        sum +
+        (item.price || 0) *
+          (1 - item.discountValue / 100) *
+          (item.quantity || 0),
+      0
+    );
+    setTotalPrice(total);
+  }, [selectedItems]);
+
   if (status === "loading") return <Loading></Loading>;
 
   return (
@@ -106,7 +145,11 @@ export const Cart = () => {
             key={index}
             className="flex p-3 items-center gap-2 mb-1 border-b border-b-gray-200"
           >
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              checked={!!selectedItems[item.itemId]}
+              onChange={(e) => handleSelectItem(item, e.target.checked)}
+            />
             <img
               className="w-20 rounded-md"
               src={`data:image/png;base64,${item.images[0].data}`}
@@ -138,9 +181,11 @@ export const Cart = () => {
             </div>
             <input className="w-10" type="number" value={item.quantity || 0} />
             <div className="w-28 text-sm">
-              {((item.price || 0) * (item.quantity || 0)).toLocaleString(
-                "vi-VN"
-              ) + "đ"}
+              {(
+                (item.price || 0) *
+                (1 - item.discountValue / 100) *
+                (item.quantity || 0)
+              ).toLocaleString("vi-VN") + "đ"}
             </div>
             <div className="text-red-500 ml-auto">
               <DeleteOutlineOutlinedIcon />
@@ -187,11 +232,13 @@ export const Cart = () => {
         </div>
         <div className="flex gap-2 border-r px-2">
           <div>Đã chọn: </div>
-          <div className="text-slate-500">2</div>
+          <div className="text-slate-500">{count}</div>
         </div>
         <div className="flex gap-2 px-2 border-r">
           <div>Tổng thanh toán: </div>
-          <div className="text-slate-500">25.000.000đ</div>
+          <div className="text-slate-500">
+            {totalPrice.toLocaleString("vi-VN") + "đ"}
+          </div>
         </div>
         <div className="px-2">
           <button className="bg-sky-500 px-2 py-1 text-white rounded-md font-bold">
@@ -204,6 +251,7 @@ export const Cart = () => {
         handleClose={() => {
           handleClose();
         }}
+        handleSetAddrress={handleSetAddrress}
       ></SelectAddressDialog>
     </div>
   );

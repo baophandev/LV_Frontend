@@ -10,7 +10,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const SelectAddressDialog = ({ open, handleClose }) => {
+const SelectAddressDialog = ({ open, handleClose, handleSetAddrress }) => {
   const addressList = useSelector((state) => state.user.address) || [];
   return (
     <React.Fragment>
@@ -29,7 +29,12 @@ const SelectAddressDialog = ({ open, handleClose }) => {
             addressList.map((address) => (
               <div className="flex items-center gap-3">
                 <AddressCard address={address}></AddressCard>
-                <button className="bg-sky-400 text-white px-1 rounded-sm">Chọn</button>
+                <button
+                  className="bg-sky-400 text-white px-1 rounded-sm"
+                  onClick={() => handleSetAddrress(address)}
+                >
+                  Chọn
+                </button>
               </div>
             ))
           )}

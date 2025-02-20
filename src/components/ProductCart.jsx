@@ -1,10 +1,9 @@
 // import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
-import ThemeColor from "../constant/theme";
 import { Link } from "react-router-dom";
 
 const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
   return (
-    <div className=" w-40 sm:w-52 sm:h-72 mb-4 p-2 pb-5 relative border border-gray-200 hover:shadow-md">
+    <div className=" w-1/5 h-auto sm:w-1/5 sm:h-96 mb-4 p-2 pb-5 relative border border-gray-200 shadow-sm rounded-md">
       <div className="w-full h-3/4 mb-2">
         <Link to={`/product/${id}`}>
           <img
@@ -21,8 +20,7 @@ const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
         <div className="">
           <Link
             to={`/product/${id}`}
-            className="line-clamp-2 mb-1"
-            style={{ color: ThemeColor.MAIN_GRREN }}
+            className="line-clamp-2 mb-1 text-slate-500 font-bold"
           >
             {name}
           </Link>
@@ -44,7 +42,7 @@ const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
           </div>
         </div>
       </div>
-      <div className="absolute top-0 left-0 bg-red-500 px-2 text-white rounded-br-md">
+      <div className="absolute top-0 left-0 bg-red-500 px-2 text-white rounded-br-md rounded-tl-md">
         -{discountDisplayed}%
       </div>
     </div>

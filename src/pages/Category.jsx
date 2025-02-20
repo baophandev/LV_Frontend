@@ -55,7 +55,7 @@ export const Category = () => {
       </Alert>
     );
   return (
-    <div className="p-5 w-full sm:w-2/3">
+    <div className="p-5 w-full sm:w-3/4">
       <div
         className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold"
         style={{

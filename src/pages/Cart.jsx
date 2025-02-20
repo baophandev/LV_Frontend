@@ -6,12 +6,14 @@ import { Link } from "react-router-dom";
 import { getVariantDiscount } from "../api/productApi";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import SelectAddressDialog from "../components/SelectAddressDialog";
+import OrderDialog from "../components/OrderDialog";
 
 export const Cart = () => {
   const { cart, status } = useSelector((state) => state.cart);
   const cartData = cart?.data?.items || [];
   const [updatedCart, setUpdatedCart] = useState(null);
   const [open, setOpen] = useState(false);
+  const [orderOpen, setOrderOpen] = useState(false);
   const addressList = useSelector((state) => state.user.address);
   const memoizedAddressList = useMemo(() => addressList || [], [addressList]);
   const [count, setCount] = useState(0);
@@ -83,6 +85,9 @@ export const Cart = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  const onClose = () => {
+    setOrderOpen(false);
+  };
 
   const handleSelectItem = (item, isChecked) => {
     setSelectedItems((prev) => {
@@ -125,13 +130,15 @@ export const Cart = () => {
       >
         Giỏ hàng
       </div>
-      <div className="flex p-3 gap-2 border-b">
+      <div className="flex p-3 gap-2 border-b" style={{
+        backgroundColor: ThemeColor.LIGHT_GRAY
+      }}>
         <input type="checkbox" />
         <div className="w-20 text-center">Ảnh</div>
         <div className="w-2/5">Tên sản phẩm</div>
         <div className="w-1/6">Phân loại</div>
-        <div className="w-24">Đơn giá</div>
-        <div className="1/6">Số lượng</div>
+        <div className="w-28">Đơn giá</div>
+        <div className="w-10">SL</div>
         <div className="1/6">Tổng tiền</div>
         <div className="text-red-500 ml-auto">Xóa</div>
       </div>
@@ -139,7 +146,7 @@ export const Cart = () => {
         displayedCartItem.map((item, index) => (
           <div
             key={index}
-            className="flex p-3 items-center gap-2 mb-1 border-b border-b-gray-200"
+            className= {`flex p-3 items-center gap-2 border-b border-b-gray-200 ${index % 2 !== 0 ? 'bg-gray-50' : ''}`}
           >
             <input
               type="checkbox"
@@ -237,8 +244,8 @@ export const Cart = () => {
           </div>
         </div>
         <div className="px-2">
-          <button className="bg-sky-500 px-2 py-1 text-white rounded-md font-bold">
-            Đặt hàng
+          <button className="bg-sky-500 px-3 py-1 text-white rounded-sm font-bold" onClick={() => setOrderOpen(true)}>
+            Mua hàng
           </button>
         </div>
       </div>
@@ -249,6 +256,15 @@ export const Cart = () => {
         }}
         handleSetAddrress={handleSetAddrress}
       ></SelectAddressDialog>
+      <OrderDialog
+        open={orderOpen}
+        onClose={() => {
+          onClose();
+        }}
+        order={selectedItems}
+        address={address}
+        totalPrice={totalPrice}
+      ></OrderDialog>
     </div>
   );
 };

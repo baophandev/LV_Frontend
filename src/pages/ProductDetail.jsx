@@ -13,6 +13,7 @@ import AttributeTable from "../components/AttributeTable";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ReviewCard from "../components/ReviewCard";
 import { getProductReview, getVariantDiscount } from "../api/productApi";
+import { addtoCartApi } from "../api/cartApi";
 
 export const ProductDetail = () => {
   const [amount, setAmount] = useState(1);
@@ -24,6 +25,9 @@ export const ProductDetail = () => {
   const { productId } = useParams();
   const [updatedProduct, setUpdatedProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [selectedItems, setSelectedItems] = useState(null);
+  const user = useSelector((state) => state.user.user);
+  const userId = user.id;
 
   // Lấy dữ liệu sản phẩm từ Redux khi component mount
   useEffect(() => {
@@ -97,6 +101,26 @@ export const ProductDetail = () => {
 
   const handleClickOpen = () => {
     setOpen(true);
+  };
+
+  const handleSelectedItems = (item) => {
+    setSelectedItems((prev) => (prev?.id === item.id ? null : item));
+  };
+
+  const handleAddToCart = async () => {
+    if(!selectedItems){
+      alert("Vui lòng chọn một biến thể trước khi thêm vào giỏ hàng!");
+      return;
+    }
+
+    try {
+      const response = await addtoCartApi({userId, variantId: selectedItems.id, quantity: amount});
+      alert("Thêm vào giỏ hàng thành công!");
+      return response;
+    } catch (error) {
+      alert("Đã có lỗi xảy ra khi thêm vào giỏ hàng");
+      console.log(error);
+    }
   };
 
   return (
@@ -191,6 +215,7 @@ export const ProductDetail = () => {
                 <button
                   key={index}
                   className="text-white px-4 py-1 rounded-md border border-teal-800 text-sm"
+                  onClick={() => {handleSelectedItems(variant);}}
                 >
                   <div
                     className="font-medium"
@@ -247,6 +272,7 @@ export const ProductDetail = () => {
             <button
               className="py-1 px-6 text-white rounded-2xl"
               style={{ backgroundColor: ThemeColor.MAIN_GRREN }}
+              onClick={handleAddToCart}
             >
               <AddShoppingCartOutlinedIcon sx={{ color: "white" }} />
               Thêm vào giỏ hàng
@@ -264,9 +290,7 @@ export const ProductDetail = () => {
           Đánh giá của người mua:
         </div>
         {reviews.length > 0 ? (
-          reviews.map((review) => (
-            <ReviewCard review={review}/>
-          ))
+          reviews.map((review) => <ReviewCard review={review} />)
         ) : (
           <div>Không có đánh giá</div>
         )}

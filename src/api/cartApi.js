@@ -19,3 +19,26 @@ export const fetchCartApi = async (userId) => {
     throw error;
   }
 };
+
+export const addtoCartApi = async ({ userId, variantId, quantity }) => {
+  try {
+    const response = await axiosInstance.post(
+      "/cart",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          userId,
+          variantId,
+          quantity,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi API addtoCartApi:", error?.response?.data || error);
+    throw error;
+  }
+};

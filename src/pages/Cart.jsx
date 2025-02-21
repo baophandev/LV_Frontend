@@ -7,6 +7,16 @@ import { getVariantDiscount } from "../api/productApi";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import SelectAddressDialog from "../components/SelectAddressDialog";
 import OrderDialog from "../components/OrderDialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Checkbox,
+} from "@mui/material";
 
 export const Cart = () => {
   const { cart, status } = useSelector((state) => state.cart);
@@ -19,6 +29,7 @@ export const Cart = () => {
   const [count, setCount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [selectedItems, setSelectedItems] = useState({}); // Lưu trạng thái checkbox
+  const [selectAll, setSelectAll] = useState(false);
 
   const [address, setAddress] = useState(null);
 
@@ -89,6 +100,20 @@ export const Cart = () => {
     setOrderOpen(false);
   };
 
+  const handleSelectAll = (isChecked) => {
+    setSelectAll(isChecked);
+    if (isChecked) {
+      const allItems = {};
+      displayedCartItem.forEach((item) => {
+        allItems[item.itemId] = item;
+      });
+      setSelectedItems(allItems);
+    } else {
+      setSelectedItems({});
+    }
+  };
+
+
   const handleSelectItem = (item, isChecked) => {
     setSelectedItems((prev) => {
       const updatedItems = { ...prev };
@@ -130,78 +155,97 @@ export const Cart = () => {
       >
         Giỏ hàng
       </div>
-      <div className="flex p-3 gap-2 border-b" style={{
-        backgroundColor: ThemeColor.LIGHT_GRAY
-      }}>
-        <input type="checkbox" />
-        <div className="w-20 text-center">Ảnh</div>
-        <div className="w-2/5">Tên sản phẩm</div>
-        <div className="w-1/6">Phân loại</div>
-        <div className="w-28">Đơn giá</div>
-        <div className="w-10">SL</div>
-        <div className="1/6">Tổng tiền</div>
-        <div className="text-red-500 ml-auto">Xóa</div>
-      </div>
-      {displayedCartItem.length > 0 ? (
-        displayedCartItem.map((item, index) => (
-          <div
-            key={index}
-            className= {`flex p-3 items-center gap-2 border-b border-b-gray-200 ${index % 2 !== 0 ? 'bg-gray-50' : ''}`}
-          >
-            <input
-              type="checkbox"
-              checked={!!selectedItems[item.itemId]}
-              onChange={(e) => handleSelectItem(item, e.target.checked)}
-            />
-            <img
-              className="w-20 rounded-md"
-              src={`data:image/png;base64,${item.images[0].data}`}
-              alt=""
-            />
-            <Link to={`/product/${item.productId}`} className="w-2/5">
-              {item.productName}
-            </Link>
-            <div className="w-1/6">{item.productColor}</div>
-            <div className="w-28 text-sm">
-              <div>
-                {item.discountValue > 0
-                  ? (
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead style={{ backgroundColor: ThemeColor.LIGHT_GRAY }}>
+            <TableRow>
+              <TableCell>
+                <Checkbox
+                  checked={selectAll}
+                  onChange={(e) => handleSelectAll(e.target.checked)}
+                />
+              </TableCell>
+              <TableCell>Ảnh</TableCell>
+              <TableCell>Tên sản phẩm</TableCell>
+              <TableCell>Phân loại</TableCell>
+              <TableCell>Đơn giá</TableCell>
+              <TableCell>SL</TableCell>
+              <TableCell>Tổng tiền</TableCell>
+              <TableCell>Xóa</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {displayedCartItem.length > 0 ? (
+              displayedCartItem.map((item, index) => (
+                <TableRow
+                  key={index}
+                  style={{
+                    backgroundColor: index % 2 !== 0 ? "#f9f9f9" : "inherit",
+                  }}
+                >
+                  <TableCell>
+                    <Checkbox
+                      checked={!!selectedItems[item.itemId]}
+                      onChange={(e) => handleSelectItem(item, e.target.checked)}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <img
+                      className="w-20 rounded-md"
+                      src={`data:image/png;base64,${item.images[0].data}`}
+                      alt=""
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Link to={`/product/${item.productId}`}>
+                      {item.productName}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{item.productColor}</TableCell>
+                  <TableCell>
+                    {item.discountValue > 0
+                      ? `${(
+                          (item.price || 0) *
+                          (1 - item.discountValue / 100)
+                        ).toLocaleString("vi-VN")}đ`
+                      : `${(item.price || 0).toLocaleString("vi-VN")}đ`}
+                  </TableCell>
+                  <TableCell>
+                    <input
+                      className="w-10"
+                      type="number"
+                      value={item.quantity || 0}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    {(
                       (item.price || 0) *
-                      (1 - item.discountValue / 100)
-                    ).toLocaleString("vi-VN") + "đ"
-                  : (item.price || 0).toLocaleString("vi-VN") + "đ"}
-              </div>
-              {item.discountValue > 0 && (
-                <div className="">
-                  <span className="line-through italic text-xs text-gray-400">
-                    {(item.price || 0).toLocaleString("vi-VN") + "đ"}
-                  </span>
-                  <span className="text-red-500 text-xs">
-                    -{item.discountValue}%
-                  </span>
-                </div>
-              )}
-            </div>
-            <input className="w-10" type="number" value={item.quantity || 0} />
-            <div className="w-28 text-sm">
-              {(
-                (item.price || 0) *
-                (1 - item.discountValue / 100) *
-                (item.quantity || 0)
-              ).toLocaleString("vi-VN") + "đ"}
-            </div>
-            <div className="text-red-500 ml-auto">
-              <DeleteOutlineOutlinedIcon />
-            </div>
-          </div>
-        ))
-      ) : (
-        <div className="text-center" style={{ color: ThemeColor.MAIN_BLUE }}>
-          Không có sản phẩm nào
-        </div>
-      )}
+                      (1 - item.discountValue / 100) *
+                      (item.quantity || 0)
+                    ).toLocaleString("vi-VN")}
+                    đ
+                  </TableCell>
+                  <TableCell>
+                    <DeleteOutlineOutlinedIcon className="text-red-500 cursor-pointer" />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={8}
+                  className="text-center"
+                  style={{ color: ThemeColor.MAIN_BLUE }}
+                >
+                  Không có sản phẩm nào
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <div
-        className="bg-gray-100 fixed z-100 w-2/3 bottom-5 rounded-md p-5 flex items-center"
+        className="bg-gray-100 fixed z-100 w-2/3 bottom-5 rounded-md p-5 flex items-center shadow-md"
         style={{
           left: "50%",
           transform: "translateX(-50%)",
@@ -244,7 +288,13 @@ export const Cart = () => {
           </div>
         </div>
         <div className="px-2">
-          <button className="bg-sky-500 px-3 py-1 text-white rounded-sm font-bold" onClick={() => setOrderOpen(true)}>
+          <button
+            className={`mt-4 px-4 py-2 font-bold text-white rounded ${
+              count === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500"
+            }`}
+            onClick={() => setOrderOpen(true)}
+            disabled={count === 0}
+          >
             Mua hàng
           </button>
         </div>

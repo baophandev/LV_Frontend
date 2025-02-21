@@ -116,6 +116,8 @@ export const ProductDetail = () => {
     try {
       const response = await addtoCartApi({userId, variantId: selectedItems.id, quantity: amount});
       alert("Thêm vào giỏ hàng thành công!");
+      setAmount(1);
+      window.location.reload();
       return response;
     } catch (error) {
       alert("Đã có lỗi xảy ra khi thêm vào giỏ hàng");
@@ -214,8 +216,10 @@ export const ProductDetail = () => {
               displayedProduct.variants.map((variant, index) => (
                 <button
                   key={index}
-                  className="text-white px-4 py-1 rounded-md border border-teal-800 text-sm"
-                  onClick={() => {handleSelectedItems(variant);}}
+                  className="relative text-white px-4 py-1 rounded-md border border-teal-800 text-sm"
+                  onClick={() => {
+                    handleSelectedItems(variant);
+                  }}
                 >
                   <div
                     className="font-medium"
@@ -249,6 +253,16 @@ export const ProductDetail = () => {
                       Còn lại: {variant?.stock || 0}
                     </div>
                   </div>
+                  {
+                    selectedItems?.id === variant.id && (
+                      <div className="absolute top-0 left-1">
+                        <CheckCircleIcon
+                          sx={{ color: ThemeColor.BLUE }}
+                          fontSize="small"
+                        />
+                      </div>
+                    )
+                  }
                 </button>
               ))
             ) : (

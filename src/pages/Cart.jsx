@@ -17,6 +17,7 @@ import {
   Paper,
   Checkbox,
 } from "@mui/material";
+import { deleteCartItemApi } from "../api/cartApi";
 
 export const Cart = () => {
   const { cart, status } = useSelector((state) => state.cart);
@@ -30,6 +31,8 @@ export const Cart = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [selectedItems, setSelectedItems] = useState({}); // Lưu trạng thái checkbox
   const [selectAll, setSelectAll] = useState(false);
+  const user = useSelector((state) => state.user.user);
+  const userId = user.id;
 
   const [address, setAddress] = useState(null);
 
@@ -113,7 +116,6 @@ export const Cart = () => {
     }
   };
 
-
   const handleSelectItem = (item, isChecked) => {
     setSelectedItems((prev) => {
       const updatedItems = { ...prev };
@@ -125,6 +127,17 @@ export const Cart = () => {
       return updatedItems;
     });
   };
+
+  const handleDeleteItem = async (itemId) => {
+    try{
+      const response = await deleteCartItemApi({userId, itemId});
+      window.location.reload();
+      return response;
+    }catch(err){
+      console.error("Lỗi khi xóa sản phẩm khỏi giỏ hàng", err);
+      throw new Error("Lỗi khi xóa sản phẩm khỏi giỏ hàng", err);
+    }
+  }
 
   useEffect(() => {
     setCount(Object.keys(selectedItems).length);
@@ -215,6 +228,7 @@ export const Cart = () => {
                       className="w-10"
                       type="number"
                       value={item.quantity || 0}
+                      disabled
                     />
                   </TableCell>
                   <TableCell>
@@ -226,7 +240,9 @@ export const Cart = () => {
                     đ
                   </TableCell>
                   <TableCell>
-                    <DeleteOutlineOutlinedIcon className="text-red-500 cursor-pointer" />
+                    <button onClick={() => handleDeleteItem(item.itemId)}>
+                      <DeleteOutlineOutlinedIcon className="text-red-500 cursor-pointer" />
+                    </button>
                   </TableCell>
                 </TableRow>
               ))

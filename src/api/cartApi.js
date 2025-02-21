@@ -42,3 +42,24 @@ export const addtoCartApi = async ({ userId, variantId, quantity }) => {
     throw error;
   }
 };
+
+export const deleteCartItemApi = async ({userId, itemId}) => {
+  try{
+    const response = await axiosInstance.delete(
+      "/cart/deleteItem",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          userId,
+          itemId,
+        },
+      }
+    );
+    return response.data;
+  }catch(err){
+    console.error("Lỗi API deleteCartItemApi:", err?.response?.data || err);
+    throw err;
+  }
+}

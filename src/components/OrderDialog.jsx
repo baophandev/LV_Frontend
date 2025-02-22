@@ -13,12 +13,48 @@ import {
   Button,
 } from "@mui/material";
 import ThemeColor from "../constant/theme";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { createOrderApi } from "../api/orderApi";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
+  const user = useSelector((state) => state.user.user);
+  const userId = user.id;
+  const [note, setNote] = useState("");
+
+  const handleCreateOrder = async () => {
+    try{
+      const response = await createOrderApi({
+        order: {
+          items: Object.values(order).map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            price: item.price,
+            discountValue: item.discountValue,
+          })),
+          addressId: address.id,
+          note: note,
+          method: "COD",
+          itemId: Object.values(order)
+            .map((item) => item.itemId)
+        },
+        userId,
+      });
+      console.log(response);
+      alert("Đặt hàng thành công");
+      onClose();
+      window.location.reload();
+    }catch(error){
+      console.error("Error creating order:", error);
+    }
+  }
+
+  console.log("order", order);
+
   return (
     <Dialog
       open={open}
@@ -93,10 +129,13 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
             <div>Chưa chọn sản phẩm</div>
           )}
         </div>
-
+          <div className="w-full mt-2">
+            <div className="font-bold">Ghi chú</div>
+            <textarea onChange={(e) => setNote(e.target.value)} value={note} className="w-full outline-none border p-3 rounded-md" name="" id=""></textarea>
+          </div>
         <div className="flex p-3 gap-1">
           <div className="ml-auto text-lg  text-yellow-400">Tổng thanh toán: {(totalPrice).toLocaleString("vi-VN") + "đ"}</div>
-          <Button variant="contained" color="primary">
+          <Button onClick={() => handleCreateOrder()} variant="contained" color="primary">
             Đặt hàng
           </Button>
         </div>

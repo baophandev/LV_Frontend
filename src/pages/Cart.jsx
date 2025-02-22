@@ -222,6 +222,16 @@ export const Cart = () => {
                           (1 - item.discountValue / 100)
                         ).toLocaleString("vi-VN")}đ`
                       : `${(item.price || 0).toLocaleString("vi-VN")}đ`}
+                    {item.discountValue > 0 && (
+                      <div className="">
+                        <span className="line-through italic text-xs text-gray-400">
+                          {(item.price || 0).toLocaleString("vi-VN") + "đ"}
+                        </span>
+                        <span className="text-red-500 text-xs">
+                          -{item.discountValue}%
+                        </span>
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell>
                     <input
@@ -251,7 +261,7 @@ export const Cart = () => {
                 <TableCell
                   colSpan={8}
                   className="text-center"
-                  style={{ color: ThemeColor.MAIN_BLUE }}
+                  style={{ color: ThemeColor.MAIN_BLUE, textAlign: "center" }}
                 >
                   Không có sản phẩm nào
                 </TableCell>

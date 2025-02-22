@@ -4,10 +4,19 @@ import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import { Link } from "react-router-dom";
 import AddressCard from "../components/AddressCard";
+import CreateAddressDialog from "../components/CreateAddressDialog";
+import { useState } from "react";
 
 export const PersonalAddressPage = () => {
   const user = useSelector((state) => state.user.user);
   const addressList = useSelector((state) => state.user.address) || [];
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
   return (
     <div className="p-5 w-full sm:w-2/3">
@@ -64,7 +73,9 @@ export const PersonalAddressPage = () => {
             Quản lý thông tin địa chỉ giao hàng của bạn
           </div>
           <div>
-            <button className="py-2 text-sky-500">Thêm địa chỉ mới</button>
+            <button className="py-2 text-sky-500" onClick={handleClickOpen}>
+              Thêm địa chỉ mới
+            </button>
           </div>
           {addressList.length === 0 ? (
             <div className="text-gray-400">Bạn chưa có địa chỉ nào</div>
@@ -77,6 +88,10 @@ export const PersonalAddressPage = () => {
           )}
         </div>
       </div>
+      <CreateAddressDialog
+        open={open}
+        handleClose={handleClose}
+      ></CreateAddressDialog>
     </div>
   );
 };

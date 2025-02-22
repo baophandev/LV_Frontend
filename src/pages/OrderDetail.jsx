@@ -12,6 +12,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 export const OrderDetail = () => {
   const user = useSelector((state) => state.user.user);
+  
   return (
     <div className="p-5 w-full sm:w-2/3">
       <div

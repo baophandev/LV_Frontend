@@ -11,6 +11,7 @@ export const PersonalAddressPage = () => {
   const user = useSelector((state) => state.user.user);
   const addressList = useSelector((state) => state.user.address) || [];
   const [open, setOpen] = useState(false);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -82,7 +83,7 @@ export const PersonalAddressPage = () => {
           ) : (
             addressList.map((address) => (
               <div className="">
-                <AddressCard address={address}></AddressCard>
+                <AddressCard address={address} ></AddressCard>
               </div>
             ))
           )}

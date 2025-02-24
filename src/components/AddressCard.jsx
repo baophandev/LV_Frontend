@@ -1,6 +1,19 @@
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { deleteAddressApi } from "../api/userApi";
 const AddressCard = ({ address = {} }) => {
+
+    const handleDeleteAddress = async () => {
+      try {
+        const response = await deleteAddressApi({ addressId: address.id });
+        console.log(response);
+        alert("Xóa địa chỉ thành công");
+        window.location.reload();
+      } catch (err) {
+        console.log(err);
+        alert("Xóa địa chỉ thất bại");
+      }
+    };
+
   return (
     <div className="flex w-full items-center border-b border-gray-300 py-2">
       <div className="">
@@ -16,10 +29,7 @@ const AddressCard = ({ address = {} }) => {
         </div>
       </div>
       <div className="ml-auto">
-        <button className="mr-2 px-1 rounded-sm text-sky-500">
-          <EditIcon fontSize="small"/>
-        </button>
-        <button className="text-red-500"><DeleteOutlineIcon fontSize="small"/></button>
+        <button onClick={() => handleDeleteAddress()} className="text-red-500"><DeleteOutlineIcon fontSize="small"/></button>
       </div>
     </div>
   );

@@ -38,3 +38,16 @@ export const fetchAllOrdersApi = async ({ userId, pageNumber, pageSize }) => {
     console.log(err);
   }
 };
+
+export const fetchOrderByIdApi = async (orderId) => {
+  try {
+    const response = await axiosInstance.get(`/order/${orderId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const OrderCard = ({ product, status }) => {
+const OrderCard = ({ product, status, id }) => {
 
   const renderStatus = () => {
     switch (status) {
@@ -25,7 +25,9 @@ const OrderCard = ({ product, status }) => {
             <img src="https://placehold.co/600x400" className="w-28 " alt="" />
           </Link> */}
                   <div className="">
-                    <Link to={"/user/purchase/order/id"}>{prd.name}</Link>
+                    <Link to={`/user/purchase/order/${id}`}>
+                      {prd.name}
+                    </Link>
                     <div className="text-sm text-gray-400">{prd.color}</div>
                     <div className="text-sm text-gray-400">
                       Số lượng: {prd.quantity}
@@ -46,7 +48,9 @@ const OrderCard = ({ product, status }) => {
                 <div className="ml-auto flex flex-col gap-1">
                   <div className="">
                     <span className="text-sm">Thành tiền: </span>
-                    <span className="">{prd.calculatePrice.toLocaleString("vi-VN")+ "đ"}</span>
+                    <span className="">
+                      {prd.calculatePrice.toLocaleString("vi-VN") + "đ"}
+                    </span>
                   </div>
                   <div className="ml-auto">
                     <button className="bg-yellow-400 px-2 py-1 text-white">

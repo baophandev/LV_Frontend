@@ -115,11 +115,9 @@ const router = createBrowserRouter([
             },
           },
           {
-            path: "/user/purchase/order/id",
+            path: "/user/purchase/order/:orderId",
             async lazy() {
-              let { OrderDetail } = await import(
-                "../pages/OrderDetail"
-              );
+              let { OrderDetail } = await import("../pages/OrderDetail");
               return {
                 Component: OrderDetail,
               };

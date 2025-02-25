@@ -91,12 +91,15 @@ export const PersonalPurchase = () => {
           <div className="w-full mt-2">
             {Array.isArray(orderList) && orderList.length > 0 ? (
               orderList.map((order, index) => (
-                <OrderCard 
+                <OrderCard
                   product={order.items}
                   status={order.status}
+                  id={order.orderId}
                 ></OrderCard>
               ))
-            ) : ( <div> Không có đơn hàng</div>)}
+            ) : (
+              <div> Không có đơn hàng</div>
+            )}
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
 
 const token = localStorage.getItem("authToken");
 
-export const createOrderApi = async ({ order , userId}) => {
+export const createOrderApi = async ({ order, userId }) => {
   try {
     const response = await axiosInstance.post(`/order/${userId}`, order, {
       headers: {
@@ -18,5 +18,23 @@ export const createOrderApi = async ({ order , userId}) => {
   } catch (error) {
     console.error("Error creating order:", error);
     throw error;
+  }
+};
+
+export const fetchAllOrdersApi = async ({ userId, pageNumber, pageSize }) => {
+  try {
+    const response = await axiosInstance.get("/order", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        userId,
+        pageNumber,
+        pageSize,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.log(err);
   }
 };

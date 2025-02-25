@@ -1,10 +1,12 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ThemeColor from "../constant/theme";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import OrderCard from "../components/OrderCard";
+import { useEffect } from "react";
+import { fetchAllOrder } from "../redux/slices/orderSlice";
 
 const buttonClickedStyle = "text-sky-400 font-semibold border-b-2 border-sky-400";
 const buttons = ["Tất cả", "Chờ xác nhận", "Đang giao", "Đã giao", "Đã hủy"];
@@ -12,6 +14,17 @@ const buttons = ["Tất cả", "Chờ xác nhận", "Đang giao", "Đã giao", "
 export const PersonalPurchase = () => {
   const [buttonClicked, setButtonClicked] = useState(0);
   const user = useSelector((state) => state.user.user);
+  const userId = user.id;
+  const dispatch = useDispatch();
+  const orders = useSelector((state) => state.order.orders);
+  const orderList = orders.content || [];
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchAllOrder({ userId: userId, pageNumber: 0, pageSize: 10 }));
+    }
+  }, [dispatch, userId]);
+
   return (
     <div className="p-5 w-full sm:w-2/3">
       <div
@@ -76,8 +89,14 @@ export const PersonalPurchase = () => {
             ))}
           </div>
           <div className="w-full mt-2">
-            <OrderCard />
-            <OrderCard />
+            {Array.isArray(orderList) && orderList.length > 0 ? (
+              orderList.map((order, index) => (
+                <OrderCard 
+                  product={order.items}
+                  status={order.status}
+                ></OrderCard>
+              ))
+            ) : ( <div> Không có đơn hàng</div>)}
           </div>
         </div>
       </div>

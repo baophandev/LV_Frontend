@@ -30,7 +30,7 @@ const Footer = () => {
         <div className="flex flex-col gap-2">
           <img src={Logo} alt="Logo" className="w-32" />
           <div className="text-gray-400">
-            Comfoty nhà cung cấp nội thất <br />
+            NEXOR nhà cung cấp Smartphone cao cấp <br />
             hàng đầu Việt Nam
             <br />
             <span className="text-gray-400">

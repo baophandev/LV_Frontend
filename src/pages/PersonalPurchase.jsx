@@ -28,9 +28,8 @@ export const PersonalPurchase = () => {
   return (
     <div className="p-5 w-full sm:w-2/3">
       <div
-        className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold"
+        className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
         style={{
-          backgroundColor: ThemeColor.LIGHT_GRAY,
           color: ThemeColor.MAIN_GRREN,
         }}
       >
@@ -38,10 +37,7 @@ export const PersonalPurchase = () => {
       </div>
       <div className="flex gap-2">
         <div
-          className="w-1/4 rounded-md p-5"
-          style={{
-            backgroundColor: ThemeColor.LIGHT_GRAY,
-          }}
+          className="w-1/4 rounded-md p-5 bg-white"
         >
           <Link className=" text-slate-700  items-center flex cursor-pointer mb-2">
             <PermIdentityOutlinedIcon />
@@ -68,10 +64,7 @@ export const PersonalPurchase = () => {
           </Link>
         </div>
         <div
-          className="w-full rounded-md p-5"
-          style={{
-            backgroundColor: ThemeColor.LIGHT_GRAY,
-          }}
+          className="w-full rounded-md p-5 bg-white"
         >
           <div className="bg-white w-full flex justify-around">
             {buttons.map((label, index) => (

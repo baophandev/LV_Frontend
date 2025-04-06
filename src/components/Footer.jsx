@@ -26,7 +26,7 @@ const Footer = () => {
 
   return (
     <>
-      <div className="flex justify-evenly p-8 border-t border-t-slate-200">
+      <div className="flex justify-evenly p-8 border-t border-t-slate-200 bg-white">
         <div className="flex flex-col gap-2">
           <img src={Logo} alt="Logo" className="w-32" />
           <div className="text-gray-400">

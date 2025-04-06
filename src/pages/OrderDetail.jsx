@@ -61,9 +61,8 @@ export const OrderDetail = () => {
       {orderDetail ? (
         <>
           <div
-            className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold"
+            className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
             style={{
-              backgroundColor: ThemeColor.LIGHT_GRAY,
               color: ThemeColor.MAIN_GRREN,
             }}
           >
@@ -71,10 +70,7 @@ export const OrderDetail = () => {
           </div>
           <div className="flex gap-2">
             <div
-              className="w-1/4 rounded-md p-5"
-              style={{
-                backgroundColor: ThemeColor.LIGHT_GRAY,
-              }}
+              className="w-1/4 rounded-md p-5 bg-white"
             >
               <Link className=" text-slate-700  items-center flex cursor-pointer mb-2">
                 <PermIdentityOutlinedIcon />

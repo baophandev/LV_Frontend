@@ -12,9 +12,8 @@ export const PersonalPage = () => {
     return (
       <div className="p-5 w-full sm:w-2/3">
         <div
-          className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold"
+          className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
           style={{
-            backgroundColor: ThemeColor.LIGHT_GRAY,
             color: ThemeColor.MAIN_GRREN,
           }}
         >
@@ -22,10 +21,7 @@ export const PersonalPage = () => {
         </div>
         <div className="flex gap-2">
           <div
-            className="w-1/4 rounded-md p-5"
-            style={{
-              backgroundColor: ThemeColor.LIGHT_GRAY,
-            }}
+            className="w-1/4 rounded-md p-5 bg-white"
           >
             <Link className=" text-slate-700  items-center flex cursor-pointer mb-2">
               <PermIdentityOutlinedIcon />
@@ -52,10 +48,7 @@ export const PersonalPage = () => {
             </Link>
           </div>
           <div
-            className="w-full rounded-md p-5"
-            style={{
-              backgroundColor: ThemeColor.LIGHT_GRAY,
-            }}
+            className="w-full rounded-md p-5 bg-white"
           >
             <div className="uppercase  font-bold text-slate-500">
               Quản lý hồ sơ

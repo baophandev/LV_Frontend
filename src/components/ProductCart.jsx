@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
   return (
-    <div className=" w-1/5 h-auto sm:w-1/5 sm:h-96 mb-4 p-2 pb-5 relative border border-gray-200 shadow-sm rounded-md">
+    <div className=" w-1/5 h-auto sm:w-1/5 sm:h-96 mb-4 p-2 pb-5 relative border border-gray-200 shadow-sm rounded-md bg-white">
       <div className="w-full h-3/4 mb-2">
         <Link to={`/product/${id}`}>
           <img

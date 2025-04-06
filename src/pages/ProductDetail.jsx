@@ -126,7 +126,7 @@ export const ProductDetail = () => {
   };
 
   return (
-    <div className="w-2/3 p-5">
+    <div className="w-2/3 p-5 bg-white mt-5 mb-4">
       <div className="flex gap-7 p-2 py-5 rounded-md">
         <div className="flex justify-center gap-2 w-1/2">
           <div className="w-[85%] h-80 rounded-md bg-gray-200">

@@ -74,14 +74,17 @@ const Header = () => {
         zIndex: 9999,
       }}
     >
+      <div className="h-7 " style={{ backgroundColor: ThemeColor.LIGHT_GRAY }}>
+
+      </div>
       <div
-        className={`flex flex-wrap justify-evenly items-center ${
+        className={`flex flex-wrap justify-evenly items-center bg-white ${
           Object.keys(user).length === 0 ? "py-2" : ""
         }`}
-        style={{ backgroundColor: ThemeColor.LIGHT_GRAY }}
+       
       >
         <Link to="/">
-          <img src={Logo} alt="Logo" className="w-32 hidden md:block" />
+          <img src={Logo} alt="Logo" className="w-28 hidden md:block" />
         </Link>
         <div className=" p-1 px-2 rounded-md shadow-inner bg-white">
           <input
@@ -175,28 +178,6 @@ const Header = () => {
               </MenuItem>
             </Menu>
           </div>
-        </div>
-      </div>
-      <div className="p-1 flex flex-wrap justify-around items-center border-b border-b-gray-200 bg-white">
-        <div
-          className="flex gap-4 justify-center items-center"
-          style={{ color: ThemeColor.DARK_GREEN }}
-        >
-          {/* <SplitGroup></SplitGroup> */}
-          {categorys?.map((category) => (
-            <Link
-              className="hover:text-sky-700"
-              to={`/category/${category.id}`}
-            >
-              {category.name}
-            </Link>
-          ))}
-        </div>
-        <div className="">
-          <LocalPhoneIcon
-            sx={{ color: ThemeColor.DARK_GREEN }}
-          ></LocalPhoneIcon>
-          Liên hệ: (+84)789668217
         </div>
       </div>
     </div>

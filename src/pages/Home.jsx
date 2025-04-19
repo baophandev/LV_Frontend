@@ -49,9 +49,9 @@ export const Home = () => {
           <ProductCart
             key={product.id}
             id={product.id}
-            image={product.images[0]?.data}
+            image={product.productAvatar.data}
             name={product.name}
-            price={product.variants[0]?.price || 0}
+            price={product.firstVariantPrice || 0}
             discountDisplayed={product.discountDisplayed}
           ></ProductCart>
         ))}

@@ -167,9 +167,9 @@ export const Cart = () => {
       >
         Giỏ hàng
       </div>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} elevation={0}>
         <Table>
-          <TableHead style={{ backgroundColor: "white"}}>
+          <TableHead style={{ backgroundColor: "white" }}>
             <TableRow>
               <TableCell>
                 <Checkbox
@@ -204,7 +204,7 @@ export const Cart = () => {
                   <TableCell>
                     <img
                       className="w-20 rounded-md"
-                      src={`data:image/png;base64,${item.images[0].data}`}
+                      src={`data:image/png;base64,${item.productAvatar.data}`}
                       alt=""
                     />
                   </TableCell>

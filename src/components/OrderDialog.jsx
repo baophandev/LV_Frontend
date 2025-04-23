@@ -88,9 +88,9 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
 
         <div className="mt-2 border-b">
           {order && Object.values(order).length > 0 ? (
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} elevation={0}>
               <Table>
-                <TableHead style={{backgroundColor: ThemeColor.LIGHT_GRAY}}>
+                <TableHead style={{ backgroundColor: ThemeColor.LIGHT_GRAY }}>
                   <TableRow>
                     <TableCell>#</TableCell>
                     <TableCell>Sản phẩm</TableCell>
@@ -129,13 +129,25 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
             <div>Chưa chọn sản phẩm</div>
           )}
         </div>
-          <div className="w-full mt-2">
-            <div className="font-bold">Ghi chú</div>
-            <textarea onChange={(e) => setNote(e.target.value)} value={note} className="w-full outline-none border p-3 rounded-md" name="" id=""></textarea>
-          </div>
+        <div className="w-full mt-2">
+          <div className="font-bold">Ghi chú</div>
+          <textarea
+            onChange={(e) => setNote(e.target.value)}
+            value={note}
+            className="w-full outline-none border p-3 rounded-md"
+            name=""
+            id=""
+          ></textarea>
+        </div>
         <div className="flex p-3 gap-1">
-          <div className="ml-auto text-lg  text-yellow-400">Tổng thanh toán: {(totalPrice).toLocaleString("vi-VN") + "đ"}</div>
-          <Button onClick={() => handleCreateOrder()} variant="contained" color="primary">
+          <div className="ml-auto text-lg  text-yellow-400">
+            Tổng thanh toán: {totalPrice.toLocaleString("vi-VN") + "đ"}
+          </div>
+          <Button
+            onClick={() => handleCreateOrder()}
+            variant="contained"
+            color="primary"
+          >
             Đặt hàng
           </Button>
         </div>

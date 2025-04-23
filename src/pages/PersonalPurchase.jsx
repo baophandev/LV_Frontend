@@ -64,7 +64,7 @@ export const PersonalPurchase = () => {
           </Link>
         </div>
         <div
-          className="w-full rounded-md p-5 bg-white"
+          className="w-full rounded-md"
         >
           <div className="bg-white w-full flex justify-around">
             {buttons.map((label, index) => (

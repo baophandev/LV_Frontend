@@ -14,7 +14,8 @@ const cartSlice = createSlice({
     status: "idle",
     error: null,
   },
-  reducers: {},
+  reducers: {
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCart.pending, (state) => {
@@ -32,4 +33,5 @@ const cartSlice = createSlice({
   },
 });
 
+export const { updateQuantity } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -14,6 +14,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ReviewCard from "../components/ReviewCard";
 import { getProductReview, getVariantDiscount } from "../api/productApi";
 import { addtoCartApi } from "../api/cartApi";
+import { fetchCart } from "../redux/slices/cartSlice";
 
 export const ProductDetail = () => {
   const [amount, setAmount] = useState(1);
@@ -117,7 +118,7 @@ export const ProductDetail = () => {
       const response = await addtoCartApi({userId, variantId: selectedItems.id, quantity: amount});
       alert("Thêm vào giỏ hàng thành công!");
       setAmount(1);
-      window.location.reload();
+      dispatch(fetchCart(userId));
       return response;
     } catch (error) {
       alert("Đã có lỗi xảy ra khi thêm vào giỏ hàng");

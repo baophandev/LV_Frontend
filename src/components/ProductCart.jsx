@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 
 const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
   return (
-    <div className=" w-60 h-80 mb-4 p-2 pb-5 relative border border-gray-200 shadow-sm rounded-md bg-white">
-      <div className="w-full h-3/4 mb-2">
+    <div className=" w-56 h-80 mb-4 p-2 pb-5 relative border border-gray-200 shadow-sm rounded-md bg-white">
+      <div className="w-full h-3/5 mb-2">
         <Link to={`/product/${id}`}>
           <img
-            className="w-full h-full rounded-md"
+            className="w-48 rounded-md"
             src={`data:image/png;base64,${image}`}
             alt=""
             style={{
@@ -16,11 +16,11 @@ const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
           />
         </Link>
       </div>
-      <div className=" flex ">
+      <div className=" flex pt-3">
         <div className="">
           <Link
             to={`/product/${id}`}
-            className="line-clamp-2 mb-1 text-slate-500 font-bold"
+            className="line-clamp-2 mb-1 text-blue-500 font-semibold"
           >
             {name}
           </Link>
@@ -32,7 +32,7 @@ const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
                 ) + "đ"
               : price.toLocaleString("vi-VN") + "đ"}
             {discountDisplayed > 0 && (
-              <div className="flex gap-1 justify-center">
+              <div className="flex gap-1">
                 <div className="text-slate-500 italic line-through font-light">
                   {price?.toLocaleString("vi-VN") + "đ"}
                 </div>

@@ -6,10 +6,14 @@ import Loading from "../components/Loading";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Pagination from "@mui/material/Pagination";
-// import Carousel from "../components/Carousel";
+import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import Banner from "../assets/banner.png";
+import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
+import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 
 export const Home = () => {
   const dispatch = useDispatch();
+  const categorys = useSelector((state) => state.categorys.categorys);
   const products = useSelector(
     (state) => state.product.products?.content || []
   );
@@ -42,29 +46,66 @@ export const Home = () => {
       </Alert>
     );
   return (
-    <div className="p-5 w-full sm:w-3/4">
-      {/* <Carousel images={adImages}></Carousel> */}
-      <div className="w-full flex flex-wrap gap-2 items-center">
-        {products?.map((product) => (
-          <ProductCart
-            key={product.id}
-            id={product.id}
-            image={product.productAvatar.data}
-            name={product.name}
-            price={product.firstVariantPrice || 0}
-            discountDisplayed={product.discountDisplayed}
-          ></ProductCart>
-        ))}
+    <>
+      <div className="w-full relative">
+        <div
+          className="w-full h-80"
+          style={{
+            backgroundImage: `url(${Banner})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        ></div>
+        <div className="w-full h-11 "></div>
+        <div className="w-3/4 flex items-center mb-5 bg-white p-3 gap-3 absolute bottom-1 shadow-sm rounded-md left-1/2 transform -translate-x-1/2">
+          <select className="border w-52 px-3 py-1 rounded-md" name="" id="">
+            {categorys?.map((category) => (
+              <option value={category.id} key={category.id}>
+                {category.name}{" "}
+              </option>
+            ))}
+          </select>
+          <div className="flex items-center gap-2">
+            <div className="border py-1 px-2 rounded-md">
+              <ArrowDownwardOutlinedIcon></ArrowDownwardOutlinedIcon> Giá cao -
+              thấp
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="border py-1 px-2 rounded-md">
+              <ArrowUpwardOutlinedIcon></ArrowUpwardOutlinedIcon> Giá thấp - cao
+            </div>
+          </div>
+          <div className="cursor-pointer px-3 py-1 rounded-md bg-sky-500 text-white font-semibold">
+            <FilterAltOutlinedIcon></FilterAltOutlinedIcon>Lọc sản phẩm
+          </div>
+        </div>
       </div>
-      <div className="flex justify-center">
-        <Pagination
-          count={totalPages}
-          variant="outlined"
-          color="primary"
-          page={currentPage + 1}
-          onChange={(event, value) => handlePageClick(value)}
-        />
+      <div className=" w-full sm:w-3/4">
+        {/* <Carousel images={adImages}></Carousel> */}
+        <div className="w-full flex flex-wrap gap-2 items-center">
+          {products?.map((product) => (
+            <ProductCart
+              key={product.id}
+              id={product.id}
+              image={product.productAvatar.data}
+              name={product.name}
+              price={product.firstVariantPrice || 0}
+              discountDisplayed={product.discountDisplayed}
+            ></ProductCart>
+          ))}
+        </div>
+        <div className="flex justify-center">
+          <Pagination
+            count={totalPages}
+            variant="outlined"
+            color="primary"
+            page={currentPage + 1}
+            onChange={(event, value) => handlePageClick(value)}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };

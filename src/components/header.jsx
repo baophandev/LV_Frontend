@@ -1,7 +1,6 @@
 import Logo from "../assets/Logo.png";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
@@ -18,7 +17,6 @@ import { fetchCart } from "../redux/slices/cartSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const categorys = useSelector((state) => state.categorys.categorys);
   const status = useSelector((state) => state.categorys.status);
   const error = useSelector((state) => state.categorys.error);
   const token = useSelector((state) => state.auth.token);
@@ -74,9 +72,6 @@ const Header = () => {
         zIndex: 9999,
       }}
     >
-      <div className="h-7 " style={{ backgroundColor: ThemeColor.LIGHT_GRAY }}>
-
-      </div>
       <div
         className={`flex flex-wrap justify-evenly items-center bg-white ${
           Object.keys(user).length === 0 ? "py-2" : ""

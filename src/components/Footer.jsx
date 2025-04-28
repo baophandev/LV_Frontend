@@ -72,7 +72,7 @@ const Footer = () => {
       </div>
       <div className="flex h-16 justify-center text-gray-500 py-1 items-center border-t border-t-slate-200">
         <CopyrightOutlinedIcon fontSize="small"></CopyrightOutlinedIcon>
-        2025 - Designed & Develop by <span className="font-medium ml-2 text-black">Phan Gia Bảo B2110114</span>
+        2025 - Designed & Developed by <span className="font-medium ml-2 text-black">Phan Gia Bảo B2110114</span>
       </div>
     </>
   );

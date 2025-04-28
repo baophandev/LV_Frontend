@@ -29,7 +29,7 @@ export const Login = () => {
 
   return (
     <div className="w-1/2 flex flex-col items-center justify-center gap-3 ">
-      <div className="uppercase text-3xl font-extrabold text-sky-500">
+      <div className="uppercase text-3xl font-extrabold text-white">
         ĐĂNG NHẬP
       </div>
       {/* Bọc các input trong form để hỗ trợ submit bằng Enter */}

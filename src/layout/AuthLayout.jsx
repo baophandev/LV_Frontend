@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
-import background from "../assets/Header.png";
+import loginPage from "../assets/loginPage.png"
 
 const AuthLayout = () => {
   return (
     <div
       className="w-full flex justify-center items-center"
       style={{
-        backgroundImage: `url(${background})`,
+        backgroundImage: `url(${loginPage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -16,10 +16,10 @@ const AuthLayout = () => {
       </div>
       <div className="w-1/2 min-h-screen items-center flex">
         <div className="uppercase text-3xl text-white font-bold drop-shadow-lg ">
-          <span className="bg-sky-400">Comforty</span>
+          <span className="bg-sky-400">NEXOR</span>
           <br />
           <span className="bg-sky-400 mt-3 inline-block">
-            Nội thất hàng đầu Việt Nam...
+            CÔNG NGHỆ TRONG TAY BẠN...
           </span>
         </div>
       </div>

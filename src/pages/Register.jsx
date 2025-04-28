@@ -81,7 +81,7 @@ export const Register = () => {
 
   return (
     <div className="w-1/2 flex flex-col items-center justify-center gap-3">
-      <div className="uppercase text-3xl font-extrabold text-sky-500">
+      <div className="uppercase text-3xl font-extrabold text-white">
         ĐĂNG KÝ
       </div>
       <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">

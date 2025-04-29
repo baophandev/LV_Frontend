@@ -66,3 +66,18 @@ export const getProductReview = async ({ pageNumber = 0, pageSize = 6, productId
     throw error;
   }
 }
+
+export const fecthProductFilterApi = async ({categoryId, sortDirection}) => {
+  try{
+    const response = await axiosInstance.get('/product/filter', {
+      params: {
+        status: "ACTIVE",
+        categoryId: categoryId ? categoryId : null,
+        sortDirection: sortDirection,
+      }
+    })
+    return response.data;
+  }catch(error){
+    throw error;
+  }
+}

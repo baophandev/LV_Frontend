@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import ThemeColor from "../constant/theme";
 import { getMyInfo, getUserAddress, logout } from "../redux/slices/userSlice";
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LoginIcon from "@mui/icons-material/Login";
 import { fetchCart } from "../redux/slices/cartSlice";
 
@@ -34,17 +34,16 @@ const Header = () => {
   }, [status, dispatch, token, user]);
 
   useEffect(() => {
-      if (userId) {
-        dispatch(fetchCart(userId));
-      }
-    }, [dispatch, userId, status]);
+    if (userId) {
+      dispatch(fetchCart(userId));
+    }
+  }, [dispatch, userId, status]);
 
   useEffect(() => {
-    if(user.id && token){
-      dispatch(getUserAddress({token, userId: user.id}));
+    if (user.id && token) {
+      dispatch(getUserAddress({ token, userId: user.id }));
     }
   }, [user.id, token, dispatch]);
-
 
   const handleLogout = () => {
     dispatch(logout());
@@ -76,7 +75,6 @@ const Header = () => {
         className={`flex flex-wrap justify-evenly items-center bg-white ${
           Object.keys(user).length === 0 ? "py-2" : ""
         }`}
-       
       >
         <Link to="/">
           <img src={Logo} alt="Logo" className="w-28 hidden md:block" />

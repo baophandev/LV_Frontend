@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import ProductCart from "../components/ProductCart";
-import { useEffect } from "react";
-import { fetchProducts, setPage } from "../redux/slices/productSlice";
+import { useEffect, useState } from "react";
+import { fecthProductFilter, fetchProducts, setPage } from "../redux/slices/productSlice";
 import Loading from "../components/Loading";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -23,6 +23,8 @@ export const Home = () => {
   const status = useSelector((state) => state.product.status);
   const error = useSelector((state) => state.product.error);
 
+  const [filter, setFilter] = useState({})
+
   useEffect(() => {
     dispatch(fetchProducts({ pageNumber: currentPage, pageSize: 20 }));
   }, [dispatch, currentPage]);
@@ -31,8 +33,18 @@ export const Home = () => {
     dispatch(setPage(page - 1));
   };
 
-  console.log(error);
-  console.log(totalPages);
+  const handleChange = (field, value) => {
+    setFilter((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleFilter = () => {
+    dispatch(
+      fecthProductFilter({ categoryId: filter.categoryId, sortDirection : filter.sortDirection})
+    );
+  }
 
   if (status === "loading") return <Loading></Loading>;
   if (status === "failed")
@@ -59,7 +71,15 @@ export const Home = () => {
         ></div>
         <div className="w-full h-11 "></div>
         <div className="w-3/4 flex items-center mb-5 bg-white p-3 gap-3 absolute bottom-1 shadow-sm rounded-md left-1/2 transform -translate-x-1/2">
-          <select className="border w-52 px-3 py-1 rounded-md" name="" id="">
+          <select
+            onChange={(e) => {
+              handleChange("categoryId", e.target.value);
+            }}
+            className="border w-52 px-3 py-1 rounded-md"
+            name=""
+            id=""
+          >
+            <option value="">Tất cả sản phẩm</option>
             {categorys?.map((category) => (
               <option value={category.id} key={category.id}>
                 {category.name}{" "}
@@ -67,17 +87,30 @@ export const Home = () => {
             ))}
           </select>
           <div className="flex items-center gap-2">
-            <div className="border py-1 px-2 rounded-md">
+            <div
+              className={`border py-1 px-2 rounded-md text-sm cursor-pointer ${
+                filter.sortDirection === "DESC" ? "text-sky-500" : ""
+              }`}
+              onClick={() => handleChange("sortDirection", "DESC")}
+            >
               <ArrowDownwardOutlinedIcon></ArrowDownwardOutlinedIcon> Giá cao -
               thấp
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="border py-1 px-2 rounded-md">
+            <div
+              className={`border py-1 px-2 rounded-md text-sm cursor-pointer ${
+                filter.sortDirection === "ASC" ? "text-sky-500" : ""
+              }`}
+              onClick={() => handleChange("sortDirection", "ASC")}
+            >
               <ArrowUpwardOutlinedIcon></ArrowUpwardOutlinedIcon> Giá thấp - cao
             </div>
           </div>
-          <div className="cursor-pointer px-3 py-1 rounded-md bg-sky-500 text-white font-semibold">
+          <div
+            className="cursor-pointer px-3 py-1 rounded-md bg-sky-500 text-white font-semibold"
+            onClick={handleFilter}
+          >
             <FilterAltOutlinedIcon></FilterAltOutlinedIcon>Lọc sản phẩm
           </div>
         </div>

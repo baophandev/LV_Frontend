@@ -1,11 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {fetchProducstApi, fetchProductApi, fetchProducstByCategoryIdApi} from "../../api/productApi"
+import {
+  fetchProducstApi,
+  fetchProductApi,
+  fetchProducstByCategoryIdApi,
+  fecthProductFilterApi,
+} from "../../api/productApi";
 
-
-export const fetchProducts = createAsyncThunk("product/fecthProducts", async (pageNumber, pageSize) => {
-  const data = await fetchProducstApi(pageNumber, pageSize);
-  return data;
-});
+export const fetchProducts = createAsyncThunk(
+  "product/fecthProducts",
+  async (pageNumber, pageSize) => {
+    const data = await fetchProducstApi(pageNumber, pageSize);
+    return data;
+  }
+);
 
 export const fetchProduct = createAsyncThunk(
   "product/fetchProduct",
@@ -16,9 +23,21 @@ export const fetchProduct = createAsyncThunk(
 );
 
 export const fetchProductsByCategoryId = createAsyncThunk(
-  "product/fetchProductsByCategoryId", 
+  "product/fetchProductsByCategoryId",
   async (categoryId, pageNumber, pageSize) => {
-    const data = await fetchProducstByCategoryIdApi(categoryId, pageNumber, pageSize);
+    const data = await fetchProducstByCategoryIdApi(
+      categoryId,
+      pageNumber,
+      pageSize
+    );
+    return data;
+  }
+);
+
+export const fecthProductFilter = createAsyncThunk(
+  "product/fetchProductFilter",
+  async ({ categoryId, sortDirection }) => {
+    const data = await fecthProductFilterApi({ categoryId, sortDirection });
     return data;
   }
 );
@@ -31,13 +50,13 @@ const productSlice = createSlice({
     error: null,
     page: {
       currentPage: 0,
-      totalPages : 0,
+      totalPages: 0,
     },
   },
   reducers: {
     setPage: (state, action) => {
-        state.page.currentPage = action.payload;
-    }
+      state.page.currentPage = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -50,6 +69,18 @@ const productSlice = createSlice({
         state.page.totalPages = action.payload.totalPages;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(fecthProductFilter.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fecthProductFilter.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = action.payload;
+        state.page.totalPages = action.payload.totalPages;
+      })
+      .addCase(fecthProductFilter.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
@@ -78,5 +109,5 @@ const productSlice = createSlice({
   },
 });
 
-export const {setPage} = productSlice.actions;
+export const { setPage } = productSlice.actions;
 export default productSlice.reducer;

@@ -30,6 +30,24 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "order/vnpay/success",
+        async lazy() {
+          let { VNPaySuccesss } = await import("../pages/VNPaySuccess");
+          return {
+            Component: VNPaySuccesss,
+          };
+        },
+      },
+      {
+        path: "order/vnpay/error",
+        async lazy() {
+          let { VNPayFail } = await import("../pages/VNPayFail");
+          return {
+            Component: VNPayFail,
+          };
+        },
+      },
+      {
         path: "register",
         element: <AuthLayout />,
         children: [

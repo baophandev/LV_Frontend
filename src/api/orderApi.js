@@ -51,3 +51,23 @@ export const fetchOrderByIdApi = async (orderId) => {
     throw err;
   }
 };
+
+export const createVNPayUrl = async (amount) => {
+  try {
+    const response = await axiosInstance.get("/phone/api/vnpay/create-payment", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        amount: amount,
+        orderInfo: "Thanh",
+        orderType: "other",
+        language: "vn",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating VNPay URL:", error);
+    throw error;
+  }
+};

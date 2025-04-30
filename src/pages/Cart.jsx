@@ -158,7 +158,7 @@ export const Cart = () => {
   if (status === "loading") return <Loading></Loading>;
 
   return (
-    <div className="w-2/3 p-5 min-h-screen">
+    <div className="w-4/5 p-5 min-h-screen">
       <div
         className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
         style={{
@@ -270,7 +270,7 @@ export const Cart = () => {
         </Table>
       </TableContainer>
       <div
-        className="bg-white fixed z-100 w-2/3 bottom-5 rounded-md p-5 flex items-center shadow-md"
+        className="bg-white fixed z-100 w-4/5 bottom-5 rounded-md p-5 flex items-center shadow-md"
         style={{
           left: "50%",
           transform: "translateX(-50%)",

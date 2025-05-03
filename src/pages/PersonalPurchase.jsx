@@ -6,27 +6,51 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import OrderCard from "../components/OrderCard";
 import { useEffect } from "react";
-import { fetchAllOrder } from "../redux/slices/orderSlice";
+import { fetchOrders } from "../redux/slices/orderSlice";
+import { ReduxStuatus } from "../enums/Status";
+// import { fetchAllOrder } from "../redux/slices/orderSlice";
+
+const STATUS_MAP = {
+  0: "ALL",
+  1: "PENDING",
+  2: "CONFIRM",
+  3: "DELIVERING",
+  4: "DELIVERED",
+  5: "CANCELLED",
+  6: "REFUNDED",
+}; 
 
 const buttonClickedStyle = "text-sky-400 font-semibold border-b-2 border-sky-400";
 const buttons = ["Tất cả", "Chờ xác nhận", "Đang giao", "Đã giao", "Đã hủy"];
 
 export const PersonalPurchase = () => {
-  const [buttonClicked, setButtonClicked] = useState(0);
   const user = useSelector((state) => state.user.user);
   const userId = user.id;
   const dispatch = useDispatch();
-  const orders = useSelector((state) => state.order.orders);
-  const orderList = orders.content || [];
+  const { orderByStatus, status } = useSelector((state) => state.order);
+  const [isFocused, setIsFocused] = useState(0);
+  const selectedStatus = STATUS_MAP[isFocused];
+  const orders = orderByStatus[selectedStatus] || [];
 
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchAllOrder({ userId: userId, pageNumber: 0, pageSize: 10 }));
+    const ordersCached = orderByStatus[selectedStatus];
+    if (!ordersCached) {
+      dispatch(
+        fetchOrders({ pageNumber: 0, pageSize: 10, status: selectedStatus, userId: userId })
+      );
     }
-  }, [dispatch, userId]);
+  }, [dispatch, selectedStatus, orderByStatus, userId]);
+
+  if (status === ReduxStuatus.LOADING) {
+    return (
+      <div className="w-full h-full flex justify-center items-center text-sky-400">
+        Loading...
+      </div>
+    );
+  }
 
   return (
-    <div className="p-5 w-full sm:w-2/3">
+    <div className="p-5 w-full sm:w-4/5">
       <div
         className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
         style={{
@@ -36,9 +60,7 @@ export const PersonalPurchase = () => {
         {user.displayName || "Không rõ tên"}
       </div>
       <div className="flex gap-2">
-        <div
-          className="w-1/4 rounded-md p-5 bg-white"
-        >
+        <div className="w-1/4 rounded-md p-5 bg-white">
           <Link className=" text-slate-700  items-center flex cursor-pointer mb-2">
             <PermIdentityOutlinedIcon />
             Tài khoản của tôi
@@ -63,18 +85,14 @@ export const PersonalPurchase = () => {
             Đơn mua
           </Link>
         </div>
-        <div
-          className="w-full rounded-md"
-        >
+        <div className="w-full rounded-md">
           <div className="bg-white w-full flex justify-around">
             {buttons.map((label, index) => (
               <button
                 key={index}
-                onClick={() => setButtonClicked(index)}
+                onClick={() => setIsFocused(index)}
                 className={` p-1 ${
-                  buttonClicked === index
-                    ? buttonClickedStyle
-                    : "text-slate-700"
+                  isFocused === index ? buttonClickedStyle : "text-slate-700"
                 }`}
               >
                 {label}
@@ -82,16 +100,18 @@ export const PersonalPurchase = () => {
             ))}
           </div>
           <div className="w-full mt-2">
-            {Array.isArray(orderList) && orderList.length > 0 ? (
-              orderList.map((order, index) => (
+            {orders ? (
+              orders.map((item) => (
                 <OrderCard
-                  product={order.items}
-                  status={order.status}
-                  id={order.orderId}
+                  product={item.items}
+                  status={item.status}
+                  id={item.orderId}
                 ></OrderCard>
               ))
             ) : (
-              <div> Không có đơn hàng</div>
+              <div className="w-full h-full flex justify-center items-center text-sky-400">
+                Không có đơn hàng nào
+              </div>
             )}
           </div>
         </div>

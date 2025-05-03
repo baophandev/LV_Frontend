@@ -14,8 +14,8 @@ import {
 import ThemeColor from "../constant/theme";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { createOrderApi } from "../api/orderApi";
-import vnpay from "../assets/vnpay.png"
+import { createOrderApi, createVNPayUrl } from "../api/orderApi";
+import vnpay from "../assets/vnpay.png";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -27,7 +27,7 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
   const [note, setNote] = useState("");
 
   const handleCreateOrder = async () => {
-    try{
+    try {
       const response = await createOrderApi({
         order: {
           items: Object.values(order).map((item) => ({
@@ -39,8 +39,7 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
           addressId: address.id,
           note: note,
           method: "COD",
-          itemId: Object.values(order)
-            .map((item) => item.itemId)
+          itemId: Object.values(order).map((item) => item.itemId),
         },
         userId,
       });
@@ -48,12 +47,19 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
       alert("Đặt hàng thành công");
       onClose();
       window.location.reload();
-    }catch(error){
+    } catch (error) {
       console.error("Error creating order:", error);
     }
-  }
+  };
 
-  console.log("order", order);
+  const handleVNpay = async () => {
+    try {
+      const response = await createVNPayUrl(totalPrice);
+      window.location.href = response.paymentUrl;
+    } catch (error) {
+      console.error("Error creating VNPay URL:", error);
+    }
+  };
 
   return (
     <Dialog
@@ -150,7 +156,7 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
             </button>
             <div>Hoặc</div>
             <button
-              onClick={() => handleCreateOrder()}
+              onClick={() => handleVNpay()}
               className="rounded-2xl bg-white py-1 px-4 text-blue-500 shadow-md border flex"
             >
               <img src={vnpay} alt="" className="w-6" /> Thanh toán qua VNPay

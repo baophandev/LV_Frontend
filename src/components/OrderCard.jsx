@@ -5,6 +5,16 @@ const OrderCard = ({ product, status, id }) => {
     switch (status) {
       case "PENDING":
         return "CHỜ XÁC NHẬN";
+      case "CONFIRM": 
+        return "ĐÃ XÁC NHẬN";
+      case "DELIVERING":
+        return "ĐANG GIAO HÀNG";
+      case "DELIVERED":
+        return "ĐÃ GIAO HÀNG";
+      case "CANCELLED":
+        return "ĐÃ HỦY";
+      case "REFUNDED":
+        return "ĐÃ HOÀN TIỀN";
       default:
         return "-";
     }
@@ -12,7 +22,7 @@ const OrderCard = ({ product, status, id }) => {
 
   return (
     <>
-      <div className="flex justify-end text-yellow-400 border-b border-dashed bg-white rounded-b-md p-2 mt-2 text-xs">
+      <div className="flex justify-end text-slate-500 font-semibold border-b border-dashed bg-slate-200 rounded-b-md p-2 mt-2 text-xs">
         {renderStatus()}
       </div>
       {Array.isArray(product) && product.length > 0
@@ -32,7 +42,7 @@ const OrderCard = ({ product, status, id }) => {
                   </div>
                   <div className="ml-auto ">
                     <div>
-                      <span className="text-sm">Gía bán: </span>{" "}
+                      <span className="text-sm">Giá bán: </span>{" "}
                       {prd.discountedPrice.toLocaleString("vi-VN") + "đ"}
                     </div>
                     <div className="">
@@ -48,18 +58,47 @@ const OrderCard = ({ product, status, id }) => {
           ))
         : ""}
       <div className="py-2 flex items-center bg-white rounded-t-md p-2">
-        <div className="text-xs text-gray-400">
-          Vui lòng chỉ nhấn "Đã nhận được hàng" khi đơn hàng đã được giao đến
-          <br />
-          bạn và sản phẩm nhận được không có vấn đề nào.
-        </div>
-        <div className="ml-auto flex flex-col gap-1">
-          <div className="ml-auto">
-            <button className="bg-yellow-400 px-2 py-1 text-white">
-              Đã nhận được hàng
-            </button>
+        {status === "DELIVERING" ? (
+          <>
+            <div className="text-xs text-gray-400">
+              Vui lòng chỉ nhấn "Đã nhận được hàng" khi đơn hàng đã được giao
+              đến
+              <br />
+              bạn và sản phẩm nhận được không có vấn đề nào.
+            </div>
+            <div className="ml-auto flex flex-col gap-1">
+              <div className="ml-auto">
+                <button className="bg-yellow-400 px-2 py-1 text-white">
+                  Đã nhận được hàng
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          ""
+        )}
+        {status === "PENDING" || status === "CONFIRM" ? (
+          <div className="ml-auto flex flex-col gap-1">
+            <div className="ml-auto">
+              <button className="bg-red-500 px-2 py-1 text-white">
+                Hủy đơn hàng
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          ""
+        )}
+        {status === "DELIVERED"  ? (
+          <div className="ml-auto flex flex-col gap-1">
+            <div className="ml-auto">
+              <button className="bg-sky-500 px-2 py-1 text-white">
+                Yêu cầu trả hàng
+              </button>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

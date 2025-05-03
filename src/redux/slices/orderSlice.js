@@ -1,40 +1,66 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchAllOrdersApi } from "../../api/orderApi";
+import { ReduxStuatus } from "../../enums/Status";
+import { fetchOrdersApi } from "../../api/orderApi";
 
-export const fetchAllOrder = createAsyncThunk(
-    "order/fetchAllOrder",
-    async ({ userId, pageNumber, pageSize }) => {
-        try {
-            const response = await fetchAllOrdersApi({ userId, pageNumber, pageSize });
-            return response;
-        } catch (err) {
-            throw err;
-        }
-    }
-)
+export const fetchOrders = createAsyncThunk(
+  "order/fetchOrders",
+  async ({ pageNumber, pageSize, status, userId }) => {
+    const response = await fetchOrdersApi({ pageNumber, pageSize, status, userId });
+    return {
+      ...response,
+      statusKey: status,
+    };
+  }
+);
 
 const orderSlice = createSlice({
   name: "order",
   initialState: {
-    orders: [],
-    status: "idle",
+    orderByStatus: {},
+    status: ReduxStuatus.IDLE,
     error: null,
+    currentPage: 1,
+    totalPages: 0,
   },
-  reducers: {},
+  reducers: {
+    localUpdateStatus: (state, action) => {
+      const { orderId, oldStatus, newStatus } = action.payload;
+
+      //Tìm order trong oldStatus list
+      const oldOrders = state.orderByStatus[oldStatus] || [];
+      const orderIndex = oldOrders.findIndex((order) => order.id === orderId);
+
+      if (orderIndex !== -1) {
+        const [updatedOrder] = oldOrders.splice(orderIndex, 1);
+        updatedOrder.status = newStatus;
+
+        //Thêm order vào newStatus list
+        if (!state.orderByStatus[newStatus]) {
+          state.orderByStatus[newStatus] = [];
+        }
+
+        state.orderByStatus[newStatus].unshift(updatedOrder);
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllOrder.pending, (state) => {
-        state.status = "loading";
+      .addCase(fetchOrders.pending, (state) => {
+        state.status = ReduxStuatus.LOADING;
       })
-      .addCase(fetchAllOrder.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.orders = action.payload;
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.status = ReduxStuatus.SUCCEEDED;
+        const { statusKey, content, pageNumber, totalPages } = action.payload;
+        state.orderByStatus[statusKey] = content;
+        state.currentPage = pageNumber;
+        state.totalPages = totalPages;
       })
-      .addCase(fetchAllOrder.rejected, (state, action) => {
-        state.status = "failed";
+      .addCase(fetchOrders.rejected, (state, action) => {
+        state.status = ReduxStuatus.FAILED;
         state.error = action.error.message;
       });
   },
 });
 
+export const { localUpdateStatus } = orderSlice.actions;
 export default orderSlice.reducer;

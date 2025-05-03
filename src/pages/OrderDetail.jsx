@@ -57,7 +57,7 @@ export const OrderDetail = () => {
   };
 
   return (
-    <div className="p-5 w-full sm:w-2/3">
+    <div className="p-5 w-full sm:w-4/5">
       {orderDetail ? (
         <>
           <div

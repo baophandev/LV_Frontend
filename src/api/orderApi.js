@@ -54,7 +54,7 @@ export const fetchOrderByIdApi = async (orderId) => {
 
 export const createVNPayUrl = async (amount) => {
   try {
-    const response = await axiosInstance.get("/phone/api/vnpay/create-payment", {
+    const response = await axiosInstance.get("/api/vnpay/create-payment", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -70,4 +70,24 @@ export const createVNPayUrl = async (amount) => {
     console.error("Error creating VNPay URL:", error);
     throw error;
   }
+};
+
+export const fetchOrdersApi = async ({
+  pageNumber = 0,
+  pageSize = 0,
+  status,
+  userId,
+}) => {
+  const response = await axiosInstance.get("/order", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      page: pageNumber,
+      size: pageSize,
+      ...(status !== "ALL" && { status }),
+      userId: userId,
+    },
+  });
+  return response.data;
 };

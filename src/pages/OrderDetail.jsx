@@ -36,6 +36,16 @@ export const OrderDetail = () => {
     switch (orderDetail.status) {
       case "PENDING":
         return "CHỜ XÁC NHẬN";
+      case "CONFIRM":
+        return "ĐÃ XÁC NHẬN";
+      case "DELIVERING":
+        return "ĐANG GIAO HÀNG";
+      case "DELIVERED":
+        return "ĐÃ GIAO HÀNG";
+      case "CANCELLED":
+        return "ĐÃ HỦY";
+      case "REFUNDED":
+        return "ĐÃ HOÀN TIỀN";
       default:
         return "-";
     }
@@ -97,7 +107,7 @@ export const OrderDetail = () => {
               </Link>
             </div>
             <div
-              className="w-full rounded-md p-5"
+              className="w-full rounded-md"
               style={{
                 backgroundColor: ThemeColor.LIGHT_GRAY,
               }}

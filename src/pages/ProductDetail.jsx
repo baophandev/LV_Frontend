@@ -30,9 +30,10 @@ export const ProductDetail = () => {
   const [selectedItems, setSelectedItems] = useState(null);
   const user = useSelector((state) => state.user.user);
   const userId = user.id;
-    const [openToast, setOpenToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState("");
-    const [toastSeverity, setToastSeverity] = useState("success");
+  const [openToast, setOpenToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastSeverity, setToastSeverity] = useState("success");
+  const [displayImages, setDisplayImages] = useState([]);
 
   // Lấy dữ liệu sản phẩm từ Redux khi component mount
   useEffect(() => {
@@ -92,6 +93,32 @@ export const ProductDetail = () => {
   // Sử dụng product đã cập nhật nếu có, nếu không thì sử dụng product gốc từ Redux
   const displayedProduct = updatedProduct || product;
 
+  useEffect(() => {
+    if (!displayedProduct) return;
+
+    if (selectedItems?.variantImages?.length > 0) {
+      // Nếu chọn biến thể có ảnh riêng thì chỉ hiển thị ảnh của biến thể
+      setDisplayImages(selectedItems.variantImages);
+    } else {
+      // Hiển thị avatar + ảnh của tất cả biến thể
+      const images = [];
+
+      // Thêm ảnh đại diện sản phẩm (productAvatar)
+      if (displayedProduct.productAvatar?.data) {
+        images.push(displayedProduct.productAvatar);
+      }
+
+      // Thêm ảnh từ các biến thể
+      displayedProduct.variants?.forEach((variant) => {
+        if (Array.isArray(variant.variantImages)) {
+          images.push(...variant.variantImages);
+        }
+      });
+
+      setDisplayImages(images);
+    }
+  }, [displayedProduct, selectedItems]);
+
   if (status === "loading") return <Loading />;
   if (status === "failed")
     return (
@@ -113,13 +140,17 @@ export const ProductDetail = () => {
   };
 
   const handleAddToCart = async () => {
-    if(!selectedItems){
+    if (!selectedItems) {
       alert("Vui lòng chọn một biến thể trước khi thêm vào giỏ hàng!");
       return;
     }
 
     try {
-      await addtoCartApi({userId, variantId: selectedItems.id, quantity: amount});
+      await addtoCartApi({
+        userId,
+        variantId: selectedItems.id,
+        quantity: amount,
+      });
       setAmount(1);
       dispatch(fetchCart(userId));
       setToastMessage("Đã thêm sản phẩm vào giỏ hàng");
@@ -138,13 +169,12 @@ export const ProductDetail = () => {
       <div className="w-2/3 p-5 bg-white mt-5 mb-4">
         <div className="flex gap-7 p-2 py-5 rounded-md">
           <div className="flex justify-center gap-2 w-1/2">
-            <div className="w-[85%] h-80 rounded-md bg-gray-200">
-              {displayedProduct?.images &&
-              displayedProduct.images.length > 0 ? (
+            <div className="w-[85%] h-80 rounded-md bg-white">
+              {displayImages.length > 0 ? (
                 <>
                   <img
                     className="w-full h-full rounded-md cursor-pointer"
-                    src={`data:image/png;base64,${displayedProduct.images[imageIndex]?.data}`}
+                    src={`data:image/png;base64,${displayImages[imageIndex]?.data}`}
                     alt={displayedProduct?.name || "Ảnh sản phẩm"}
                     style={{ objectFit: "contain" }}
                     onClick={handleClickOpen}
@@ -152,7 +182,7 @@ export const ProductDetail = () => {
                   <UpSizeImage
                     open={open}
                     handleClose={handleClose}
-                    images={displayedProduct.images}
+                    images={displayImages}
                     imageNumber={imageIndex}
                   />
                 </>
@@ -170,11 +200,10 @@ export const ProductDetail = () => {
                 displayedProduct?.images?.length > 4 ? "overflow-y-scroll" : ""
               }`}
             >
-              {displayedProduct?.images?.map((image, index) => (
+              {displayImages.map((image, index) => (
                 <div
                   key={index}
-                  className="w-full h-24 cursor-pointer rounded-md bg-gray-200"
-                  style={{ backgroundColor: ThemeColor.MAIN_GREEN }}
+                  className="w-full h-24 cursor-pointer rounded-md bg-white"
                   onClick={() => setImageIndex(index)}
                 >
                   <img

@@ -5,15 +5,17 @@ import cartReducer from "../redux/slices/cartSlice";
 import authReducer from "../redux/slices/authSlice"
 import userReducer from "../redux/slices/userSlice"
 import orderReducer from "../redux/slices/orderSlice"
+import chatReducer from "../redux/slices/chatSlice"
 
 const store = configureStore({
   reducer: {
     categorys: categoryReducer,
     product: productReducer,
     cart: cartReducer,
-    auth : authReducer,
-    user : userReducer,
+    auth: authReducer,
+    user: userReducer,
     order: orderReducer,
+    chat: chatReducer,
   },
 });
 

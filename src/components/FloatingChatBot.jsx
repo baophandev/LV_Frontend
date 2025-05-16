@@ -1,4 +1,3 @@
-// src/components/FloatingChatBot.jsx
 import React, { useState } from "react";
 import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import RasaChat from "./RasaChat";

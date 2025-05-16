@@ -1,16 +1,19 @@
-// src/components/ChatBot.jsx
 import React, { useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { addMessage, addMessages } from "../redux/slices/chatSlice";
+import { Link } from "react-router-dom";
 
 const RasaChat = () => {
-  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const dispatch = useDispatch();
+  const messages = useSelector((state) => state.chat.messages);
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
     const newMessage = { sender: "user", text: input };
-    setMessages((prev) => [...prev, newMessage]);
+    dispatch(addMessage(newMessage));
 
     try {
       const response = await axios.post(
@@ -31,7 +34,7 @@ const RasaChat = () => {
         return [];
       });
 
-      setMessages((prev) => [...prev, ...formattedResponses]);
+      dispatch(addMessages(formattedResponses));
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -42,14 +45,19 @@ const RasaChat = () => {
   return (
     <div className="p-4 max-w-md mx-auto border rounded shadow">
       <div className="h-96 overflow-y-auto mb-4 border p-2 bg-gray-50 rounded">
+        <div className="mb-2 text-left">
+          <span className="inline-block px-3 py-2 rounded text-gray bg-gray-300">
+            Xin chào 🤗
+          </span>
+        </div>
+
         {messages.map((msg, index) =>
           msg.products ? (
             <div key={index} className="mb-4">
-              <div className="font-bold mb-2">🔍 Sản phẩm tìm thấy:</div>
               {msg.products.map((product) => (
                 <div
                   key={product.id}
-                  className="border p-2 rounded mb-2 bg-white shadow"
+                  className="border p-2 rounded mb-2 bg-white"
                 >
                   <img
                     src={`data:${product.productAvatar.imageType};base64,${product.productAvatar.data}`}
@@ -57,9 +65,12 @@ const RasaChat = () => {
                     className="w-20 h-20 object-cover rounded mb-2"
                   />
                   <div className="font-semibold">{product.name}</div>
-                  <div className="text-sm text-gray-600">
-                    {product.description}
+                  <div className="text-gray-600">
+                    {product.firstVariantPrice?.toLocaleString("vi-VN")}đ
                   </div>
+                  <Link to={`/product/${product.id}`} className="text-sky-500">
+                    Xem chi tiết
+                  </Link>
                 </div>
               ))}
             </div>

@@ -7,7 +7,6 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useEffect, useState } from "react";
 import { fetchOrderByIdApi } from "../api/orderApi";
@@ -79,9 +78,7 @@ export const OrderDetail = () => {
             {user.displayName || "Không rõ tên"}
           </div>
           <div className="flex gap-2">
-            <div
-              className="w-1/4 rounded-md p-5 bg-white"
-            >
+            <div className="w-1/4 rounded-md p-5 bg-white">
               <Link className=" text-slate-700  items-center flex cursor-pointer mb-2">
                 <PermIdentityOutlinedIcon />
                 Tài khoản của tôi
@@ -197,17 +194,7 @@ export const OrderDetail = () => {
                   <div>Đã nhận hàng</div>
                 </div>
               </div>
-              <div className="p-3 bg-yellow-50 flex items-center text-gray-500 border-t border-dashed rounded-t-md">
-                <WarningAmberIcon />
-                <div className="text-sm">
-                  Lưu ý: đây là đơn hàng Thanh toán khi nhận hàng.
-                </div>
-                <div className="ml-auto">
-                  <button className="bg-yellow-400 px-2 py-1 text-white">
-                    Đã nhận được hàng
-                  </button>
-                </div>
-              </div>
+          
               <div className="h-[4px] bg-[length:44px_44px] bg-[repeating-linear-gradient(45deg,#f18d9b_0px,#f18d9b_25px,white_25px,white_38px,#6fa6d6_38px,#6fa6d6_44px)]"></div>
               <div className="bg-white p-5">
                 <div className="text-lg text-slate-400">Địa Chỉ Nhận Hàng</div>
@@ -225,7 +212,9 @@ export const OrderDetail = () => {
                   ? orderDetail.items.map((item) => (
                       <div className="flex gap-1 items-center">
                         <div className="">
-                          <Link to={`/product/${item.prdId}`}>{item.name || "-"}</Link>
+                          <Link to={`/product/${item.prdId}`}>
+                            {item.name || "-"}
+                          </Link>
                           <div className="text-sm text-gray-400">
                             Phân lọai: {item.color || "-"}
                           </div>
@@ -244,14 +233,14 @@ export const OrderDetail = () => {
               <div className="flex w-full ml-auto p-5 bg-white">
                 <div className="ml-auto">
                   Thành tiền:{" "}
-                  <span className="text-orange-500">
+                  <span className="text-sky-500 text-lg">
                     {orderDetail.totalPrice.toLocaleString("vi-VN")}đ
                   </span>
                 </div>
               </div>
-              <div className="bg-yellow-50 text-sm px-5 py-2 border border-yellow-300">
+              <div className="bg-sky-50 text-sm px-5 py-2 border border-sky-300">
                 Vui lòng thanh toán{" "}
-                <span className="text-orange-500">
+                <span className="text-sky-500 font-semibold">
                   {orderDetail.totalPrice.toLocaleString("vi-VN")}đ
                 </span>{" "}
                 khi nhận hàng

@@ -10,6 +10,7 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import Banner from "../assets/banner.png";
 import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
+import FloatingChatBot from "../components/FloatingChatBot";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -139,6 +140,7 @@ export const Home = () => {
           />
         </div>
       </div>
+      <FloatingChatBot/>
     </>
   );
 };

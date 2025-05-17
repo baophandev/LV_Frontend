@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const RasaChat = () => {
   const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.chat.messages);
 
@@ -14,6 +15,8 @@ const RasaChat = () => {
 
     const newMessage = { sender: "user", text: input };
     dispatch(addMessage(newMessage));
+    setInput("");
+    setIsTyping(true);
 
     try {
       const response = await axios.post(
@@ -39,7 +42,7 @@ const RasaChat = () => {
       console.error("Error sending message:", error);
     }
 
-    setInput("");
+    setIsTyping(false);
   };
 
   return (
@@ -92,6 +95,14 @@ const RasaChat = () => {
               </span>
             </div>
           )
+        )}
+
+        {isTyping && (
+          <div className="mb-2 text-left">
+            <span className="inline-block px-3 py-2 rounded bg-gray-200 animate-pulse">
+              ...
+            </span>
+          </div>
         )}
       </div>
 

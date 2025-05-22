@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import RasaChat from "./RasaChat";
+import chatbot from "../assets/chatbot.png"
 
 const FloatingChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,11 +14,11 @@ const FloatingChatBot = () => {
       )}
 
       <button
-        className="fixed bottom-5 right-5 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition z-50"
+        className="fixed bottom-4 right-5 bg-white text-white p-3 rounded-full shadow-lg transition z-50 w-16 h-16"
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label="Mở chatbot"
       >
-        <SmartToyOutlinedIcon />
+        <img src={chatbot} alt="" />
       </button>
     </>
   );

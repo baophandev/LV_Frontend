@@ -196,8 +196,8 @@ export const ProductDetail = () => {
               )}
             </div>
             <div
-              className={`flex flex-col gap-1 w-[20%] h-64 ${
-                displayedProduct?.images?.length > 4 ? "overflow-y-scroll" : ""
+              className={`flex flex-col gap-1 w-[20%] h-72 ${
+                displayImages?.length > 4 ? "overflow-y-scroll" : ""
               }`}
             >
               {displayImages.map((image, index) => (

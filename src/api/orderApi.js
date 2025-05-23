@@ -91,3 +91,19 @@ export const fetchOrdersApi = async ({
   });
   return response.data;
 };
+
+export const updateOrderStatusApi = async (orderId, status) => {
+  const response = await axiosInstance.post(
+    `/order/updateStatus/${orderId}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        status: status,
+      },
+    }
+  );
+  return response.data;
+};

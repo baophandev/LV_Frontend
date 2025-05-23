@@ -20,9 +20,6 @@ const STATUS_MAP = {
   6: "REFUNDED",
 }; 
 
-const buttonClickedStyle = "text-sky-400 font-semibold border-b-2 border-sky-400";
-const buttons = ["Tất cả", "Chờ xác nhận", "Đang giao", "Đã giao", "Đã hủy"];
-
 export const PersonalPurchase = () => {
   const user = useSelector((state) => state.user.user);
   const userId = user.id;
@@ -48,6 +45,21 @@ export const PersonalPurchase = () => {
       </div>
     );
   }
+
+  const renderStatusButton = (index, label) => {
+    return (
+      <div
+        className={`px-4 py-1 cursor-pointer  ${
+          isFocused === index
+            ? " font-semibold text-sky-500 border-b-2 border-b-sky-500"
+            : "bg-white "
+        }`}
+        onClick={() => setIsFocused(index)}
+      >
+        {label}
+      </div>
+    );
+  };
 
   return (
     <div className="p-5 w-full sm:w-4/5">
@@ -86,18 +98,14 @@ export const PersonalPurchase = () => {
           </Link>
         </div>
         <div className="w-full rounded-md">
-          <div className="bg-white w-full flex justify-around">
-            {buttons.map((label, index) => (
-              <button
-                key={index}
-                onClick={() => setIsFocused(index)}
-                className={` p-1 ${
-                  isFocused === index ? buttonClickedStyle : "text-slate-700"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+          <div className="flex justify-center gap-3 mb-2 bg-white">
+            {renderStatusButton(0, "Tất cả")}
+            {renderStatusButton(1, "Chờ xác nhận")}
+            {renderStatusButton(2, "Đã xác nhận")}
+            {renderStatusButton(3, "Đang vận chuyển")}
+            {renderStatusButton(4, "Đã giao hàng")}
+            {renderStatusButton(5, "Đã hủy")}
+            {renderStatusButton(6, "Yêu cầu hoàn tiền")}
           </div>
           <div className="w-full mt-2">
             {orders ? (

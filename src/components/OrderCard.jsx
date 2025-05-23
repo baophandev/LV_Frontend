@@ -1,8 +1,20 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { updateOrderStatusApi } from "../api/orderApi";
+import { useDispatch } from "react-redux";
+import { localUpdateStatus } from "../redux/slices/orderSlice";
+import { Snackbar, Alert } from "@mui/material";
 
 const OrderCard = ({ product, status, id }) => {
+
+  const [statusRecently, setStatusRecently] = useState(status);
+  const dispatch = useDispatch();
+  const [openToast, setOpenToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastSeverity, setToastSeverity] = useState("success");
+
   const renderStatus = () => {
-    switch (status) {
+    switch (statusRecently) {
       case "PENDING":
         return "CHỜ XÁC NHẬN";
       case "CONFIRM": 
@@ -20,9 +32,29 @@ const OrderCard = ({ product, status, id }) => {
     }
   };
 
+  const handleStatusChange = async (newStatus) => {
+    const oldStatus = statusRecently;
+    setStatusRecently(newStatus);
+    try {
+      await updateOrderStatusApi(id, newStatus);
+      dispatch(
+        localUpdateStatus({ orderId: id, oldStatus, newStatus })
+      );
+      setToastMessage("Cập nhật đơn hàng thành công!");
+      setToastSeverity("success");
+    } catch (error) {
+      setToastMessage("Lỗi khi cập nhật đơn hàng!");
+      setToastSeverity("error");
+      setStatusRecently(oldStatus);
+    } finally {
+      setOpenToast(true);
+    }
+  };
+
   return (
     <>
-      <div className="flex justify-end text-slate-500 font-semibold border-b border-dashed bg-slate-200 rounded-b-md p-2 mt-2 text-xs">
+      <div className="flex justify-end border-b border-dashed bg-slate-200 rounded-b-md p-2 mt-2 text-sm uppercase">
+        <span className="">MÃ ĐƠN HÀNG: {id.split("-")[0]} </span> -{" "}
         {renderStatus()}
       </div>
       {Array.isArray(product) && product.length > 0
@@ -68,7 +100,10 @@ const OrderCard = ({ product, status, id }) => {
             </div>
             <div className="ml-auto flex flex-col gap-1">
               <div className="ml-auto">
-                <button className="bg-yellow-400 px-2 py-1 text-white">
+                <button
+                  className="bg-yellow-400 px-2 py-1 text-white"
+                  onClick={() => handleStatusChange("DELIVERED")}
+                >
                   Đã nhận được hàng
                 </button>
               </div>
@@ -80,7 +115,10 @@ const OrderCard = ({ product, status, id }) => {
         {status === "PENDING" || status === "CONFIRM" ? (
           <div className="ml-auto flex flex-col gap-1">
             <div className="ml-auto">
-              <button className="bg-red-500 px-2 py-1 text-white">
+              <button
+                className="bg-red-500 px-2 py-1 text-white"
+                onClick={() => handleStatusChange("CANCELLED")}
+              >
                 Hủy đơn hàng
               </button>
             </div>
@@ -88,7 +126,7 @@ const OrderCard = ({ product, status, id }) => {
         ) : (
           ""
         )}
-        {status === "DELIVERED"  ? (
+        {status === "DELIVERED" ? (
           <div className="ml-auto flex flex-col gap-1">
             <div className="ml-auto">
               <button className="bg-sky-500 px-2 py-1 text-white">
@@ -100,6 +138,20 @@ const OrderCard = ({ product, status, id }) => {
           ""
         )}
       </div>
+      <Snackbar
+        open={openToast}
+        autoHideDuration={3000}
+        onClose={() => setOpenToast(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={() => setOpenToast(false)}
+          severity={toastSeverity}
+          sx={{ width: "100%" }}
+        >
+          {toastMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

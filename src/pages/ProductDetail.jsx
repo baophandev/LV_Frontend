@@ -164,6 +164,8 @@ export const ProductDetail = () => {
     }
   };
 
+  console.log("displayedProduct", displayedProduct);
+
   return (
     <>
       <div className="w-2/3 p-5 bg-white mt-5 mb-4">
@@ -232,78 +234,33 @@ export const ProductDetail = () => {
               />
             </Box>
             <div className="flex gap-2 flex-wrap pb-2 border-b border-b-gray-200">
-              <button
-                className="text-white px-4 py-1 rounded-md relative"
-                style={{ border: "1px solid #007580" }}
-              >
-                <div className="font-medium" style={{ color: ThemeColor.BLUE }}>
-                  1TB
-                </div>
-                <div className="font-medium text-yellow-400">23.000.000đ</div>
-                <div className="absolute top-0 left-1">
-                  <CheckCircleIcon
-                    sx={{ color: ThemeColor.BLUE }}
-                    fontSize="small"
-                  />
-                </div>
-              </button>
+              <div className="uppercase text-2xl font-extrabold">
+                {selectedItems?.price.toLocaleString("vi-VN") ||
+                  displayedProduct.firstVariantPrice?.toLocaleString("vi-VN")}
+                VNĐ
+              </div>
             </div>
             <div className="text-gray-400">Chọn màu sắc:</div>
             <div className="flex gap-2 flex-wrap border-b border-b-gray-200 pb-2">
               {displayedProduct?.variants &&
               displayedProduct.variants.length > 0 ? (
-                displayedProduct.variants.map((variant, index) => (
-                  <button
-                    key={index}
-                    className="relative text-white px-4 py-1 rounded-md border border-teal-800 text-sm"
-                    onClick={() => {
-                      handleSelectedItems(variant);
+                displayedProduct.variants.map((_variant, idx) => (
+                  <div
+                    key={_variant.id || idx}
+                    className="w-10 h-10 rounded-full border border-gray-300"
+                    style={{
+                      backgroundColor: _variant.colorCode || "#fff",
+                      border:
+                        selectedItems?.id === _variant.id
+                          ? `2px solid ${ThemeColor.BLUE}`
+                          : "1px solid #ccc",
+                      cursor: "pointer",
                     }}
-                  >
-                    <div
-                      className="font-medium"
-                      style={{ color: ThemeColor.BLUE }}
-                    >
-                      {variant?.color || "Không xác định"}
-                    </div>
-                    <div className="text-yellow-400 font-medium">
-                      {variant.discountValue > 0
-                        ? (
-                            (variant.price || 0) *
-                            (1 - variant.discountValue / 100)
-                          ).toLocaleString("vi-VN") + "đ"
-                        : (variant.price || 0).toLocaleString("vi-VN") + "đ"}
-                    </div>
-                    {variant.discountValue > 0 && (
-                      <div className="flex gap-1 justify-center">
-                        <div className="text-slate-500 italic line-through">
-                          {(variant.price || 0).toLocaleString("vi-VN") + "đ"}
-                        </div>
-                        <div className="text-red-500">
-                          -{variant.discountValue}%
-                        </div>
-                      </div>
-                    )}
-                    <div className="flex gap-2">
-                      <div className="text-gray-400 text-xs">
-                        Đã bán: {variant?.sold || 0}
-                      </div>
-                      <div className="text-gray-400 text-xs">
-                        Còn lại: {variant?.stock || 0}
-                      </div>
-                    </div>
-                    {selectedItems?.id === variant.id && (
-                      <div className="absolute top-0 left-1">
-                        <CheckCircleIcon
-                          sx={{ color: ThemeColor.BLUE }}
-                          fontSize="small"
-                        />
-                      </div>
-                    )}
-                  </button>
+                    onClick={() => handleSelectedItems(_variant)}
+                  ></div>
                 ))
               ) : (
-                <p className="text-sky-400 italic">Không có lựa chọn màu sắc</p>
+                <div>Không có lựa chọn màu sắc</div>
               )}
             </div>
 

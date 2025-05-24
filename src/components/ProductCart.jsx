@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 
 const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
   return (
-    <div className=" w-56 h-80 mb-4 p-2 pb-5 relative border border-gray-200 shadow-sm rounded-md bg-white">
-      <div className="w-full h-3/5 mb-2">
+    <div className="w-72 mb-4 p-2 pb-5 relative  rounded-md bg-white">
+      <div className=" h-64 mb-2 flex items-center justify-center">
         <Link to={`/product/${id}`}>
           <img
-            className="w-48 rounded-md"
+            className="w-52 rounded-md"
             src={`data:image/png;base64,${image}`}
             alt=""
             style={{
@@ -16,15 +16,12 @@ const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
           />
         </Link>
       </div>
-      <div className=" flex pt-3">
+      <div className=" flex pt-3 px-1 h-36">
         <div className="">
-          <Link
-            to={`/product/${id}`}
-            className="line-clamp-2 mb-1 text-blue-500 font-semibold"
-          >
+          <Link to={`/product/${id}`} className=" text-xl font-extrabold">
             {name}
           </Link>
-          <div className="text-slate-600">
+          <div className="text-xl mt-2 font-medium">
             {discountDisplayed > 0
               ? // Tính giá sau giảm và chuyển về chuỗi định dạng "vi-VN" rồi nối thêm "đ"
                 (price * (1 - discountDisplayed / 100)).toLocaleString(

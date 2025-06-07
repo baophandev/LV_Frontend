@@ -52,34 +52,45 @@ const OrderCard = ({ product, status, id }) => {
   };
 
   return (
-    <>
-      <div className="flex justify-end border-b border-dashed bg-slate-200 rounded-b-md p-2 mt-2 text-sm uppercase">
-        <span className="">MÃ ĐƠN HÀNG: {id.split("-")[0]} </span> -{" "}
-        {renderStatus()}
+    <div className="border rounded-xl mb-5">
+      <div className="flex border-b bg-slate-100 rounded-t-xl px-5 py-4 items-center">
+        <div className="font-bold uppercase text-slate-600">
+          MÃ ĐƠN HÀNG: {id}{" "}
+        </div>
+        <div className="ml-auto bg-green-100 text-sm text-green-700 font-bold px-4 py-1 rounded-full">
+          {renderStatus()}
+        </div>
       </div>
       {Array.isArray(product) && product.length > 0
         ? product.map((prd, index) => (
             <>
-              <div className="flex flex-col gap-2 rounded-md bg-white p-2 border-b border-dashed">
+              <div className="flex flex-col gap-2 bg-white p-7 border-b">
                 <div className="flex gap-1 items-center">
                   {/* <Link to={"/user/purchase/order/id"}>
             <img src="https://placehold.co/600x400" className="w-28 " alt="" />
           </Link> */}
                   <div className="">
-                    <Link to={`/user/purchase/order/${id}`}>{prd.name}</Link>
+                    <Link
+                      className="font-semibold text-lg text-slate-600"
+                      to={`/user/purchase/order/${id}`}
+                    >
+                      {prd.name}
+                    </Link>
                     <div className="text-sm text-gray-400">{prd.color}</div>
                     <div className="text-sm text-gray-400">
                       Số lượng: {prd.quantity}
                     </div>
                   </div>
-                  <div className="ml-auto ">
+                  <div className="ml-auto">
                     <div>
                       <span className="text-sm">Giá bán: </span>{" "}
-                      {prd.discountedPrice.toLocaleString("vi-VN") + "đ"}
+                      <span className="text-blue-800 font-semibold">
+                        {prd.discountedPrice.toLocaleString("vi-VN") + "đ"}
+                      </span>
                     </div>
                     <div className="">
                       <span className="text-sm">Thành tiền: </span>
-                      <span className="">
+                      <span className="text-blue-800 font-semibold">
                         {prd.calculatePrice.toLocaleString("vi-VN") + "đ"}
                       </span>
                     </div>
@@ -89,7 +100,7 @@ const OrderCard = ({ product, status, id }) => {
             </>
           ))
         : ""}
-      <div className="py-2 flex items-center bg-white rounded-t-md p-2">
+      <div className="flex items-center bg-slate-100 rounded-b-xl py-4 px-5">
         {status === "DELIVERING" ? (
           <>
             <div className="text-xs text-gray-400">
@@ -129,7 +140,7 @@ const OrderCard = ({ product, status, id }) => {
         {status === "DELIVERED" ? (
           <div className="ml-auto flex flex-col gap-1">
             <div className="ml-auto">
-              <button className="bg-sky-500 px-2 py-1 text-white">
+              <button className="bg-sky-500 px-3 py-2 text-white rounded-md">
                 Yêu cầu trả hàng
               </button>
             </div>
@@ -152,7 +163,7 @@ const OrderCard = ({ product, status, id }) => {
           {toastMessage}
         </Alert>
       </Snackbar>
-    </>
+    </div>
   );
 };
 

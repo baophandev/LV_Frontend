@@ -1,9 +1,9 @@
 // import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import { Link } from "react-router-dom";
 
-const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
+const ProductCart = ({ id, image, name, price, category, discountDisplayed }) => {
   return (
-    <div className="w-72 mb-4 p-2 pb-5 relative  rounded-md bg-white">
+    <div className="w-72 mb-4 p-2 pb-5 relative  rounded-xl bg-white ">
       <div className=" h-64 mb-2 flex items-center justify-center">
         <Link to={`/product/${id}`}>
           <img
@@ -16,12 +16,17 @@ const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
           />
         </Link>
       </div>
-      <div className=" flex pt-3 px-1 h-36">
+      <div className=" flex pt-3 px-2 h-36">
         <div className="">
-          <Link to={`/product/${id}`} className=" text-xl font-extrabold">
+          <div className="text-gray-400">{category || ""}</div>
+          <Link
+            to={`/product/${id}`}
+            className=" text-xl font-extrabold text-slate-700"
+          >
             {name}
           </Link>
-          <div className="text-xl mt-2 font-medium">
+
+          <div className="text-lg mt-2 text-slate-600">
             {discountDisplayed > 0
               ? // Tính giá sau giảm và chuyển về chuỗi định dạng "vi-VN" rồi nối thêm "đ"
                 (price * (1 - discountDisplayed / 100)).toLocaleString(
@@ -39,7 +44,7 @@ const ProductCart = ({ id, image, name, price, discountDisplayed }) => {
           </div>
         </div>
       </div>
-      <div className="absolute top-0 left-0 bg-red-500 px-2 text-white rounded-br-md rounded-tl-md">
+      <div className="absolute top-2 left-2 bg-red-500 px-2 text-white rounded-md">
         -{discountDisplayed}%
       </div>
     </div>

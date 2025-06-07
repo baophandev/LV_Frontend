@@ -10,7 +10,6 @@ import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 import UpSizeImage from "../components/UpSizeImage";
 import AttributeTable from "../components/AttributeTable";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ReviewCard from "../components/ReviewCard";
 import { getProductReview, getVariantDiscount } from "../api/productApi";
 import { addtoCartApi } from "../api/cartApi";
@@ -244,21 +243,23 @@ export const ProductDetail = () => {
             <div className="flex gap-2 flex-wrap border-b border-b-gray-200 pb-2">
               {displayedProduct?.variants &&
               displayedProduct.variants.length > 0 ? (
-                displayedProduct.variants.map((_variant, idx) => (
-                  <div
-                    key={_variant.id || idx}
-                    className="w-10 h-10 rounded-full border border-gray-300"
-                    style={{
-                      backgroundColor: _variant.colorCode || "#fff",
-                      border:
-                        selectedItems?.id === _variant.id
-                          ? `2px solid ${ThemeColor.BLUE}`
-                          : "1px solid #ccc",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => handleSelectedItems(_variant)}
-                  ></div>
-                ))
+                displayedProduct.variants.map((_variant, idx) =>
+                  _variant.isActive && (
+                    <div
+                      key={_variant.id || idx}
+                      className="w-10 h-10 rounded-full border border-gray-300"
+                      style={{
+                        backgroundColor: _variant.colorCode || "#fff",
+                        border:
+                          selectedItems?.id === _variant.id
+                            ? `2px solid ${ThemeColor.BLUE}`
+                            : "1px solid #ccc",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => handleSelectedItems(_variant)}
+                    ></div>
+                  )
+                )
               ) : (
                 <div>Không có lựa chọn màu sắc</div>
               )}

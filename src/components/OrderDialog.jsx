@@ -67,40 +67,50 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
       TransitionComponent={Transition}
       onClose={onClose}
       keepMounted
-      aria-describedby="alert-dialog-slide-description"
       fullWidth
       maxWidth="lg"
+      aria-describedby="alert-dialog-slide-description"
     >
-      <div className="h-[4px] bg-[length:44px_44px] bg-[repeating-linear-gradient(45deg,#f18d9b_0px,#f18d9b_25px,white_25px,white_38px,#6fa6d6_38px,#6fa6d6_44px)]"></div>
-      <DialogContent>
-        <div className="text-slate-600 border-b">Chi tiết đơn hàng</div>
-        <div className=" mt-3 font-semibold">Địa Chỉ Nhận Hàng</div>
-        <div className="pl-3">
-          Tên người nhận:{" "}
-          <span className="">{address?.receiverName || "-"}</span>
-        </div>
-        <div className="pl-3">
-          Địa chỉ nhận hàng:{" "}
-          <span className="">{`${address?.detail || "-"}, ${
-            address?.ward || "-"
-          }, ${address?.district || "-"}, ${address?.province || "-"}.`}</span>
-        </div>
-        <div className="border-b pl-3">
-          Số điện thoại:{" "}
-          <span className="">{address?.receiverPhone || ""}</span>
+      {/* Stripe top bar */}
+      <div className="h-[4px] bg-[length:44px_44px] bg-[repeating-linear-gradient(45deg,#f18d9b_0px,#f18d9b_25px,white_25px,white_38px,#6fa6d6_38px,#6fa6d6_44px)]" />
+
+      <DialogContent className="text-sm text-slate-700">
+        {/* Tiêu đề */}
+        <div className="text-xl font-bold border-b pb-2 mb-3">
+          Chi tiết đơn hàng
         </div>
 
-        <div className="mt-2 border-b">
+        {/* Địa chỉ nhận hàng */}
+        <div className="space-y-1 mb-4">
+          <div className="font-semibold">Địa Chỉ Nhận Hàng</div>
+          <div className="pl-3">
+            Tên người nhận: <span>{address?.receiverName || "-"}</span>
+          </div>
+          <div className="pl-3">
+            Địa chỉ nhận hàng:{" "}
+            <span>
+              {`${address?.detail || "-"}, ${address?.ward || "-"}, ${
+                address?.district || "-"
+              }, ${address?.province || "-"}.`}
+            </span>
+          </div>
+          <div className="pl-3 border-b pb-2">
+            Số điện thoại: <span>{address?.receiverPhone || "-"}</span>
+          </div>
+        </div>
+
+        {/* Danh sách sản phẩm */}
+        <div className="mb-4 border-b pb-4">
           {order && Object.values(order).length > 0 ? (
             <TableContainer component={Paper} elevation={0}>
-              <Table>
+              <Table size="small">
                 <TableHead style={{ backgroundColor: ThemeColor.LIGHT_GRAY }}>
                   <TableRow>
                     <TableCell>#</TableCell>
                     <TableCell>Sản phẩm</TableCell>
-                    <TableCell>Số lượng</TableCell>
-                    <TableCell>Đơn giá</TableCell>
-                    <TableCell>Thành tiền</TableCell>
+                    <TableCell align="center">SL</TableCell>
+                    <TableCell align="right">Đơn giá</TableCell>
+                    <TableCell align="right">Thành tiền</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -108,16 +118,14 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
                     <TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{item.productName}</TableCell>
-                      <TableCell>{item.quantity}</TableCell>
-                      <TableCell>
-                        {item.discountValue > 0
-                          ? (
-                              (item.price || 0) *
-                              (1 - item.discountValue / 100)
-                            ).toLocaleString("vi-VN") + "đ"
-                          : (item.price || 0).toLocaleString("vi-VN") + "đ"}
+                      <TableCell align="center">{item.quantity}</TableCell>
+                      <TableCell align="right">
+                        {(item.discountValue > 0
+                          ? item.price * (1 - item.discountValue / 100)
+                          : item.price
+                        ).toLocaleString("vi-VN") + "đ"}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="right">
                         {(
                           (item.price || 0) *
                           (1 - item.discountValue / 100) *
@@ -130,36 +138,43 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
               </Table>
             </TableContainer>
           ) : (
-            <div>Chưa chọn sản phẩm</div>
+            <div className="text-center text-gray-500 py-4">
+              Chưa chọn sản phẩm
+            </div>
           )}
         </div>
-        <div className="w-full mt-2">
-          <div className="font-bold">Ghi chú</div>
+
+        {/* Ghi chú */}
+        <div className="mb-4">
+          <div className="font-bold mb-1">Ghi chú</div>
           <textarea
             onChange={(e) => setNote(e.target.value)}
             value={note}
-            className="w-full outline-none border p-3 rounded-md"
-            name=""
-            id=""
+            className="w-full outline-none border p-3 rounded-md resize-none text-sm"
+            rows={3}
+            placeholder="Thêm ghi chú cho đơn hàng (nếu có)..."
           ></textarea>
         </div>
-        <div className="flex flex-col p-3 gap-1 items-center">
-          <div className="ml-auto font-semibold text-blue-500 mb-2">
+
+        {/* Tổng tiền và nút thanh toán */}
+        <div className="flex flex-col gap-3 items-end">
+          <div className="text-lg font-bold text-blue-600">
             Tổng thanh toán: {totalPrice.toLocaleString("vi-VN") + "đ"}
           </div>
-          <div className="flex ml-auto items-center gap-2">
+          <div className="flex gap-2 items-center">
             <button
-              onClick={() => handleCreateOrder()}
-              className="rounded-2xl text-white py-1 px-3 bg-blue-500 shadow-md"
+              onClick={handleCreateOrder}
+              className="rounded-full text-white py-2 px-4 bg-blue-500 hover:bg-blue-600 transition shadow"
             >
               Thanh toán khi nhận hàng
             </button>
-            <div>Hoặc</div>
+            <span className="text-gray-500">Hoặc</span>
             <button
-              onClick={() => handleVNpay()}
-              className="rounded-2xl bg-white py-1 px-4 text-blue-500 shadow-md border flex"
+              onClick={handleVNpay}
+              className="rounded-full bg-white py-2 px-4 text-blue-500 border border-blue-500 flex items-center gap-2 hover:bg-blue-50 transition"
             >
-              <img src={vnpay} alt="" className="w-6" /> Thanh toán qua VNPay
+              <img src={vnpay} alt="vnpay" className="w-5" />
+              VNPay
             </button>
           </div>
         </div>

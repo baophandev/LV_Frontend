@@ -127,6 +127,7 @@ export const Home = () => {
               name={product.name}
               price={product.firstVariantPrice || 0}
               discountDisplayed={product.discountDisplayed}
+              category={product.category.name}
             ></ProductCart>
           ))}
         </div>

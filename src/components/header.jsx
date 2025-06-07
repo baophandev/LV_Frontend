@@ -64,113 +64,104 @@ const Header = () => {
   return (
     <div
       style={{
-        position: "fixed", // Đặt vị trí cố định
-        top: 0, // Cố định header ở phía trên
+        position: "fixed",
+        top: 0,
         left: 0,
         right: 0,
         zIndex: 9999,
       }}
+      className="shadow-sm  bg-white"
     >
-      <div
-        className={`flex flex-wrap justify-evenly items-center bg-white ${
-          Object.keys(user).length === 0 ? "py-2" : ""
-        }`}
-      >
-        <Link to="/">
+      <div className="flex justify-between items-center px-6 py-1 max-w-screen-xl mx-auto">
+        {/* Logo */}
+        <Link to="/" className="flex items-center">
           <img src={Logo} alt="Logo" className="w-28 hidden md:block" />
         </Link>
-        <div className=" p-1 px-2 rounded-md shadow-inner bg-white">
+
+        {/* Ô tìm kiếm */}
+        <div className="flex items-center bg-gray-100 px-3 py-2 rounded-md w-64 sm:w-72 md:w-96">
           <input
-            className="outline-none bg-transparent"
+            className="flex-grow bg-transparent outline-none text-sm"
             spellCheck="false"
-            placeholder="Tìm kiếm..."
+            placeholder="Tìm kiếm sản phẩm..."
             type="text"
-            name=""
-            id=""
           />
           <button>
-            <SearchIcon
-              sx={{
-                color: "gray",
-              }}
-            />
+            <SearchIcon className="text-gray-500" />
           </button>
         </div>
-        <div className="flex gap-2">
-          <div className="flex justify-center items-center">
+
+        {/* Các action */}
+        <div className="flex items-center gap-4">
+          {/* Giỏ hàng */}
+          <Link
+            to="/cart"
+            className="relative flex items-center gap-2 hover:text-green-600 transition-colors"
+          >
+            <ShoppingCartOutlinedIcon fontSize="medium" sx={{ color: ThemeColor.DARK_GREEN }} />
+            <span className="absolute -top-2 -right-2 text-xs bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center shadow">
+              {count || 0}
+            </span>
+          </Link>
+
+          {/* Người dùng */}
+          {Object.keys(user).length === 0 ? (
             <Link
-              to={"/cart"}
-              className=" flex px-2 py-1 gap-2 rounded-md bg-white"
+              to="/login"
+              className="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2 transition-all"
             >
-              <ShoppingCartOutlinedIcon
-                sx={{
-                  color: ThemeColor.DARK_GREEN,
-                }}
-              />
-              <div
-                className="w-6 rounded-full flex justify-center items-center shadow-md text-white"
-                style={{ backgroundColor: ThemeColor.DARK_GREEN }}
-              >
-                {count || 0}
-              </div>
+              <LoginIcon fontSize="small" /> Đăng nhập
             </Link>
-          </div>
-          <div className="p-1 rounded-md">
-            {Object.keys(user).length === 0 ? (
-              <Link
-                className="bg-sky-500 text-white p-2 rounded-md font-semibold"
-                to={"/login"}
-              >
-                <LoginIcon /> Đăng nhập
-              </Link>
-            ) : (
+          ) : (
+            <>
               <Button
                 id="basic-button"
                 aria-controls={open ? "basic-menu" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
+                className="focus:outline-none"
               >
                 {user.avatar ? (
                   <img
                     className="w-10 h-10 rounded-full object-cover"
                     src={`data:image/png;base64,${user.avatar?.data}`}
-                    alt="User Avatar"
+                    alt="Avatar"
                   />
                 ) : (
-                  <AccountCircleOutlinedIcon></AccountCircleOutlinedIcon>
+                  <AccountCircleOutlinedIcon sx={{ fontSize: 32 }} />
                 )}
               </Button>
-            )}
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-              sx={{
-                zIndex: 9999,
-              }}
-            >
-              <MenuItem onClick={handleClose}>
-                <Link to={"/user/account"} className="text-sky-600">
-                  Tài khoản
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Link to={"/user/purchase"} className="text-sky-600">
-                  Đơn mua
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Link className="text-red-500" onClick={handleLogout}>
-                  Đăng xuất
-                </Link>
-              </MenuItem>
-            </Menu>
-          </div>
+
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{ "aria-labelledby": "basic-button" }}
+                sx={{ zIndex: 9999 }}
+              >
+                <MenuItem onClick={handleClose}>
+                  <Link to="/user/account" className="text-sky-600">
+                    Tài khoản
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <Link to="/user/purchase" className="text-sky-600">
+                    Đơn mua
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <span
+                    onClick={handleLogout}
+                    className="text-red-500 cursor-pointer"
+                  >
+                    Đăng xuất
+                  </span>
+                </MenuItem>
+              </Menu>
+            </>
+          )}
         </div>
       </div>
     </div>

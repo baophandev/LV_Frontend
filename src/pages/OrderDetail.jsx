@@ -10,11 +10,27 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useEffect, useState } from "react";
 import { fetchOrderByIdApi } from "../api/orderApi";
+import React from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  Rating,
+  IconButton,
+  Box,
+  Typography,
+} from "@mui/material";
+import { Image as ImageIcon, Close as CloseIcon } from "@mui/icons-material";
+import { createReviewApi } from "../api/reviewApi";
 
 export const OrderDetail = () => {
   const user = useSelector((state) => state.user.user);
   const { orderId } = useParams();
   const [orderDetail, setOrderDetail] = useState(null);
+  const [openReviewDialogId, setOpenReviewDialogId] = useState(null);
 
   useEffect(() => {
     const getOrderDetail = async () => {
@@ -29,6 +45,8 @@ export const OrderDetail = () => {
 
     getOrderDetail();
   }, [orderId]);
+
+  console.log("orderDetail", orderDetail);
 
   const renderStatus = () => {
     if (!orderDetail) return "-";
@@ -47,6 +65,39 @@ export const OrderDetail = () => {
         return "ĐÃ HOÀN TIỀN";
       default:
         return "-";
+    }
+  };
+
+  const handleSubmitReview = async (reviewData) => {
+    console.log("Review submitted:", reviewData);
+    try {
+      const formData = new FormData();
+
+      // Đóng gói thông tin variant vào JSON blob
+      const data = {
+        prdId: reviewData.productId,
+        rating: reviewData.rating,
+        comment: reviewData.comment,
+        orderItemId: reviewData.orderItemId,
+        userId: user.id,
+      };
+      const reviewBlob = new Blob([JSON.stringify(data)], {
+        type: "application/json",
+      });
+      formData.append("data", reviewBlob);
+
+      // Thêm nhiều ảnh (nếu có)
+      for (let i = 0; i < reviewData.images.length; i++) {
+        formData.append("files", reviewData.images[i]);
+      }
+      // Gửi API
+      await createReviewApi(formData);
+
+      // Reset lại sau khi update
+      setOpenReviewDialogId(false);
+      window.location.reload(); // Tải lại trang để cập nhật biến thể
+    } catch (err) {
+      console.log("Lỗi khi cập nhật biến thể:", err);
     }
   };
 
@@ -194,7 +245,7 @@ export const OrderDetail = () => {
                   <div>Đã nhận hàng</div>
                 </div>
               </div>
-          
+
               <div className="h-[4px] bg-[length:44px_44px] bg-[repeating-linear-gradient(45deg,#f18d9b_0px,#f18d9b_25px,white_25px,white_38px,#6fa6d6_38px,#6fa6d6_44px)]"></div>
               <div className="bg-white p-5">
                 <div className="text-lg text-slate-400">Địa Chỉ Nhận Hàng</div>
@@ -222,10 +273,32 @@ export const OrderDetail = () => {
                             Số lượng: {item.quantity || "-"}
                           </div>
                         </div>
-                        <div className="ml-auto ">
-                          {item.discountedPrice.toLocaleString("vi-VN") + "đ" ||
-                            "-"}
+                        <div className="ml-auto flex gap-3 items-center">
+                          <div>
+                            {item.discountedPrice.toLocaleString("vi-VN") +
+                              "đ" || "-"}
+                          </div>
+                          {orderDetail.status === "DELIVERED" && !item.isReviewed ? (
+                            <button
+                              onClick={() => setOpenReviewDialogId(item.id)}
+                              className="px-4 py-2 bg-sky-500 rounded-md text-white"
+                            >
+                              Viết nhận xét
+                            </button>
+                          ) : (
+                            ""
+                          )}
                         </div>
+                        {orderDetail.status === "DELIVERED" &&
+                        !item.isReviewed && (
+                          <ReviewDialog
+                            open={openReviewDialogId === item.id}
+                            onClose={() => setOpenReviewDialogId(null)}
+                            productId={item.prdId}
+                            orderItemId={item.id}
+                            onSubmit={handleSubmitReview}
+                          />
+                        )}
                       </div>
                     ))
                   : ""}
@@ -254,3 +327,89 @@ export const OrderDetail = () => {
     </div>
   );
 };
+
+export const ReviewDialog = ({ productId, orderItemId, open, onClose, onSubmit }) => {
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [images, setImages] = useState([]);
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setImages(files);
+  };
+
+  const handleSubmit = () => {
+    const reviewData = {
+      productId,
+      rating,
+      comment,
+      images,
+      orderItemId,
+    };
+    onSubmit(reviewData);
+    onClose();
+  };
+
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <DialogTitle>
+        Đánh giá sản phẩm
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{ position: "absolute", right: 8, top: 8 }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        <Box display="flex" flexDirection="column" gap={3}>
+          <Box>
+            <Typography component="legend">Đánh giá:</Typography>
+            <Rating
+              name="rating"
+              value={rating}
+              onChange={(event, newValue) => {
+                setRating(newValue);
+              }}
+            />
+          </Box>
+          <TextField
+            label="Nhận xét"
+            multiline
+            rows={4}
+            fullWidth
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            variant="outlined"
+          />
+          <Button
+            variant="outlined"
+            component="label"
+            startIcon={<ImageIcon />}
+          >
+            Tải hình ảnh
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              multiple
+              onChange={handleImageChange}
+            />
+          </Button>
+          {images.length > 0 && (
+            <Typography variant="body2" color="textSecondary">
+              {images.length} hình ảnh đã chọn
+            </Typography>
+          )}
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Hủy</Button>
+        <Button onClick={handleSubmit} variant="contained" color="primary">
+          Gửi đánh giá
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}

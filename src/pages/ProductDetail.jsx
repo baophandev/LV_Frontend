@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProduct } from "../redux/slices/productSlice";
 import Loading from "../components/Loading";
 import { useParams } from "react-router-dom";
-import ThemeColor from "../constant/theme";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
@@ -162,9 +161,7 @@ export const ProductDetail = () => {
       setOpenToast(true);
     }
   };
-
-  console.log("displayedProduct", displayedProduct);
-
+  
   return (
     <>
       <div className="w-2/3 p-5 bg-white mt-5 mb-4">
@@ -232,39 +229,83 @@ export const ProductDetail = () => {
                 }
               />
             </Box>
-            <div className="flex gap-2 flex-wrap pb-2 border-b border-b-gray-200">
-              <div className="uppercase text-2xl font-extrabold">
-                {selectedItems?.price.toLocaleString("vi-VN") ||
-                  displayedProduct.firstVariantPrice?.toLocaleString("vi-VN")}
-                VNĐ
-              </div>
+            <div className="flex flex-col gap-1 pb-2 border-b border-gray-200">
+              {/* Tính giá gốc và phần trăm giảm */}
+              {(() => {
+                const price =
+                  selectedItems?.price ||
+                  displayedProduct.firstVariantPrice ||
+                  0;
+                const discount = selectedItems?.discountValue || 0;
+                const discountedPrice = Math.round(
+                  price * (1 - discount / 100)
+                );
+
+                return (
+                  <>
+                    {/* Giá sau giảm (nếu có giảm), hoặc giá gốc */}
+                    <div className="text-2xl font-extrabold text-sky-500">
+                      {discountedPrice.toLocaleString("vi-VN")} VNĐ
+                    </div>
+
+                    {/* Nếu có giảm giá, hiển thị giá gốc + phần trăm */}
+                    {discount > 0 && (
+                      <div className="flex items-center gap-3 text-sm text-gray-500">
+                        <span className="line-through">
+                          {price.toLocaleString("vi-VN")} VNĐ
+                        </span>
+                        <span className="bg-red-100 text-red-500 px-2 py-0.5 rounded text-xs font-semibold">
+                          -{discount}%
+                        </span>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
+
             <div className="text-gray-400">Chọn màu sắc:</div>
             <div className="flex gap-2 flex-wrap border-b border-b-gray-200 pb-2">
               {displayedProduct?.variants &&
               displayedProduct.variants.length > 0 ? (
-                displayedProduct.variants.map((_variant, idx) =>
-                  _variant.isActive && (
-                    <div
-                      key={_variant.id || idx}
-                      className="w-10 h-10 rounded-full border border-gray-300"
-                      style={{
-                        backgroundColor: _variant.colorCode || "#fff",
-                        border:
-                          selectedItems?.id === _variant.id
-                            ? `2px solid ${ThemeColor.BLUE}`
-                            : "1px solid #ccc",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => handleSelectedItems(_variant)}
-                    ></div>
-                  )
+                displayedProduct.variants.map(
+                  (_variant, idx) =>
+                    _variant.isActive && (
+                      <div
+                        key={_variant.id || idx}
+                        className="w-10 h-10 rounded-full border border-gray-300 "
+                        style={{
+                          backgroundColor: _variant.colorCode || "#fff",
+                          border:
+                            selectedItems?.id === _variant.id
+                              ? `3px solid #16a34a `
+                              : "1px solid #ccc",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => handleSelectedItems(_variant)}
+                      ></div>
+                    )
                 )
               ) : (
                 <div>Không có lựa chọn màu sắc</div>
               )}
             </div>
-
+            {selectedItems && (
+              <div className="flex gap-2 mt-3">
+                <div className="flex items-center gap-2 px-3 bg-sky-50 border border-sky-200 rounded-xl shadow-sm">
+                  <span className="text-sm text-gray-600">Đã bán:</span>
+                  <span className="font-semibold text-sky-600">
+                    {selectedItems?.sold || "0"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 px-3 bg-green-50 border border-green-200 rounded-xl shadow-sm">
+                  <span className="text-sm text-gray-600">Còn lại:</span>
+                  <span className="font-semibold text-green-700">
+                    {selectedItems?.stock || "0"}
+                  </span>
+                </div>
+              </div>
+            )}
             <div className="text-white flex gap-1">
               <div className="flex gap-1">
                 <div className="flex gap-3">
@@ -279,11 +320,10 @@ export const ProductDetail = () => {
                 </div>
               </div>
               <button
-                className="py-1 px-6 text-white rounded-2xl"
-                style={{ backgroundColor: ThemeColor.MAIN_GRREN }}
+                className="py-1 px-6 font-semibold rounded-2xl bg-sky-100 text-sky-500  border border-sky-200"
                 onClick={handleAddToCart}
               >
-                <AddShoppingCartOutlinedIcon sx={{ color: "white" }} />
+                <AddShoppingCartOutlinedIcon sx={{ color: "e0f2fe" }} />
                 Thêm vào giỏ hàng
               </button>
             </div>

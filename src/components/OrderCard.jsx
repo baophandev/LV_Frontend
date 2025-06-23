@@ -112,7 +112,7 @@ const OrderCard = ({ product, status, id }) => {
             <div className="ml-auto flex flex-col gap-1">
               <div className="ml-auto">
                 <button
-                  className="bg-yellow-400 px-2 py-1 text-white"
+                  className="bg-yellow-400 px-2 py-1 text-white rounded-md"
                   onClick={() => handleStatusChange("DELIVERED")}
                 >
                   Đã nhận được hàng
@@ -127,7 +127,7 @@ const OrderCard = ({ product, status, id }) => {
           <div className="ml-auto flex flex-col gap-1">
             <div className="ml-auto">
               <button
-                className="bg-red-500 px-2 py-1 text-white"
+                className="bg-red-500 px-2 py-1 text-white rounded-md"
                 onClick={() => handleStatusChange("CANCELLED")}
               >
                 Hủy đơn hàng

@@ -32,9 +32,9 @@ const router = createBrowserRouter([
       {
         path: "order/vnpay/success",
         async lazy() {
-          let { VNPaySuccesss } = await import("../pages/VNPaySuccess");
+          let { VNPaySuccess } = await import("../pages/VNPaySuccess");
           return {
-            Component: VNPaySuccesss,
+            Component: VNPaySuccess,
           };
         },
       },

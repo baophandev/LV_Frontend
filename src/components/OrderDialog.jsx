@@ -54,12 +54,29 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
 
   const handleVNpay = async () => {
     try {
-      const response = await createVNPayUrl(totalPrice);
+      const tempOrder = {
+        items: Object.values(order).map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+          price: item.price,
+          discountValue: item.discountValue,
+        })),
+        addressId: address.id,
+        note: note,
+        method: "BANKING",
+        itemId: Object.values(order).map((item) => item.itemId),
+      };
+
+      // Tạo URL thanh toán, gửi theo totalPrice và thông tin đơn hàng
+      const response = await createVNPayUrl(totalPrice, tempOrder); // hoặc encode lên URL
+      window.localStorage.setItem("pendingOrder", JSON.stringify(tempOrder)); // lưu lại để tạo sau khi thanh toán
+      window.localStorage.setItem("userId", userId); // lưu userId
       window.location.href = response.paymentUrl;
     } catch (error) {
       console.error("Error creating VNPay URL:", error);
     }
   };
+  
 
   return (
     <Dialog

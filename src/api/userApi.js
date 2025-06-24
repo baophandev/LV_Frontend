@@ -64,3 +64,16 @@ export const deleteAddressApi = async ({addressId}) => {
     console.log(err);
   }
 }
+
+export const updateUserApi = async (formData) => {
+  try {
+    const response = await axiosInstance.put(`/user`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

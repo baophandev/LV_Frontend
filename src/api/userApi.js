@@ -77,3 +77,14 @@ export const updateUserApi = async (formData) => {
     throw error;
   }
 }
+
+export const forgotPasswordApi = async ({email}) => {
+  try{
+    const response = await axiosInstance.post('/auth/password/forgot', {
+      email: email
+    })
+    return response.data;
+  }catch(err){
+    throw err;
+  }
+}

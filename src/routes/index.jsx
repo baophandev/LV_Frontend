@@ -63,6 +63,21 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "enter-email",
+        element: <AuthLayout />,
+        children: [
+          {
+            index: true,
+            async lazy() {
+              let { EnterEmail } = await import("../pages/EnterEmail");
+              return {
+                Component: EnterEmail,
+              };
+            },
+          },
+        ],
+      },
+      {
         element: <MainLayout />,
         children: [
           {
@@ -138,6 +153,15 @@ const router = createBrowserRouter([
               let { OrderDetail } = await import("../pages/OrderDetail");
               return {
                 Component: OrderDetail,
+              };
+            },
+          },
+          {
+            path: "/reset-password",
+            async lazy() {
+              let { ResetPassword } = await import("../pages/ResetPassword");
+              return {
+                Component: ResetPassword,
               };
             },
           },

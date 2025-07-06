@@ -57,8 +57,11 @@ export const Login = () => {
           {loading ? "Đang đăng nhập..." : "Đăng nhập"}
         </button>
       </form>
-      <Link to="/register" className="text-sky-500">
+      <Link to="/register" className="text-white underline">
         Chưa có tài khoản? Đăng ký ngay!
+      </Link>
+      <Link to={"/enter-email"} className="text-white underline cursor-pointer">
+        Quên mật khẩu
       </Link>
     </div>
   );

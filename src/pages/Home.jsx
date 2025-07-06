@@ -144,31 +144,35 @@ export const Home = () => {
           </div>
         </div>
       </div>
-      <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
-        <div className="">DÀNH CHO BẠN</div>
-      </div>
-      <div className=" w-full sm:w-3/4">
-        {/* <Carousel images={adImages}></Carousel> */}
-        <div className="w-full flex flex-wrap gap-2 items-center justify-start bg-sky-300 rounded-xl p-3">
-          {recmdProducts?.map((product) => (
-            <ProductCart
-              key={product.id}
-              id={product.id}
-              image={product.productAvatar.data}
-              name={product.name}
-              price={product.firstVariantPrice || 0}
-              discountDisplayed={product.discountDisplayed}
-              category={product.category.name}
-            ></ProductCart>
-          ))}
-        </div>
-      </div>
+      {userId && (
+        <>
+          <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
+            <div className="">DÀNH CHO BẠN</div>
+          </div>
+          <div className=" w-full sm:w-3/4">
+            {/* <Carousel images={adImages}></Carousel> */}
+            <div className="w-full flex flex-wrap gap-2 items-center justify-start bg-sky-300 rounded-xl p-3">
+              {recmdProducts?.map((product) => (
+                <ProductCart
+                  key={product.id}
+                  id={product.id}
+                  image={product.productAvatar.data}
+                  name={product.name}
+                  price={product.firstVariantPrice || 0}
+                  discountDisplayed={product.discountDisplayed}
+                  category={product.category.name}
+                ></ProductCart>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
       {/* <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
         <div className="">GIẢM GIÁ</div>
       </div>
       <div className=" w-full sm:w-3/4 bg-red-400"> */}
-        {/* <Carousel images={adImages}></Carousel> */}
-        {/* <div className="w-full flex flex-wrap gap-2 items-center justify-around">
+      {/* <Carousel images={adImages}></Carousel> */}
+      {/* <div className="w-full flex flex-wrap gap-2 items-center justify-around">
           {productDiscounteds?.map((product) => (
             <ProductCart
               key={product.id}

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import ProductCart from "../components/ProductCart";
 import { useEffect, useState } from "react";
-import { fecthProductFilter, fetchProducts, setPage } from "../redux/slices/productSlice";
+import {  fecthProductFilter, fetchProducts, setPage } from "../redux/slices/productSlice";
 import Loading from "../components/Loading";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -11,6 +11,7 @@ import Banner from "../assets/banner.png";
 import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import FloatingChatBot from "../components/FloatingChatBot";
+import { getProductRecommendations } from "../api/recomendation";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -18,17 +19,44 @@ export const Home = () => {
   const products = useSelector(
     (state) => state.product.products?.content || []
   );
+  // const productDiscounteds = useSelector(
+  //   (state) => state.product.discountedProducts?.content || []
+  // );
   const totalPages = useSelector((state) => state.product.page.totalPages);
   const currentPage = useSelector((state) => state.product.page.currentPage);
+  const user = useSelector((state) => state.user.user);
+  const userId = user.id;
 
   const status = useSelector((state) => state.product.status);
   const error = useSelector((state) => state.product.error);
 
   const [filter, setFilter] = useState({})
 
+  const [recmdProducts, setRecmdProducts] = useState([]);
+
   useEffect(() => {
     dispatch(fetchProducts({ pageNumber: currentPage, pageSize: 20 }));
   }, [dispatch, currentPage]);
+
+  // useEffect(() => {
+  //   dispatch(fecthProductDiscounteds());
+  // }, [dispatch]);
+
+  useEffect(() => {
+    const fetchRecmdProducts = async () => {
+      if (!userId) return;
+
+      try {
+        const response = await getProductRecommendations({ userId });
+        setRecmdProducts(response);
+      } catch (err) {
+        console.error("Recommendation error:", err);
+      }
+    };
+
+    fetchRecmdProducts();
+  }, [userId]);
+  console.log(userId)
 
   const handlePageClick = (page) => {
     dispatch(setPage(page - 1));
@@ -116,6 +144,47 @@ export const Home = () => {
           </div>
         </div>
       </div>
+      <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
+        <div className="">DÀNH CHO BẠN</div>
+      </div>
+      <div className=" w-full sm:w-3/4">
+        {/* <Carousel images={adImages}></Carousel> */}
+        <div className="w-full flex flex-wrap gap-2 items-center justify-start bg-sky-300 rounded-xl p-3">
+          {recmdProducts?.map((product) => (
+            <ProductCart
+              key={product.id}
+              id={product.id}
+              image={product.productAvatar.data}
+              name={product.name}
+              price={product.firstVariantPrice || 0}
+              discountDisplayed={product.discountDisplayed}
+              category={product.category.name}
+            ></ProductCart>
+          ))}
+        </div>
+      </div>
+      {/* <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
+        <div className="">GIẢM GIÁ</div>
+      </div>
+      <div className=" w-full sm:w-3/4 bg-red-400"> */}
+        {/* <Carousel images={adImages}></Carousel> */}
+        {/* <div className="w-full flex flex-wrap gap-2 items-center justify-around">
+          {productDiscounteds?.map((product) => (
+            <ProductCart
+              key={product.id}
+              id={product.id}
+              image={product.productAvatar.data}
+              name={product.name}
+              price={product.firstVariantPrice || 0}
+              discountDisplayed={product.discountDisplayed}
+              category={product.category.name}
+            ></ProductCart>
+          ))}
+        </div> */}
+      {/* </div> */}
+      <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
+        <div className="">SẢN PHẨM HÀNG ĐẦU</div>
+      </div>
       <div className=" w-full sm:w-3/4">
         {/* <Carousel images={adImages}></Carousel> */}
         <div className="w-full flex flex-wrap gap-2 items-center justify-around">
@@ -141,7 +210,7 @@ export const Home = () => {
           />
         </div>
       </div>
-      <FloatingChatBot/>
+      <FloatingChatBot />
     </>
   );
 };

@@ -81,3 +81,12 @@ export const fecthProductFilterApi = async ({categoryId, sortDirection}) => {
     throw error;
   }
 }
+
+// export const fecthProductDiscounted = async () => {
+//   try{
+//     const response = await axiosInstance.get('/product/discounted');
+//     return response.data;
+//   }catch(err) {
+//     throw err;
+//   }
+// }

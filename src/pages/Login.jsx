@@ -16,6 +16,7 @@ export const Login = () => {
 
       if (response.success) {
         localStorage.setItem("authToken", response.data.token);
+        localStorage.setItem("ROLE", "USER")
         window.location.href = "/";
       } else {
         alert("Đăng nhập thất bại! " + response.message);

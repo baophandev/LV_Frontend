@@ -4,6 +4,7 @@ import {
   fetchProductApi,
   fetchProducstByCategoryIdApi,
   fecthProductFilterApi,
+  // fecthProductDiscounted,
 } from "../../api/productApi";
 
 export const fetchProducts = createAsyncThunk(
@@ -13,6 +14,14 @@ export const fetchProducts = createAsyncThunk(
     return data;
   }
 );
+
+// export const fecthProductDiscounteds = createAsyncThunk(
+//   "product/fecthProductDiscounteds",
+//   async () => {
+//     const data = await fecthProductDiscounted();
+//     return data;
+//   }
+// );
 
 export const fetchProduct = createAsyncThunk(
   "product/fetchProduct",
@@ -46,6 +55,7 @@ const productSlice = createSlice({
   name: "product",
   initialState: {
     products: [],
+    // discountedProducts: [],
     status: "idle",
     error: null,
     page: {
@@ -105,7 +115,19 @@ const productSlice = createSlice({
       .addCase(fetchProductsByCategoryId.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      });
+      })
+      // .addCase(fecthProductDiscounteds.pending, (state) => {
+      //   state.status = "loading";
+      // })
+      // .addCase(fecthProductDiscounteds.fulfilled, (state, action) => {
+      //   state.status = "succeeded";
+      //   state.discountedProducts = action.payload;
+      // })
+      // .addCase(fecthProductDiscounteds.rejected, (state, action) => {
+      //   state.status = "failed";
+      //   state.error = action.error.message;
+      // })
+      ;
   },
 });
 

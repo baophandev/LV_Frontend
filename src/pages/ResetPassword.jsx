@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { resetPasswordApi } from "../api/userApi";
 
 export const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [token, setToken] = useState("");
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tokenFromUrl = params.get("token");
+    setToken(tokenFromUrl);
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -21,8 +29,11 @@ export const ResetPassword = () => {
       return;
     }
 
-    // Xử lý logic đặt lại mật khẩu ở đây
-    // Ví dụ: gọi API để cập nhật mật khẩu
+    await resetPasswordApi({
+      token: token,
+      newPassword: password,
+      confirmPassword: confirmPassword,
+    });
 
     setSuccess("Mật khẩu đã được thay đổi thành công!");
     setPassword("");

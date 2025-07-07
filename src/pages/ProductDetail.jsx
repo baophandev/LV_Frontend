@@ -250,11 +250,11 @@ export const ProductDetail = () => {
 
                     {/* Nếu có giảm giá, hiển thị giá gốc + phần trăm */}
                     {discount > 0 && (
-                      <div className="flex items-center gap-3 text-sm text-gray-500">
+                      <div className="flex items-center gap-3 text-gray-500">
                         <span className="line-through">
                           {price.toLocaleString("vi-VN")} VNĐ
                         </span>
-                        <span className="bg-red-100 text-red-500 px-2 py-0.5 rounded text-xs font-semibold">
+                        <span className="bg-red-100 text-red-500 px-2 py-0.5 rounded font-semibold">
                           -{discount}%
                         </span>
                       </div>

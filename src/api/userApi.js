@@ -88,3 +88,14 @@ export const forgotPasswordApi = async ({email}) => {
     throw err;
   }
 }
+
+export const resetPasswordApi = async ({token, newPassword, confirmPassword}) => {
+  try{
+    const response = await axiosInstance.post('/auth/password/reset', {
+      token: token, newPassword: newPassword, confirmPassword: confirmPassword
+    })
+    return response.data;
+  }catch(err){
+    throw err;
+  }
+}

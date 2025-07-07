@@ -1,6 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import { registerApi } from "../api/authApi";
+import { Link } from "react-router-dom";
 
 export const Register = () => {
   const [userData, setUserData] = useState({
@@ -14,38 +18,89 @@ export const Register = () => {
   });
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+
+  const validateField = (name, value) => {
+    let error = "";
+
+    switch (name) {
+      case "displayName":
+        if (!value.trim()) error = "Vui lòng nhập họ và tên";
+        else if (value.length < 2) error = "Họ và tên phải có ít nhất 2 ký tự";
+        break;
+      case "email":
+        if (!value.trim()) error = "Vui lòng nhập email";
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+          error = "Email không hợp lệ";
+        break;
+      case "phoneNumber":
+        if (!value.trim()) error = "Vui lòng nhập số điện thoại";
+        else if (!/^[0-9]{10,11}$/.test(value.replace(/\s/g, "")))
+          error = "Số điện thoại không hợp lệ";
+        break;
+      case "password":
+        if (!value.trim()) error = "Vui lòng nhập mật khẩu";
+        else if (value.length < 6) error = "Mật khẩu phải có ít nhất 6 ký tự";
+        break;
+      case "repeatPassword":
+        if (!value.trim()) error = "Vui lòng nhập lại mật khẩu";
+        else if (value !== userData.password) error = "Mật khẩu không khớp";
+        break;
+      case "dob":
+        if (!value.trim()) error = "Vui lòng chọn ngày sinh";
+        else {
+          const today = new Date();
+          const birthDate = new Date(value);
+          const age = today.getFullYear() - birthDate.getFullYear();
+          if (age < 13) error = "Bạn phải từ 13 tuổi trở lên";
+        }
+        break;
+      default:
+        break;
+    }
+
+    return error;
+  };
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
+    const newValue = type === "file" ? files[0] : value;
+
     setUserData({
       ...userData,
-      [name]: type === "file" ? files[0] : value,
+      [name]: newValue,
     });
-    setErrors({
-      ...errors,
-      [name]: "",
-    });
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: "",
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let newErrors = {};
+    // Validate all fields
+    const newErrors = {};
     Object.keys(userData).forEach((key) => {
-      if (!userData[key] && key !== "avatar") {
-        newErrors[key] = "Trường này không được để trống";
+      if (key !== "avatar") {
+        const error = validateField(key, userData[key]);
+        if (error) newErrors[key] = error;
       }
     });
-
-    if (userData.password !== userData.repeatPassword) {
-      newErrors.repeatPassword = "Mật khẩu không khớp";
-    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
+
+    setLoading(true);
+    setSuccessMessage("");
 
     const formData = new FormData();
     formData.append(
@@ -70,103 +125,273 @@ export const Register = () => {
     );
 
     try {
-      const response = await registerApi(formData);
-      console.log(response);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      await registerApi(formData);
+
       setSuccessMessage("Tạo tài khoản thành công!");
-      setTimeout(() => navigate("/login"), 2000);
+      setTimeout(() => {
+        console.log("Navigate to login");
+        // navigate("/login");
+      }, 2000);
     } catch (error) {
       console.log(error);
+      setErrors({ general: "Có lỗi xảy ra. Vui lòng thử lại." });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="w-1/2 flex flex-col items-center justify-center gap-3">
-      <div className="uppercase text-3xl font-extrabold text-white">
-        ĐĂNG KÝ
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-md max-h-screen overflow-y-auto">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-full mb-4 backdrop-blur-sm">
+            <PersonAddOutlinedIcon className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-3xl font-bold text-white mb-2">Tạo tài khoản</h1>
+          <p className="text-blue-100 text-sm">
+            Điền thông tin để tạo tài khoản mới
+          </p>
+        </div>
+
+        {/* Form */}
+        <div className="space-y-4">
+          {/* Display Name */}
+          <div className="space-y-1">
+            <div className="relative">
+              <input
+                type="text"
+                name="displayName"
+                placeholder="Họ và tên"
+                value={userData.displayName}
+                onChange={handleChange}
+                className={`w-full pl-10 pr-4 py-3 bg-white/10 border ${
+                  errors.displayName ? "border-red-500/50" : "border-white/20"
+                } rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-200`}
+                disabled={loading}
+              />
+            </div>
+            {errors.displayName && (
+              <div className="flex items-center gap-2 text-red-400 text-sm">
+                <ErrorOutlineOutlinedIcon className="w-4 h-4" />
+                <span>{errors.displayName}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Phone Number */}
+          <div className="space-y-1">
+            <div className="relative">
+              <input
+                type="text"
+                name="phoneNumber"
+                placeholder="Số điện thoại"
+                value={userData.phoneNumber}
+                onChange={handleChange}
+                className={`w-full pl-10 pr-4 py-3 bg-white/10 border ${
+                  errors.phoneNumber ? "border-red-500/50" : "border-white/20"
+                } rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-200`}
+                disabled={loading}
+              />
+            </div>
+            {errors.phoneNumber && (
+              <div className="flex items-center gap-2 text-red-400 text-sm">
+                <ErrorOutlineOutlinedIcon className="w-4 h-4" />
+                <span>{errors.phoneNumber}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Email */}
+          <div className="space-y-1">
+            <div className="relative">
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={userData.email}
+                onChange={handleChange}
+                className={`w-full pl-10 pr-4 py-3 bg-white/10 border ${
+                  errors.email ? "border-red-500/50" : "border-white/20"
+                } rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-200`}
+                disabled={loading}
+              />
+            </div>
+            {errors.email && (
+              <div className="flex items-center gap-2 text-red-400 text-sm">
+                <ErrorOutlineOutlinedIcon className="w-4 h-4" />
+                <span>{errors.email}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Date of Birth */}
+          <div className="space-y-1">
+            <div className="relative">
+              <input
+                type="date"
+                name="dob"
+                placeholder="Ngày sinh"
+                value={userData.dob}
+                onChange={handleChange}
+                className={`w-full pl-10 pr-4 py-3 bg-white/10 border ${
+                  errors.dob ? "border-red-500/50" : "border-white/20"
+                } rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-200`}
+                disabled={loading}
+              />
+            </div>
+            {errors.dob && (
+              <div className="flex items-center gap-2 text-red-400 text-sm">
+                <ErrorOutlineOutlinedIcon className="w-4 h-4" />
+                <span>{errors.dob}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Password */}
+          <div className="space-y-1">
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Mật khẩu"
+                value={userData.password}
+                onChange={handleChange}
+                className={`w-full pl-10 pr-12 py-3 bg-white/10 border ${
+                  errors.password ? "border-red-500/50" : "border-white/20"
+                } rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-200`}
+                disabled={loading}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
+                disabled={loading}
+              >
+                {showPassword ? (
+                  <RemoveRedEyeOutlinedIcon className="w-5 h-5" />
+                ) : (
+                  <VisibilityOffOutlinedIcon className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+            {errors.password && (
+              <div className="flex items-center gap-2 text-red-400 text-sm">
+                <ErrorOutlineOutlinedIcon className="w-4 h-4" />
+                <span>{errors.password}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Repeat Password */}
+          <div className="space-y-1">
+            <div className="relative">
+              <input
+                type={showRepeatPassword ? "text" : "password"}
+                name="repeatPassword"
+                placeholder="Nhập lại mật khẩu"
+                value={userData.repeatPassword}
+                onChange={handleChange}
+                className={`w-full pl-10 pr-12 py-3 bg-white/10 border ${
+                  errors.repeatPassword
+                    ? "border-red-500/50"
+                    : "border-white/20"
+                } rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-200`}
+                disabled={loading}
+              />
+              <button
+                type="button"
+                onClick={() => setShowRepeatPassword(!showRepeatPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
+                disabled={loading}
+              >
+                {showRepeatPassword ? (
+                  <RemoveRedEyeOutlinedIcon className="w-5 h-5" />
+                ) : (
+                  <VisibilityOffOutlinedIcon className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+            {errors.repeatPassword && (
+              <div className="flex items-center gap-2 text-red-400 text-sm">
+                <ErrorOutlineOutlinedIcon className="w-4 h-4" />
+                <span>{errors.repeatPassword}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Avatar Upload */}
+          <div className="space-y-1">
+            <div className="relative">
+              <input
+                type="file"
+                name="avatar"
+                accept="image/*"
+                onChange={handleChange}
+                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 backdrop-blur-sm transition-all duration-200"
+                disabled={loading}
+              />
+            </div>
+            {userData.avatar && (
+              <div className="flex items-center gap-2 text-green-400 text-sm">
+                <ErrorOutlineOutlinedIcon className="w-4 h-4" />
+                <span>Đã chọn: {userData.avatar.name}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Success/Error Messages */}
+          {successMessage && (
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-green-500/20 border border-green-500/30 text-green-100">
+              <ErrorOutlineOutlinedIcon className="w-5 h-5" />
+              <span className="text-sm">{successMessage}</span>
+            </div>
+          )}
+
+          {errors.general && (
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-red-500/20 border border-red-500/30 text-red-100">
+              <ErrorOutlineOutlinedIcon className="w-5 h-5" />
+              <span className="text-sm">{errors.general}</span>
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-medium rounded-xl transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <span>Đang tạo tài khoản...</span>
+              </>
+            ) : (
+              <>
+                <PersonAddOutlinedIcon className="w-5 h-5" />
+                <span>Tạo tài khoản</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Login Link */}
+        <div className="mt-6 text-center">
+          <p className="text-blue-100 text-sm">
+            Đã có tài khoản?{" "}
+            <Link
+             to={'/login'}
+              className="text-blue-300 hover:text-white font-medium underline transition-colors duration-200 inline-flex items-center gap-1"
+              disabled={loading}
+            >
+              Đăng nhập
+            </Link>
+          </p>
+        </div>
       </div>
-      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
-        <input
-          type="text"
-          name="displayName"
-          placeholder="Họ và tên"
-          className="bg-gray-200 w-full h-10 rounded-3xl p-3 outline-none"
-          value={userData.displayName}
-          onChange={handleChange}
-        />
-        {errors.displayName && (
-          <span className="text-red-500">{errors.displayName}</span>
-        )}
-        <input
-          type="text"
-          name="phoneNumber"
-          placeholder="Số điện thoại"
-          className="bg-gray-200 w-full h-10 rounded-3xl p-3 outline-none"
-          value={userData.phoneNumber}
-          onChange={handleChange}
-        />
-        {errors.phoneNumber && (
-          <span className="text-red-500">{errors.phoneNumber}</span>
-        )}
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="bg-gray-200 w-full h-10 rounded-3xl p-3 outline-none"
-          value={userData.email}
-          onChange={handleChange}
-        />
-        {errors.email && <span className="text-red-500">{errors.email}</span>}
-        <input
-          type="date"
-          name="dob"
-          placeholder="Ngày sinh"
-          className="bg-gray-200 w-full h-10 rounded-3xl p-3 outline-none"
-          value={userData.dob}
-          onChange={handleChange}
-        />
-        {errors.dob && <span className="text-red-500">{errors.dob}</span>}
-        <input
-          type="password"
-          name="password"
-          placeholder="Mật khẩu"
-          className="bg-gray-200 w-full h-10 rounded-3xl p-3 outline-none"
-          value={userData.password}
-          onChange={handleChange}
-        />
-        {errors.password && (
-          <span className="text-red-500">{errors.password}</span>
-        )}
-        <input
-          type="password"
-          name="repeatPassword"
-          placeholder="Nhập lại mật khẩu"
-          className="bg-gray-200 w-full h-10 rounded-3xl p-3 outline-none"
-          value={userData.repeatPassword}
-          onChange={handleChange}
-        />
-        {errors.repeatPassword && (
-          <span className="text-red-500">{errors.repeatPassword}</span>
-        )}
-        <input
-          type="file"
-          name="avatar"
-          accept="image/*"
-          className="w-full"
-          onChange={handleChange}
-        />
-        <button
-          type="submit"
-          className="bg-sky-500 w-full h-10 rounded-3xl text-white font-bold"
-        >
-          Tạo tài khoản
-        </button>
-      </form>
-      <Link to="/login" className="text-sky-500">
-        Đăng nhập
-      </Link>
-      {successMessage && (
-        <span className="text-green-500">{successMessage}</span>
-      )}
     </div>
   );
-};
+}

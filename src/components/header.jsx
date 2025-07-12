@@ -125,22 +125,28 @@ const Header = () => {
         left: 0,
         right: 0,
         zIndex: 9999,
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
       }}
-      className="shadow-sm bg-white"
+      className="bg-blue-50"
     >
-      <div className="flex justify-between items-center px-6 py-1 max-w-screen-xl mx-auto">
+      <div className="flex justify-between items-center px-6 py-3 max-w-screen-xl mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img src={Logo} alt="Logo" className="w-28 hidden md:block" />
+          <img
+            src={Logo}
+            alt="Logo"
+            className="w-32 hidden md:block"
+            style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.1))" }}
+          />
         </Link>
 
         {/* Ô tìm kiếm */}
         <form
           onSubmit={handleSearchSubmit}
-          className="relative flex items-center bg-gray-100 px-3 py-2 rounded-md w-64 sm:w-72 md:w-96"
+          className="h-12 relative flex items-center bg-white px-4 py-3 rounded-full w-64 sm:w-72 md:w-96 border border-blue-100 shadow-sm transition-all duration-300 hover:shadow-md focus-within:shadow-lg focus-within:border-blue-300"
         >
           <input
-            className="flex-grow bg-transparent outline-none text-sm pr-2"
+            className="flex-grow bg-transparent outline-none text-sm pr-2 placeholder-gray-400"
             spellCheck="false"
             placeholder={isListening ? "Đang nghe..." : "Tìm kiếm sản phẩm..."}
             type="text"
@@ -148,27 +154,25 @@ const Header = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
 
-          {/* Clear button */}
           {searchQuery && (
             <button
               type="button"
               onClick={clearSearch}
-              className="mr-2 text-gray-400 hover:text-gray-600"
+              className="mr-2 text-gray-400 hover:text-blue-600 transition-colors"
               title="Xóa tìm kiếm"
             >
               ×
             </button>
           )}
 
-          {/* Voice Search Button */}
           {isSupported && (
             <button
               type="button"
               onClick={handleVoiceSearch}
-              className={`mr-2 p-1 rounded-full transition-all duration-200 ${
+              className={`mr-3 p-1 rounded-full transition-all duration-200 ${
                 isListening
-                  ? "bg-red-500 text-white animate-pulse shadow-md"
-                  : "text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+                  ? "bg-red-500 text-white animate-pulse shadow-lg"
+                  : "text-blue-600 hover:bg-emerald-50 hover:text-blue-700"
               }`}
               title={
                 isListening
@@ -184,23 +188,28 @@ const Header = () => {
             </button>
           )}
 
-          <button type="submit" className="text-gray-500 hover:text-gray-700">
-            <SearchIcon />
+          <button
+            type="submit"
+            className="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded-full text-white transition-colors shadow-md"
+          >
+            <SearchIcon fontSize="small" />
           </button>
         </form>
 
         {/* Các action */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-5">
           {/* Giỏ hàng */}
           <Link
             to="/cart"
-            className="relative flex items-center gap-2 hover:text-green-600 transition-colors"
+            className="relative flex items-center gap-2 text-blue-800 hover:text-blue-600 transition-colors"
           >
-            <ShoppingCartOutlinedIcon
-              fontSize="medium"
-              sx={{ color: ThemeColor.DARK_GREEN }}
-            />
-            <span className="absolute -top-2 -right-2 text-xs bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center shadow">
+            <div className="p-2 rounded-full hover:bg-emerald-50 transition-colors">
+              <ShoppingCartOutlinedIcon
+                fontSize="medium"
+                style={{ color: ThemeColor.DARK_GREEN }}
+              />
+            </div>
+            <span className="absolute top-0 right-0 text-xs bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center shadow transform -translate-y-1 translate-x-1">
               {count || 0}
             </span>
           </Link>
@@ -209,9 +218,10 @@ const Header = () => {
           {Object.keys(user).length === 0 ? (
             <Link
               to="/login"
-              className="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2 transition-all"
+              className="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-blue-700 text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
             >
-              <LoginIcon fontSize="small" /> Đăng nhập
+              <LoginIcon fontSize="small" />
+              <span className="hidden sm:inline">Đăng nhập</span>
             </Link>
           ) : (
             <>
@@ -224,13 +234,17 @@ const Header = () => {
                 className="focus:outline-none"
               >
                 {user.avatar ? (
-                  <img
-                    className="w-10 h-10 rounded-full object-cover"
-                    src={`data:image/png;base64,${user.avatar?.data}`}
-                    alt="Avatar"
-                  />
+                  <div className="border-2 border-blue-500 rounded-full p-0.5">
+                    <img
+                      className="w-9 h-9 rounded-full object-cover shadow"
+                      src={`data:image/png;base64,${user.avatar?.data}`}
+                      alt="Avatar"
+                    />
+                  </div>
                 ) : (
-                  <AccountCircleOutlinedIcon sx={{ fontSize: 32 }} />
+                  <div className="p-2 rounded-full bg-emerald-100 text-blue-700">
+                    <AccountCircleOutlinedIcon sx={{ fontSize: 28 }} />
+                  </div>
                 )}
               </Button>
 
@@ -240,22 +254,30 @@ const Header = () => {
                 open={open}
                 onClose={handleClose}
                 MenuListProps={{ "aria-labelledby": "basic-button" }}
-                sx={{ zIndex: 9999 }}
+                sx={{
+                  zIndex: 9999,
+                  "& .MuiPaper-root": {
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+                    marginTop: "8px",
+                    minWidth: "200px",
+                  },
+                }}
               >
-                <MenuItem onClick={handleClose}>
-                  <Link to="/user/account" className="text-sky-600">
+                <MenuItem onClick={handleClose} className="hover:bg-emerald-50">
+                  <Link to="/user/account" className="text-blue-700 flex-1">
                     Tài khoản
                   </Link>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Link to="/user/purchase" className="text-sky-600">
+                <MenuItem onClick={handleClose} className="hover:bg-emerald-50">
+                  <Link to="/user/purchase" className="text-blue-700 flex-1">
                     Đơn mua
                   </Link>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleClose} className="hover:bg-red-50">
                   <span
                     onClick={handleLogout}
-                    className="text-red-500 cursor-pointer"
+                    className="text-red-500 cursor-pointer flex-1"
                   >
                     Đăng xuất
                   </span>

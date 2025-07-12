@@ -99,7 +99,7 @@ export const Home = () => {
           }}
         ></div>
         <div className="w-full h-11 "></div>
-        <div className="w-3/4 flex items-center mb-5 bg-white p-3 gap-3 absolute bottom-1 shadow-sm rounded-md left-1/2 transform -translate-x-1/2">
+        <div className="w-3/4 flex items-center mb-5 bg-gradient-to-r from-blue-600 to-teal-600 p-3 gap-3 absolute bottom-1 shadow-sm rounded-md left-1/2 transform -translate-x-1/2">
           <select
             onChange={(e) => {
               handleChange("categoryId", e.target.value);
@@ -115,9 +115,9 @@ export const Home = () => {
               </option>
             ))}
           </select>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 ">
             <div
-              className={`border py-1 px-2 rounded-md text-sm cursor-pointer ${
+              className={`border py-1 px-2 rounded-md text-sm cursor-pointer bg-white ${
                 filter.sortDirection === "DESC" ? "text-sky-500" : ""
               }`}
               onClick={() => handleChange("sortDirection", "DESC")}
@@ -128,7 +128,7 @@ export const Home = () => {
           </div>
           <div className="flex items-center gap-2">
             <div
-              className={`border py-1 px-2 rounded-md text-sm cursor-pointer ${
+              className={`border py-1 px-2 rounded-md text-sm cursor-pointer bg-white ${
                 filter.sortDirection === "ASC" ? "text-sky-500" : ""
               }`}
               onClick={() => handleChange("sortDirection", "ASC")}
@@ -137,7 +137,7 @@ export const Home = () => {
             </div>
           </div>
           <div
-            className="cursor-pointer px-3 py-1 rounded-md bg-sky-500 text-white font-semibold"
+            className="cursor-pointer px-3 py-1 rounded-md text-blue-500 bg-white font-semibold"
             onClick={handleFilter}
           >
             <FilterAltOutlinedIcon></FilterAltOutlinedIcon>Lọc sản phẩm

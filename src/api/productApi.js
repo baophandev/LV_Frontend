@@ -5,6 +5,8 @@ const axiosInstance = axios.create({
   timeout: 10000,
 });
 
+const USER_ID = window.localStorage.getItem("USER_ID");
+
 export const fetchProducstApi = async ({ pageNumber = 0, pageSize = 0 }) => {
   const response = await axiosInstance.get("/product/status", {
     params: {
@@ -32,7 +34,11 @@ export const fetchProducstByCategoryIdApi = async ({
 };
 
 export const fetchProductApi = async (productId) => {
-  const response = await axiosInstance.get(`/product/${productId}`);
+  const response = await axiosInstance.get(`/product/${productId}`, {
+    params: {
+      userId: USER_ID,
+    },
+  });
   return response.data;
 };
 

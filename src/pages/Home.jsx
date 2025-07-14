@@ -99,7 +99,7 @@ export const Home = () => {
           }}
         ></div>
         <div className="w-full h-11 "></div>
-        <div className="w-3/4 flex items-center mb-5 bg-gradient-to-r from-blue-600 to-teal-600 p-3 gap-3 absolute bottom-1 shadow-sm rounded-md left-1/2 transform -translate-x-1/2">
+        <div className="w-3/4 flex items-center mb-5 bg-gradient-to-r from-teal-600  via-blue-600 to-teal-600 p-3 gap-3 absolute bottom-1 shadow-sm rounded-md left-1/2 transform -translate-x-1/2">
           <select
             onChange={(e) => {
               handleChange("categoryId", e.target.value);

@@ -26,7 +26,7 @@ const ProductCart = ({ id, image, name, price, category, discountDisplayed }) =>
             {name}
           </Link>
 
-          <div className="text-lg mt-2 text-slate-600">
+          <div className="text-lg mt-2 text-blue-600 font-semibold">
             {discountDisplayed > 0
               ? // Tính giá sau giảm và chuyển về chuỗi định dạng "vi-VN" rồi nối thêm "đ"
                 (price * (1 - discountDisplayed / 100)).toLocaleString(

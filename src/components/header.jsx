@@ -16,16 +16,19 @@ import { getMyInfo, getUserAddress, logout } from "../redux/slices/userSlice";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LoginIcon from "@mui/icons-material/Login";
 import { fetchCart } from "../redux/slices/cartSlice";
-import useVoiceSearch from "../hooks/useVoiceSearch"; // Import custom hook
+import useVoiceSearch from "../hooks/useVoiceSearch";
+import { searchProductApi } from "../api/productApi";
+import _ from "lodash";
 
 const Header = () => {
   const dispatch = useDispatch();
   const status = useSelector((state) => state.categorys.status);
-  const error = useSelector((state) => state.categorys.error);
   const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.user.user);
   const { count } = useSelector((state) => state.cart);
   const userId = user.id;
+  const [searchResults, setSearchResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
 
   // Voice search hook
   const {
@@ -92,12 +95,7 @@ const Header = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Thực hiện tìm kiếm ở đây
-      console.log("Searching for:", searchQuery);
-      // Có thể dispatch action tìm kiếm hoặc navigate đến trang tìm kiếm
-      // dispatch(searchProducts(searchQuery));
-      // hoặc
-      // navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      debouncedSearch(searchQuery);
     }
   };
 
@@ -105,8 +103,6 @@ const Header = () => {
     setSearchQuery("");
     resetTranscript();
   };
-
-  console.log(error);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -116,6 +112,41 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const debouncedSearch = React.useRef(
+    _.debounce(async (query) => {
+      try {
+        if (query.trim()) {
+          const data = await searchProductApi({ name: query });
+          setSearchResults(data || []);
+          setShowResults(true);
+        } else {
+          setSearchResults([]);
+          setShowResults(false);
+        }
+      } catch (err) {
+        console.error("Lỗi tìm kiếm:", err);
+      }
+    }, 400) // delay 400ms
+  ).current;
+
+  useEffect(() => {
+    debouncedSearch(searchQuery);
+    return () => {
+      debouncedSearch.cancel(); // cleanup nếu người dùng gõ quá nhanh
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(".search-dropdown")) {
+        setShowResults(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   return (
     <div
@@ -129,13 +160,13 @@ const Header = () => {
       }}
       className="bg-blue-50"
     >
-      <div className="flex justify-between items-center px-6 py-3 max-w-screen-xl mx-auto">
+      <div className="flex justify-between items-center px-6 py-2 max-w-screen-xl mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <img
             src={Logo}
             alt="Logo"
-            className="w-32 hidden md:block"
+            className="w-24 hidden md:block"
             style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.1))" }}
           />
         </Link>
@@ -195,6 +226,23 @@ const Header = () => {
             <SearchIcon fontSize="small" />
           </button>
         </form>
+        {showResults && searchResults.length > 0 && (
+          <div className="absolute top-full mt-1 left-1/4 w-1/2 bg-blue-50 border rounded-md shadow-lg z-50 max-h-60 overflow-auto">
+            {searchResults.map((item, index) => (
+              <Link
+                to={`/product/${item.id}`} // đường dẫn chi tiết sản phẩm
+                key={index}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-white"
+                onClick={() => {
+                  setShowResults(false);
+                  setSearchQuery("");
+                }}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* Các action */}
         <div className="flex items-center gap-5">

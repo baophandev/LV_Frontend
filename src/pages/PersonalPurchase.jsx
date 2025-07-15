@@ -49,10 +49,10 @@ export const PersonalPurchase = () => {
   const renderStatusButton = (index, label) => {
     return (
       <div
-        className={`px-4 py-1 cursor-pointer  ${
+        className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors whitespace-nowrap  ${
           isFocused === index
-            ? " font-semibold text-sky-500 border-b-2 border-b-sky-500"
-            : "bg-white "
+            ? " bg-blue-600 text-white shadow-md"
+            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
         }`}
         onClick={() => setIsFocused(index)}
       >
@@ -98,7 +98,7 @@ export const PersonalPurchase = () => {
           </Link>
         </div>
         <div className="w-full rounded-md">
-          <div className="flex justify-center gap-3 mb-2 bg-white">
+          <div className="flex flex-wrap justify-center gap-1 sm:gap-2 p-3 bg-white border-b shadow-sm mb-4 rounded-md">
             {renderStatusButton(0, "Tất cả")}
             {renderStatusButton(1, "Chờ xác nhận")}
             {renderStatusButton(2, "Đã xác nhận")}

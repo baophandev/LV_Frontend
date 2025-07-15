@@ -1,45 +1,84 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { updateOrderStatusApi } from "../api/orderApi";
 import { useDispatch } from "react-redux";
 import { localUpdateStatus } from "../redux/slices/orderSlice";
 import { Snackbar, Alert } from "@mui/material";
+// import { CheckCircle, XCircle, Truck, PackageCheck, Undo2 } from "lucide-react";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import UndoOutlinedIcon from "@mui/icons-material/UndoOutlined";
 
-const OrderCard = ({ product, status, id }) => {
+const STATUS_CONFIG = {
+  PENDING: { text: "CHỜ XÁC NHẬN", color: "bg-amber-100 text-amber-800" },
+  CONFIRM: { text: "ĐÃ XÁC NHẬN", color: "bg-blue-100 text-blue-800" },
+  DELIVERING: {
+    text: "ĐANG GIAO HÀNG",
+    color: "bg-indigo-100 text-indigo-800",
+  },
+  DELIVERED: { text: "ĐÃ GIAO HÀNG", color: "bg-green-100 text-green-800" },
+  CANCELLED: { text: "ĐÃ HỦY", color: "bg-red-100 text-red-800" },
+  REFUNDED: { text: "ĐÃ HOÀN TIỀN", color: "bg-purple-100 text-purple-800" },
+  DEFAULT: { text: "-", color: "bg-gray-100 text-gray-800" },
+};
 
+const ProductItem = ({ product, orderId }) => (
+  <div className="flex gap-4 p-4 border-b">
+    <div className="flex-1">
+      <Link
+        className="font-semibold text-gray-800 hover:text-blue-600 transition-colors"
+        to={`/user/purchase/order/${orderId}`}
+      >
+        {product.name}
+      </Link>
+      <div className="flex flex-wrap gap-2 mt-1 text-sm">
+        <span className="text-gray-500">Màu: {product.color}</span>
+        <span className="text-gray-500">SL: {product.quantity}</span>
+      </div>
+
+      <div className="mt-2 flex justify-between">
+        <div>
+          <span className="text-gray-500 text-sm">Đơn giá: </span>
+          <span className="font-medium text-blue-700">
+            {product.discountedPrice.toLocaleString("vi-VN")}đ
+          </span>
+        </div>
+
+        <div className="text-right">
+          <span className="text-gray-500 text-sm">Thành tiền: </span>
+          <span className="font-medium text-blue-700">
+            {product.calculatePrice.toLocaleString("vi-VN")}đ
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const OrderCard = ({ product, status, id, orderDate }) => {
   const [statusRecently, setStatusRecently] = useState(status);
   const dispatch = useDispatch();
   const [openToast, setOpenToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastSeverity, setToastSeverity] = useState("success");
 
-  const renderStatus = () => {
-    switch (statusRecently) {
-      case "PENDING":
-        return "CHỜ XÁC NHẬN";
-      case "CONFIRM": 
-        return "ĐÃ XÁC NHẬN";
-      case "DELIVERING":
-        return "ĐANG GIAO HÀNG";
-      case "DELIVERED":
-        return "ĐÃ GIAO HÀNG";
-      case "CANCELLED":
-        return "ĐÃ HỦY";
-      case "REFUNDED":
-        return "ĐÃ HOÀN TIỀN";
-      default:
-        return "-";
-    }
-  };
+  // Sync status with props
+  useEffect(() => {
+    setStatusRecently(status);
+  }, [status]);
+
+  const getStatusConfig = () =>
+    STATUS_CONFIG[statusRecently] || STATUS_CONFIG.DEFAULT;
 
   const handleStatusChange = async (newStatus) => {
     const oldStatus = statusRecently;
     setStatusRecently(newStatus);
+
     try {
       await updateOrderStatusApi(id, newStatus);
-      dispatch(
-        localUpdateStatus({ orderId: id, oldStatus, newStatus })
-      );
+      dispatch(localUpdateStatus({ orderId: id, oldStatus, newStatus }));
+
       setToastMessage("Cập nhật đơn hàng thành công!");
       setToastSeverity("success");
     } catch (error) {
@@ -51,104 +90,96 @@ const OrderCard = ({ product, status, id }) => {
     }
   };
 
+  // Calculate total amount
+  const totalAmount = product.reduce(
+    (sum, item) => sum + item.calculatePrice,
+    0
+  );
+
   return (
-    <div className="border rounded-xl mb-5">
-      <div className="flex border-b bg-slate-100 rounded-t-xl px-5 py-4 items-center">
-        <div className="font-bold uppercase text-slate-600">
-          MÃ ĐƠN HÀNG: {id}{" "}
+    <div className="border border-gray-200 rounded-xl mb-6 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between bg-gray-50 px-5 py-4 border-b">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+          <div className="font-bold text-gray-700">
+            MÃ ĐƠN: <span className="text-blue-600">{id}</span>
+          </div>
+
+          {orderDate && (
+            <div className="text-sm text-gray-500">
+              Ngày đặt: {new Date(orderDate).toLocaleDateString("vi-VN")}
+            </div>
+          )}
         </div>
-        <div className="ml-auto bg-green-100 text-sm text-green-700 font-bold px-4 py-1 rounded-full">
-          {renderStatus()}
+
+        <div
+          className={`mt-2 sm:mt-0 px-3 py-1 rounded-full text-sm font-medium ${
+            getStatusConfig().color
+          }`}
+        >
+          {getStatusConfig().text}
         </div>
       </div>
-      {Array.isArray(product) && product.length > 0
-        ? product.map((prd, index) => (
-            <>
-              <div className="flex flex-col gap-2 bg-white p-7 border-b">
-                <div className="flex gap-1 items-center">
-                  {/* <Link to={"/user/purchase/order/id"}>
-            <img src="https://placehold.co/600x400" className="w-28 " alt="" />
-          </Link> */}
-                  <div className="">
-                    <Link
-                      className="font-semibold text-lg text-slate-600"
-                      to={`/user/purchase/order/${id}`}
-                    >
-                      {prd.name}
-                    </Link>
-                    <div className="text-sm text-gray-400">{prd.color}</div>
-                    <div className="text-sm text-gray-400">
-                      Số lượng: {prd.quantity}
-                    </div>
-                  </div>
-                  <div className="ml-auto">
-                    <div>
-                      <span className="text-sm">Giá bán: </span>{" "}
-                      <span className="text-blue-800 font-semibold">
-                        {prd.discountedPrice.toLocaleString("vi-VN") + "đ"}
-                      </span>
-                    </div>
-                    <div className="">
-                      <span className="text-sm">Thành tiền: </span>
-                      <span className="text-blue-800 font-semibold">
-                        {prd.calculatePrice.toLocaleString("vi-VN") + "đ"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          ))
-        : ""}
-      <div className="flex items-center bg-slate-100 rounded-b-xl py-4 px-5">
-        {status === "DELIVERING" ? (
-          <>
-            <div className="text-xs text-gray-400">
-              Vui lòng chỉ nhấn "Đã nhận được hàng" khi đơn hàng đã được giao
-              đến
-              <br />
-              bạn và sản phẩm nhận được không có vấn đề nào.
-            </div>
-            <div className="ml-auto flex flex-col gap-1">
-              <div className="ml-auto">
-                <button
-                  className="bg-yellow-400 px-2 py-1 text-white rounded-md"
-                  onClick={() => handleStatusChange("DELIVERED")}
-                >
-                  Đã nhận được hàng
-                </button>
-              </div>
-            </div>
-          </>
-        ) : (
-          ""
-        )}
-        {status === "PENDING" || status === "CONFIRM" ? (
-          <div className="ml-auto flex flex-col gap-1">
-            <div className="ml-auto">
-              <button
-                className="bg-red-500 px-2 py-1 text-white rounded-md"
-                onClick={() => handleStatusChange("CANCELLED")}
-              >
-                Hủy đơn hàng
-              </button>
-            </div>
+
+      {/* Product List */}
+      <div className="divide-y">
+        {product.map((prd, index) => (
+          <ProductItem key={`${id}-${index}`} product={prd} orderId={id} />
+        ))}
+      </div>
+
+      {/* Order Summary */}
+      <div className="flex justify-between items-center px-5 py-3 bg-gray-50 border-t">
+        <div className="text-gray-600 text-sm">{product.length} sản phẩm</div>
+        <div className="text-right">
+          <div className="text-gray-500 text-sm">Tổng tiền:</div>
+          <div className="text-lg font-bold text-red-600">
+            {totalAmount.toLocaleString("vi-VN")}đ
           </div>
-        ) : (
-          ""
-        )}
-        {status === "DELIVERED" ? (
-          <div className="ml-auto flex flex-col gap-1">
-            <div className="ml-auto">
-              <button className="bg-sky-500 px-3 py-2 text-white rounded-md">
-                Yêu cầu trả hàng
-              </button>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="p-4 bg-gray-50 border-t">
+        {statusRecently === "DELIVERING" && (
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="text-xs text-gray-500 max-w-md">
+              <Inventory2OutlinedIcon className="inline mr-1 w-4 h-4" />
+              Vui lòng chỉ nhấn "Đã nhận hàng" khi bạn đã kiểm tra sản phẩm
             </div>
+            <button
+              className="flex items-center gap-1 bg-green-600 hover:bg-green-700 px-4 py-2 text-white rounded-md transition-colors"
+              onClick={() => handleStatusChange("DELIVERED")}
+            >
+              <CheckCircleOutlineOutlinedIcon className="w-4 h-4" />
+              Đã nhận được hàng
+            </button>
           </div>
-        ) : (
-          ""
+        )}
+
+        {(statusRecently === "PENDING" || statusRecently === "CONFIRM") && (
+          <div className="flex justify-end">
+            <button
+              className="flex items-center gap-1 bg-red-600 hover:bg-red-700 px-4 py-2 text-white rounded-md transition-colors"
+              onClick={() => handleStatusChange("CANCELLED")}
+            >
+              <HighlightOffOutlinedIcon className="w-4 h-4" />
+              Hủy đơn hàng
+            </button>
+          </div>
+        )}
+
+        {statusRecently === "DELIVERED" && (
+          <div className="flex justify-end">
+            <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 px-4 py-2 text-white rounded-md transition-colors">
+              <UndoOutlinedIcon className="w-4 h-4" />
+              Yêu cầu trả hàng
+            </button>
+          </div>
         )}
       </div>
+
+      {/* Toast Notification */}
       <Snackbar
         open={openToast}
         autoHideDuration={3000}

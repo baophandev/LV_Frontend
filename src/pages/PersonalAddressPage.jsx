@@ -60,7 +60,7 @@ export const PersonalAddressPage = () => {
         <div
           className="w-full rounded-md p-5 bg-white"
         >
-          <div className="uppercase  font-bold text-slate-500">
+          <div className="uppercase  font-bold text-blue-500">
             Địa chỉ của tôi
           </div>
           <div className="border-b border-gray-300 text-sm text-gray-400 pb-1">

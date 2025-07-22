@@ -74,10 +74,7 @@ export const PersonalPage = () => {
     <>
       <div className="p-5 w-full sm:w-2/3">
         <div
-          className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
-          style={{
-            color: ThemeColor.MAIN_GRREN,
-          }}
+          className="text-blue-500 p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
         >
           {user.displayName || "Không rõ tên"}
         </div>
@@ -108,7 +105,7 @@ export const PersonalPage = () => {
             </Link>
           </div>
           <div className="w-full rounded-md p-5 bg-white">
-            <div className="uppercase  font-bold text-slate-500">
+            <div className="uppercase  font-bold text-blue-500">
               Quản lý hồ sơ
             </div>
             <div className="border-b border-gray-300 text-sm text-gray-400 pb-1">

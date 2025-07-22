@@ -99,7 +99,7 @@ const OrderCard = ({ product, status, id, orderDate }) => {
   return (
     <div className="border border-gray-200 rounded-xl mb-6 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between bg-gray-50 px-5 py-4 border-b">
+      <div className="flex flex-wrap items-center justify-between bg-blue-50 px-5 py-4 border-b">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
           <div className="font-bold text-gray-700">
             MÃ ĐƠN: <span className="text-blue-600">{id}</span>
@@ -122,14 +122,14 @@ const OrderCard = ({ product, status, id, orderDate }) => {
       </div>
 
       {/* Product List */}
-      <div className="divide-y">
+      <div className="divide-y bg-white">
         {product.map((prd, index) => (
           <ProductItem key={`${id}-${index}`} product={prd} orderId={id} />
         ))}
       </div>
 
       {/* Order Summary */}
-      <div className="flex justify-between items-center px-5 py-3 bg-gray-50 border-t">
+      <div className="flex justify-between items-center px-5 py-3 bg-blue-50 border-t">
         <div className="text-gray-600 text-sm">{product.length} sản phẩm</div>
         <div className="text-right">
           <div className="text-gray-500 text-sm">Tổng tiền:</div>
@@ -140,7 +140,7 @@ const OrderCard = ({ product, status, id, orderDate }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="p-4 bg-gray-50 border-t">
+      <div className="p-4 bg-white border-t">
         {statusRecently === "DELIVERING" && (
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="text-xs text-gray-500 max-w-md">

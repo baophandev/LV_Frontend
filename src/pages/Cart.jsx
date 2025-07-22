@@ -160,10 +160,7 @@ export const Cart = () => {
   return (
     <div className="w-4/5 p-5 min-h-screen">
       <div
-        className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
-        style={{
-          color: ThemeColor.MAIN_GRREN,
-        }}
+        className="text-blue-500 p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
       >
         Giỏ hàng
       </div>

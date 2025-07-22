@@ -329,7 +329,7 @@ export const ProductDetail = () => {
             </div>
           </div>
         </div>
-        <div className="mt-2 rounded-md p-5 text-gray-700 bg-gray-100">
+        <div className="mt-2 rounded-md p-5 text-gray-700 bg-blue-50">
           <div className="uppercase text-2xl font-extrabold">Mô tả: </div>
           <p>{displayedProduct?.description || "Chưa có mô tả"}</p>
           <AttributeTable productId={displayedProduct?.id} />

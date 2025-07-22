@@ -1,7 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import ProductCart from "../components/ProductCart";
 import { useEffect, useState } from "react";
-import {  fecthProductFilter, fetchProducts, setPage } from "../redux/slices/productSlice";
+import {
+  fecthProductFilter,
+  fetchProducts,
+  setPage,
+} from "../redux/slices/productSlice";
 import Loading from "../components/Loading";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -30,7 +34,7 @@ export const Home = () => {
   const status = useSelector((state) => state.product.status);
   const error = useSelector((state) => state.product.error);
 
-  const [filter, setFilter] = useState({})
+  const [filter, setFilter] = useState({});
 
   const [recmdProducts, setRecmdProducts] = useState([]);
 
@@ -56,7 +60,7 @@ export const Home = () => {
 
     fetchRecmdProducts();
   }, [userId]);
-  console.log(userId)
+  console.log(userId);
 
   const handlePageClick = (page) => {
     dispatch(setPage(page - 1));
@@ -71,9 +75,12 @@ export const Home = () => {
 
   const handleFilter = () => {
     dispatch(
-      fecthProductFilter({ categoryId: filter.categoryId, sortDirection : filter.sortDirection})
+      fecthProductFilter({
+        categoryId: filter.categoryId,
+        sortDirection: filter.sortDirection,
+      })
     );
-  }
+  };
 
   if (status === "loading") return <Loading></Loading>;
   if (status === "failed")
@@ -149,19 +156,24 @@ export const Home = () => {
           <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
             <div className="">DÀNH CHO BẠN</div>
           </div>
-          <div className=" w-full sm:w-3/4">
+
+          <div className="w-full sm:w-3/4">
             {/* <Carousel images={adImages}></Carousel> */}
-            <div className="w-full flex flex-wrap gap-2 items-center justify-start bg-sky-300 rounded-xl p-3">
+            <div
+              className="w-full flex gap-2 items-center justify-start bg-sky-300 rounded-xl p-3 overflow-x-auto whitespace-nowrapscrollbar-thin scrollbar-thumb-slate-400
+      scrollbar-track-transparent"
+            >
               {recmdProducts?.map((product) => (
-                <ProductCart
-                  key={product.id}
-                  id={product.id}
-                  image={product.productAvatar.data}
-                  name={product.name}
-                  price={product.firstVariantPrice || 0}
-                  discountDisplayed={product.discountDisplayed}
-                  category={product.category.name}
-                ></ProductCart>
+                <div key={product.id} className="">
+                  <ProductCart
+                    id={product.id}
+                    image={product.productAvatar.data}
+                    name={product.name}
+                    price={product.firstVariantPrice || 0}
+                    discountDisplayed={product.discountDisplayed}
+                    category={product.category.name}
+                  />
+                </div>
               ))}
             </div>
           </div>

@@ -73,6 +73,20 @@ export const getProductReview = async ({ pageNumber = 0, pageSize = 6, productId
   }
 }
 
+export const getProductDiscountedApi = async ({ pageNumber = 0, pageSize = 0 }) => {
+  try{
+    const response = await axiosInstance.get("/product/discounted", {
+      params: {
+        page: pageNumber,
+        size: pageSize,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const fecthProductFilterApi = async ({categoryId, sortDirection}) => {
   try{
     const response = await axiosInstance.get('/product/filter', {

@@ -16,6 +16,8 @@ import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import FloatingChatBot from "../components/FloatingChatBot";
 import { getProductRecommendations } from "../api/recomendation";
+import { getProductDiscountedApi } from "../api/productApi";
+import CountdownTimer from "../components/CountdownTimer"; 
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -37,6 +39,7 @@ export const Home = () => {
   const [filter, setFilter] = useState({});
 
   const [recmdProducts, setRecmdProducts] = useState([]);
+  const [productDiscounteds, setProductDiscounteds] = useState([]);
 
   useEffect(() => {
     dispatch(fetchProducts({ pageNumber: currentPage, pageSize: 20 }));
@@ -60,7 +63,18 @@ export const Home = () => {
 
     fetchRecmdProducts();
   }, [userId]);
-  console.log(userId);
+
+  useEffect(() => {
+    const fecthProductDiscounteds = async () => {
+      try {
+        const response = await getProductDiscountedApi({pageNumber: 0, pageSize: 10});
+        setProductDiscounteds(response.content)
+      }catch(err){
+        console.error("Error fetching discounted products:", err);
+      }
+    }
+    fecthProductDiscounteds();
+  })
 
   const handlePageClick = (page) => {
     dispatch(setPage(page - 1));
@@ -153,6 +167,33 @@ export const Home = () => {
       </div>
       {userId && (
         <>
+          <div className="w-full sm:w-3/4 flex justify-start mb-3">
+            <CountdownTimer initialMinutes={180} /> {/* bắt đầu với 3 giờ */}
+          </div>
+          <div className="w-full sm:w-3/4">
+            {/* <Carousel images={adImages}></Carousel> */}
+            <div
+              className="w-full flex gap-2 items-center justify-start bg-sky-300 rounded-xl p-3 overflow-x-auto whitespace-nowrapscrollbar-thin scrollbar-thumb-slate-400
+      scrollbar-track-transparent"
+            >
+              {productDiscounteds?.map((product) => (
+                <div key={product.id} className="">
+                  <ProductCart
+                    id={product.id}
+                    image={product.productAvatar.data}
+                    name={product.name}
+                    price={product.firstVariantPrice || 0}
+                    discountDisplayed={product.discountDisplayed}
+                    category={product.category.name}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+      {userId && (
+        <>
           <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
             <div className="">DÀNH CHO BẠN</div>
           </div>
@@ -179,31 +220,13 @@ export const Home = () => {
           </div>
         </>
       )}
-      {/* <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
-        <div className="">GIẢM GIÁ</div>
-      </div>
-      <div className=" w-full sm:w-3/4 bg-red-400"> */}
-      {/* <Carousel images={adImages}></Carousel> */}
-      {/* <div className="w-full flex flex-wrap gap-2 items-center justify-around">
-          {productDiscounteds?.map((product) => (
-            <ProductCart
-              key={product.id}
-              id={product.id}
-              image={product.productAvatar.data}
-              name={product.name}
-              price={product.firstVariantPrice || 0}
-              discountDisplayed={product.discountDisplayed}
-              category={product.category.name}
-            ></ProductCart>
-          ))}
-        </div> */}
-      {/* </div> */}
+
       <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
         <div className="">SẢN PHẨM HÀNG ĐẦU</div>
       </div>
       <div className=" w-full sm:w-3/4">
         {/* <Carousel images={adImages}></Carousel> */}
-        <div className="w-full flex flex-wrap gap-2 items-center justify-around">
+        <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {products?.map((product) => (
             <ProductCart
               key={product.id}
@@ -213,9 +236,10 @@ export const Home = () => {
               price={product.firstVariantPrice || 0}
               discountDisplayed={product.discountDisplayed}
               category={product.category.name}
-            ></ProductCart>
+            />
           ))}
         </div>
+
         <div className="flex justify-center">
           <Pagination
             count={totalPages}

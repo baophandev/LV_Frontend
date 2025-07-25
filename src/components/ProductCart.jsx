@@ -45,7 +45,7 @@ const ProductCart = ({ id, image, name, price, category, discountDisplayed }) =>
         </div>
       </div>
       <div className="absolute top-2 left-2 bg-red-500 px-2 text-white rounded-md">
-        -{discountDisplayed}%
+        -{discountDisplayed || 0}%
       </div>
     </div>
   );

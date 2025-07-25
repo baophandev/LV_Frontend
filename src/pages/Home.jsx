@@ -74,7 +74,7 @@ export const Home = () => {
       }
     }
     fecthProductDiscounteds();
-  })
+  }, [])
 
   const handlePageClick = (page) => {
     dispatch(setPage(page - 1));
@@ -165,33 +165,31 @@ export const Home = () => {
           </div>
         </div>
       </div>
-      {userId && (
-        <>
-          <div className="w-full sm:w-3/4 flex justify-start mb-3">
-            <CountdownTimer initialMinutes={180} /> {/* bắt đầu với 3 giờ */}
-          </div>
-          <div className="w-full sm:w-3/4">
-            {/* <Carousel images={adImages}></Carousel> */}
-            <div
-              className="w-full flex gap-2 items-center justify-start bg-sky-300 rounded-xl p-3 overflow-x-auto whitespace-nowrapscrollbar-thin scrollbar-thumb-slate-400
+      <>
+        <div className="w-full sm:w-3/4 flex justify-start mb-3">
+          <CountdownTimer initialMinutes={180} /> {/* bắt đầu với 3 giờ */}
+        </div>
+        <div className="w-full sm:w-3/4">
+          {/* <Carousel images={adImages}></Carousel> */}
+          <div
+            className="w-full flex gap-2 items-center justify-start shadow-sm bg-blue-100 rounded-xl p-3 overflow-x-auto whitespace-nowrapscrollbar-thin scrollbar-thumb-slate-400
       scrollbar-track-transparent"
-            >
-              {productDiscounteds?.map((product) => (
-                <div key={product.id} className="">
-                  <ProductCart
-                    id={product.id}
-                    image={product.productAvatar.data}
-                    name={product.name}
-                    price={product.firstVariantPrice || 0}
-                    discountDisplayed={product.discountDisplayed}
-                    category={product.category.name}
-                  />
-                </div>
-              ))}
-            </div>
+          >
+            {productDiscounteds?.map((product) => (
+              <div key={product.id} className="">
+                <ProductCart
+                  id={product.id}
+                  image={product.productAvatar.data}
+                  name={product.name}
+                  price={product.firstVariantPrice || 0}
+                  discountDisplayed={product.discountDisplayed}
+                  category={product.category.name}
+                />
+              </div>
+            ))}
           </div>
-        </>
-      )}
+        </div>
+      </>
       {userId && (
         <>
           <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
@@ -201,7 +199,7 @@ export const Home = () => {
           <div className="w-full sm:w-3/4">
             {/* <Carousel images={adImages}></Carousel> */}
             <div
-              className="w-full flex gap-2 items-center justify-start bg-sky-300 rounded-xl p-3 overflow-x-auto whitespace-nowrapscrollbar-thin scrollbar-thumb-slate-400
+              className="w-full flex gap-2 items-center justify-start bg-blue-100 rounded-xl p-3 overflow-x-auto whitespace-nowrapscrollbar-thin scrollbar-thumb-slate-400
       scrollbar-track-transparent"
             >
               {recmdProducts?.map((product) => (
@@ -224,9 +222,15 @@ export const Home = () => {
       <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
         <div className="">SẢN PHẨM HÀNG ĐẦU</div>
       </div>
-      <div className=" w-full sm:w-3/4">
-        {/* <Carousel images={adImages}></Carousel> */}
-        <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+
+      <div className="w-full sm:w-3/4 px-4">
+        <div
+          className="grid gap-8 mx-auto"
+          style={{
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            maxWidth: "1400px", // ✅ giới hạn chiều rộng để Grid không bị dàn quá rộng
+          }}
+        >
           {products?.map((product) => (
             <ProductCart
               key={product.id}
@@ -240,7 +244,7 @@ export const Home = () => {
           ))}
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-6">
           <Pagination
             count={totalPages}
             variant="outlined"
@@ -250,6 +254,7 @@ export const Home = () => {
           />
         </div>
       </div>
+
       <FloatingChatBot />
     </>
   );

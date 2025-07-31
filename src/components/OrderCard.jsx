@@ -129,7 +129,7 @@ const OrderCard = ({ product, status, id, orderDate }) => {
       </div>
 
       {/* Order Summary */}
-      <div className="flex justify-between items-center px-5 py-3 bg-blue-50 border-t">
+      <div className="flex justify-between items-center px-5 py-3 bg-gray-50 border-t">
         <div className="text-gray-600 text-sm">{product.length} sản phẩm</div>
         <div className="text-right">
           <div className="text-gray-500 text-sm">Tổng tiền:</div>
@@ -170,11 +170,9 @@ const OrderCard = ({ product, status, id, orderDate }) => {
         )}
 
         {statusRecently === "DELIVERED" && (
-          <div className="flex justify-end">
-            <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 px-4 py-2 text-white rounded-md transition-colors">
-              <UndoOutlinedIcon className="w-4 h-4" />
-              Yêu cầu trả hàng
-            </button>
+          <div className="flex justify-end ">
+            Vui lòng gửi yêu cầu hoàn tiền nếu có vấn đề với sản phẩm qua địa
+            chỉ email:<span className="text-blue-500 ml-2 font-semibold">cskh@nexor.com</span>
           </div>
         )}
       </div>

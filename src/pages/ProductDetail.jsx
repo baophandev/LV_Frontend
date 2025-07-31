@@ -307,11 +307,15 @@ export const ProductDetail = () => {
               </div>
             )}
             <div className="text-white flex gap-1">
-              <div className="flex gap-1">
-                <div className="flex gap-3">
+              <div className="flex items-center bg-gray-100 px-4 py-2 rounded-lg shadow-sm">
+                <div className="flex items-center gap-3">
+                  <div className="text-sky-700 text-sm font-medium">
+                    Chọn số lượng:
+                  </div>
                   <input
                     type="number"
-                    className="w-48 text-center text-black rounded-2xl outline-noneshadow bg-gray-200"
+                    min="1"
+                    className="w-20 h-9 text-center text-black bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition"
                     value={amount}
                     onChange={(e) =>
                       setAmount(Math.max(1, parseInt(e.target.value) || 1))
@@ -319,6 +323,7 @@ export const ProductDetail = () => {
                   />
                 </div>
               </div>
+
               <button
                 className="py-1 px-6 font-semibold rounded-2xl bg-sky-100 text-sky-500  border border-sky-200"
                 onClick={handleAddToCart}
@@ -329,8 +334,16 @@ export const ProductDetail = () => {
             </div>
           </div>
         </div>
-        <div className="mt-2 rounded-md p-5 text-gray-700 bg-blue-50">
-          <div className="uppercase text-2xl font-extrabold">Mô tả: </div>
+        <div class="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-md shadow-sm font-semibold">
+          <i class="fa-solid fa-shield-halved text-blue-600"></i>
+          <span className="">
+            Bảo hành 12 tháng - 1 đổi 1 nếu có lỗi từ nhà sản xuất
+          </span>
+        </div>
+        <div className="mt-2  p-5 text-gray-700 border-t border-gray-200">
+          <div className="uppercase text-2xl font-extrabold mb-2 text-blue-500">
+            Mô tả:{" "}
+          </div>
           <p>{displayedProduct?.description || "Chưa có mô tả"}</p>
           <AttributeTable productId={displayedProduct?.id} />
         </div>

@@ -18,6 +18,7 @@ import FloatingChatBot from "../components/FloatingChatBot";
 import { getProductRecommendations } from "../api/recomendation";
 import { getProductDiscountedApi } from "../api/productApi";
 import CountdownTimer from "../components/CountdownTimer"; 
+import { Link } from "react-router-dom";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -110,6 +111,19 @@ export const Home = () => {
   return (
     <>
       <div className="w-full relative">
+        <div className="bg-white flex flex-wrap items-center justify-center gap-20 w-full mx-auto p-4 rounded-md shadow">
+          {categorys?.map((category, index) => (
+            <Link to={`/category/${category.id}`} key={index} className="flex items-center">
+              <img
+                key={index}
+                className="w-12 h-12 object-contain rounded-lg cursor-pointer hover:scale-105 transition-transform duration-200"
+                src={`data:image/png;base64,${category.categoryImages[0]?.data}`}
+                alt={category?.name || "Ảnh sản phẩm"}
+                // onClick={handleClickOpen}
+              />
+            </Link>
+          ))}
+        </div>
         <div
           className="w-full h-80"
           style={{

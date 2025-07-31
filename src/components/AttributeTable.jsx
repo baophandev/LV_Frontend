@@ -56,7 +56,7 @@ const AttributeTable = ({ productId }) => {
   return (
     <div className=" mt-4">
       <h3 className="text-lg font-semibold mb-3 text-gray-700">
-        Thông số kỹ thuật
+        Thông số kỹ thuật:
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {items.map((item) => (

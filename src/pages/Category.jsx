@@ -56,13 +56,7 @@ export const Category = () => {
     );
   return (
     <div className="p-5 w-full sm:w-3/4">
-      <div
-        className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold"
-        style={{
-          backgroundColor: ThemeColor.LIGHT_GRAY,
-          color: ThemeColor.MAIN_GRREN,
-        }}
-      >
+      <div className="text-blue-500 p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white">
         <span className="">
           {categorys.find((category) => category.id === categoryId)?.name}
         </span>
@@ -72,9 +66,9 @@ export const Category = () => {
           <ProductCart
             key={product.id}
             id={product.id}
-            image={product.images[0]?.data}
+            image={product.productAvatar.data}
             name={product.name}
-            price={product.variants[0]?.price}
+            price={product.firstVariantPrice || 0}
           ></ProductCart>
         ))}
       </div>

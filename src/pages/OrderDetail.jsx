@@ -173,7 +173,7 @@ export const OrderDetail = () => {
                     MÃ ĐƠN HÀNG: {orderDetail ? orderDetail.orderId : "-"}
                   </div>
                   <div className="text-sm">|</div>
-                  <div className="text-orange-600 text-sm uppercase">
+                  <div className="text-blue-600 font-semibold text-sm uppercase">
                     {renderStatus()}
                   </div>
                 </div>

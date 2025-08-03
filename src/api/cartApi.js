@@ -63,3 +63,18 @@ export const deleteCartItemApi = async ({userId, itemId}) => {
     throw err;
   }
 }
+
+export const updateCartQuantityApi = async ({ userId, cartItemId, quantity }) => {
+  const params = new URLSearchParams();
+  params.append("userId", userId);
+  params.append("cartItemId", cartItemId);
+  params.append("quantity", quantity);
+
+  const response = await axiosInstance.post("/cart/updateQuantity", params, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};

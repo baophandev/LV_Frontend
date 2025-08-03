@@ -64,10 +64,7 @@ export const PersonalPurchase = () => {
   return (
     <div className="p-5 w-full sm:w-4/5">
       <div
-        className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
-        style={{
-          color: ThemeColor.MAIN_GRREN,
-        }}
+        className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white text-blue-500"
       >
         {user.displayName || "Không rõ tên"}
       </div>
@@ -98,7 +95,7 @@ export const PersonalPurchase = () => {
           </Link>
         </div>
         <div className="w-full rounded-md">
-          <div className="flex flex-wrap justify-center gap-1 sm:gap-2 p-3 bg-white border-b shadow-sm mb-4 rounded-md">
+          <div className="flex flex-wrap cursor-pointer justify-center gap-1 sm:gap-2 p-3 bg-white border-b shadow-sm mb-4 rounded-md">
             {renderStatusButton(0, "Tất cả")}
             {renderStatusButton(1, "Chờ xác nhận")}
             {renderStatusButton(2, "Đã xác nhận")}

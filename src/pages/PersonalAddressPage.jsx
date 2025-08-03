@@ -22,17 +22,12 @@ export const PersonalAddressPage = () => {
   return (
     <div className="p-5 w-full sm:w-2/3">
       <div
-        className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
-        style={{
-          color: ThemeColor.MAIN_GRREN,
-        }}
+        className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white text-blue-500"
       >
         {user.displayName || "Không rõ tên"}
       </div>
       <div className="flex gap-2">
-        <div
-          className="w-1/4 rounded-md p-5 bg-white"
-        >
+        <div className="w-1/4 rounded-md p-5 bg-white">
           <Link className=" text-slate-700  items-center flex cursor-pointer mb-2">
             <PermIdentityOutlinedIcon />
             Tài khoản của tôi
@@ -57,9 +52,7 @@ export const PersonalAddressPage = () => {
             Đơn mua
           </Link>
         </div>
-        <div
-          className="w-full rounded-md p-5 bg-white"
-        >
+        <div className="w-full rounded-md p-5 bg-white">
           <div className="uppercase  font-bold text-blue-500">
             Địa chỉ của tôi
           </div>
@@ -76,7 +69,7 @@ export const PersonalAddressPage = () => {
           ) : (
             addressList.map((address) => (
               <div className="">
-                <AddressCard address={address} ></AddressCard>
+                <AddressCard address={address}></AddressCard>
               </div>
             ))
           )}

@@ -102,7 +102,7 @@ const OrderCard = ({ product, status, id, orderDate }) => {
       <div className="flex flex-wrap items-center justify-between bg-blue-50 px-5 py-4 border-b">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
           <div className="font-bold text-gray-700">
-            MÃ ĐƠN: <span className="text-blue-600">{id}</span>
+            MÃ ĐƠN: <span className="text-blue-600 uppercase">{id.split("-")[0]}</span>
           </div>
 
           {orderDate && (
@@ -172,7 +172,10 @@ const OrderCard = ({ product, status, id, orderDate }) => {
         {statusRecently === "DELIVERED" && (
           <div className="flex justify-end ">
             Vui lòng gửi yêu cầu hoàn tiền nếu có vấn đề với sản phẩm qua địa
-            chỉ email:<span className="text-blue-500 ml-2 font-semibold">cskh@nexor.com</span>
+            chỉ email:
+            <span className="text-blue-500 ml-2 font-semibold">
+              cskh@nexor.com
+            </span>
           </div>
         )}
       </div>

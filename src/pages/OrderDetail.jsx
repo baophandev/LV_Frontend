@@ -170,7 +170,8 @@ export const OrderDetail = () => {
                 </Link>
                 <div className="flex gap-2 ml-auto items-center">
                   <div className="text-sm uppercase">
-                    MÃ ĐƠN HÀNG: {orderDetail ? orderDetail.orderId : "-"}
+                    MÃ ĐƠN HÀNG:{" "}
+                    {orderDetail ? orderDetail.orderId.split("-")[0] : "-"}
                   </div>
                   <div className="text-sm">|</div>
                   <div className="text-blue-600 font-semibold text-sm uppercase">
@@ -278,7 +279,8 @@ export const OrderDetail = () => {
                             {item.discountedPrice.toLocaleString("vi-VN") +
                               "đ" || "-"}
                           </div>
-                          {orderDetail.status === "DELIVERED" && !item.isReviewed ? (
+                          {orderDetail.status === "DELIVERED" &&
+                          !item.isReviewed ? (
                             <button
                               onClick={() => setOpenReviewDialogId(item.id)}
                               className="px-4 py-2 bg-sky-500 rounded-md text-white"
@@ -290,15 +292,15 @@ export const OrderDetail = () => {
                           )}
                         </div>
                         {orderDetail.status === "DELIVERED" &&
-                        !item.isReviewed && (
-                          <ReviewDialog
-                            open={openReviewDialogId === item.id}
-                            onClose={() => setOpenReviewDialogId(null)}
-                            productId={item.prdId}
-                            orderItemId={item.id}
-                            onSubmit={handleSubmitReview}
-                          />
-                        )}
+                          !item.isReviewed && (
+                            <ReviewDialog
+                              open={openReviewDialogId === item.id}
+                              onClose={() => setOpenReviewDialogId(null)}
+                              productId={item.prdId}
+                              orderItemId={item.id}
+                              onSubmit={handleSubmitReview}
+                            />
+                          )}
                       </div>
                     ))
                   : ""}

@@ -17,7 +17,7 @@ import {
   Paper,
   Checkbox,
 } from "@mui/material";
-import { deleteCartItemApi } from "../api/cartApi";
+import { deleteCartItemApi, updateCartQuantityApi } from "../api/cartApi";
 
 export const Cart = () => {
   const { cart, status } = useSelector((state) => state.cart);
@@ -155,13 +155,36 @@ export const Cart = () => {
     setTotalPrice(total);
   }, [selectedItems]);
 
+  const handleQuantityChange = async (item, newQuantity) => {
+    const quantity = parseInt(newQuantity, 10);
+    if (isNaN(quantity) || quantity <= 0) return;
+
+    try {
+      await updateCartQuantityApi({
+        userId: userId,
+        cartItemId: item.itemId,
+        quantity: quantity,
+      });
+
+      setUpdatedCart((prev) => {
+        const updatedItems = prev.items.map((cartItem) =>
+          cartItem.itemId === item.itemId
+            ? { ...cartItem, quantity: quantity }
+            : cartItem
+        );
+        return { ...prev, items: updatedItems };
+      });
+    } catch (error) {
+      console.error("Lỗi cập nhật số lượng:", error);
+    }
+  };
+
+
   if (status === "loading") return <Loading></Loading>;
 
   return (
     <div className="w-4/5 p-5 min-h-screen">
-      <div
-        className="text-blue-500 p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
-      >
+      <div className="text-blue-500 p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white">
         Giỏ hàng
       </div>
       <TableContainer component={Paper} elevation={0}>
@@ -231,10 +254,13 @@ export const Cart = () => {
                   </TableCell>
                   <TableCell>
                     <input
-                      className="w-10"
+                      className="w-16 border border-gray-300 rounded px-2 py-1"
                       type="number"
+                      min={1}
                       value={item.quantity || 0}
-                      disabled
+                      onChange={(e) =>
+                        handleQuantityChange(item, e.target.value)
+                      }
                     />
                   </TableCell>
                   <TableCell>

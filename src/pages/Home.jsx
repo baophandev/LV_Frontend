@@ -16,7 +16,7 @@ import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import FloatingChatBot from "../components/FloatingChatBot";
 import { getProductRecommendations } from "../api/recomendation";
-import { getProductDiscountedApi } from "../api/productApi";
+import { getCurrentBannerApi, getProductDiscountedApi } from "../api/productApi";
 import CountdownTimer from "../components/CountdownTimer"; 
 import { Link } from "react-router-dom";
 
@@ -41,6 +41,7 @@ export const Home = () => {
 
   const [recmdProducts, setRecmdProducts] = useState([]);
   const [productDiscounteds, setProductDiscounteds] = useState([]);
+  const [banner, setBanner] = useState(null);
 
   useEffect(() => {
     dispatch(fetchProducts({ pageNumber: currentPage, pageSize: 20 }));
@@ -77,6 +78,20 @@ export const Home = () => {
     fecthProductDiscounteds();
   }, [])
 
+  useEffect(() => {
+    const fetchBanner = async () => {
+      try {
+        const data = await getCurrentBannerApi();
+        setBanner(data);
+      } catch (err) {
+        console.error("Error fetching banner:", err);
+      }
+    };
+
+    fetchBanner();
+  }, []);
+
+
   const handlePageClick = (page) => {
     dispatch(setPage(page - 1));
   };
@@ -108,12 +123,17 @@ export const Home = () => {
         {error}
       </Alert>
     );
+    
   return (
     <>
       <div className="w-full relative">
         <div className="bg-white flex flex-wrap items-center justify-center gap-20 w-full mx-auto p-4 rounded-md shadow">
           {categorys?.map((category, index) => (
-            <Link to={`/category/${category.id}`} key={index} className="flex items-center">
+            <Link
+              to={`/category/${category.id}`}
+              key={index}
+              className="flex items-center"
+            >
               <img
                 key={index}
                 className="w-12 h-12 object-contain rounded-lg cursor-pointer hover:scale-105 transition-transform duration-200"
@@ -124,15 +144,23 @@ export const Home = () => {
             </Link>
           ))}
         </div>
-        <div
-          className="w-full h-80"
-          style={{
-            backgroundImage: `url(${Banner})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        ></div>
+        {banner?.bannerImage?.data ? (
+          <div
+            className="w-full h-80"
+            style={{
+              backgroundImage: `url(data:image/${banner.bannerImage.imageType};base64,${banner.bannerImage.data})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+          </div>
+        ) : (
+          <div className="w-full h-80 bg-gray-200 flex items-center justify-center">
+            <span className="text-gray-500">Không có banner hiển thị</span>
+          </div>
+        )}
+
         <div className="w-full h-11 "></div>
         <div className="w-3/4 flex items-center mb-5 bg-gradient-to-r from-teal-600  via-blue-600 to-teal-600 p-3 gap-3 absolute bottom-1 shadow-sm rounded-md left-1/2 transform -translate-x-1/2">
           <select

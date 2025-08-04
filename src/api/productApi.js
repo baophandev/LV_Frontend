@@ -114,3 +114,12 @@ export const searchProductApi = async ({ name }) => {
     throw error;
   }
 };
+
+export const getCurrentBannerApi = async () => {
+  try {
+    const response = await axiosInstance.get("/banner/current");
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};

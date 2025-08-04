@@ -8,7 +8,6 @@ import { Snackbar, Alert } from "@mui/material";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
-import UndoOutlinedIcon from "@mui/icons-material/UndoOutlined";
 
 const STATUS_CONFIG = {
   PENDING: { text: "CHỜ XÁC NHẬN", color: "bg-amber-100 text-amber-800" },
@@ -56,7 +55,7 @@ const ProductItem = ({ product, orderId }) => (
   </div>
 );
 
-const OrderCard = ({ product, status, id, orderDate }) => {
+const OrderCard = ({ product, status, id, orderDate, method }) => {
   const [statusRecently, setStatusRecently] = useState(status);
   const dispatch = useDispatch();
   const [openToast, setOpenToast] = useState(false);
@@ -136,6 +135,9 @@ const OrderCard = ({ product, status, id, orderDate }) => {
           <div className="text-lg font-bold text-red-600">
             {totalAmount.toLocaleString("vi-VN")}đ
           </div>
+          {method === "BANKING" && (
+            <div className="text-blue-500">* Đã thanh toán VNPAY</div>
+          )}
         </div>
       </div>
 
@@ -143,8 +145,8 @@ const OrderCard = ({ product, status, id, orderDate }) => {
       <div className="p-4 bg-white border-t">
         {statusRecently === "DELIVERING" && (
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="text-xs text-gray-500 max-w-md">
-              <Inventory2OutlinedIcon className="inline mr-1 w-4 h-4" />
+            <div className="text-sm max-w-md text-slate-700">
+              <Inventory2OutlinedIcon className="inline mr-1 w-4 h-4 text-red-500" />
               Vui lòng chỉ nhấn "Đã nhận hàng" khi bạn đã kiểm tra sản phẩm
             </div>
             <button

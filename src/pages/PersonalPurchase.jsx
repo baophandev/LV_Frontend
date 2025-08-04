@@ -33,7 +33,7 @@ export const PersonalPurchase = () => {
     const ordersCached = orderByStatus[selectedStatus];
     if (!ordersCached) {
       dispatch(
-        fetchOrders({ pageNumber: 0, pageSize: 10, status: selectedStatus, userId: userId })
+        fetchOrders({ pageNumber: 0, pageSize: 100, status: selectedStatus, userId: userId })
       );
     }
   }, [dispatch, selectedStatus, orderByStatus, userId]);
@@ -111,6 +111,7 @@ export const PersonalPurchase = () => {
                   product={item.items}
                   status={item.status}
                   id={item.orderId}
+                  method = {item.method}
                 ></OrderCard>
               ))
             ) : (

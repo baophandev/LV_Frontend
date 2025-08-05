@@ -40,9 +40,6 @@ export const Category = () => {
     dispatch(setPage(page - 1));
   };
 
-  console.log(error);
-  console.log(totalPages);
-
   if (status === "loading") return <Loading></Loading>;
   if (status === "failed")
     return (

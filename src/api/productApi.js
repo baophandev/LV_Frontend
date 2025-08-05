@@ -93,7 +93,7 @@ export const fecthProductFilterApi = async ({categoryId, sortDirection}) => {
       params: {
         status: "ACTIVE",
         categoryId: categoryId ? categoryId : null,
-        sortDirection: sortDirection,
+        sortDirection: sortDirection ? sortDirection : "DESC",
       }
     })
     return response.data;

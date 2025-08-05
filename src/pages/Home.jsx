@@ -104,14 +104,22 @@ export const Home = () => {
     }));
   };
 
-  const handleFilter = () => {
-    dispatch(
-      fecthProductFilter({
-        categoryId: filter.categoryId,
-        sortDirection: filter.sortDirection,
-      })
-    );
-  };
+ const handleFilter = () => {
+   const params = new URLSearchParams();
+
+   if (filter.categoryId) {
+     params.append("categoryId", filter.categoryId);
+   }
+
+   if (filter.sortDirection) {
+     params.append("sortDirection", filter.sortDirection);
+   }
+
+   params.append("status", "ACTIVE"); // nếu bạn luôn muốn gửi status
+
+   window.location = `/product/filter?${params.toString()}`;
+ };
+
 
   if (status === "loading") return <Loading></Loading>;
   if (status === "failed")
@@ -333,8 +341,8 @@ export const Home = () => {
                 Gợi ý dành riêng cho bạn
               </h2>
               <p className="text-gray-600 font-light max-w-2xl mx-auto">
-                Dựa trên sở thích và lịch sử mua sắm của bạn, chúng tôi đã
-                chọn lọc những sản phẩm phù hợp nhất
+                Dựa trên sở thích và lịch sử mua sắm của bạn, chúng tôi đã chọn
+                lọc những sản phẩm phù hợp nhất
               </p>
             </div>
 
@@ -354,7 +362,11 @@ export const Home = () => {
           </div>
         </section>
       )}
-
+      <div className="bg-slate-200 text-black py-20 px-8 text-center">
+        <h3 className="text-3xl font-serif font-light  mb-6">
+          Bảo hành 12 tháng - 1 đổi 1 trong vòng 30 ngày
+        </h3>
+      </div>
       {/* Signature Collection */}
       <section className="py-16 px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
@@ -393,6 +405,29 @@ export const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Luxury Footer Banner */}
+      {userId ? (
+        ""
+      ) : (
+        <div className="bg-slate-200 text-black py-20 px-8 text-center">
+          <h3 className="text-3xl font-serif font-light  mb-6">
+            Trở thành thành viên của chúng tôi
+          </h3>
+          <p className=" max-w-2xl mx-auto mb-8 font-light">
+            Tham gia cộng đồng yêu thích hàng hiệu và nhận những ưu đãi độc
+            quyền, tin tức mới nhất và nhiều hơn nữa. Chúng tôi cam kết mang đến
+            cho bạn những trải nghiệm mua sắm tốt nhất.
+          </p>
+          <Link
+            to={"/login"}
+            className="bg-transparent border  bg-black text-white border-black px-10 py-3 font-light tracking-wider transition-all duration-300"
+          >
+            ĐĂNG KÝ NGAY
+          </Link>
+        </div>
+      )}
+
       <FloatingChatBot />
     </div>
   );

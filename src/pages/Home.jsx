@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import ProductCart from "../components/ProductCart";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import ProductCart from "../components/ProductCart";
 import {
   fecthProductFilter,
   fetchProducts,
@@ -11,14 +12,20 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Pagination from "@mui/material/Pagination";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import Banner from "../assets/banner.png";
 import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import FloatingChatBot from "../components/FloatingChatBot";
 import { getProductRecommendations } from "../api/recomendation";
-import { getCurrentBannerApi, getProductDiscountedApi } from "../api/productApi";
-import CountdownTimer from "../components/CountdownTimer"; 
+import {
+  getCurrentBannerApi,
+  getProductDiscountedApi,
+} from "../api/productApi";
+import CountdownTimer from "../components/CountdownTimer";
 import { Link } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -26,9 +33,6 @@ export const Home = () => {
   const products = useSelector(
     (state) => state.product.products?.content || []
   );
-  // const productDiscounteds = useSelector(
-  //   (state) => state.product.discountedProducts?.content || []
-  // );
   const totalPages = useSelector((state) => state.product.page.totalPages);
   const currentPage = useSelector((state) => state.product.page.currentPage);
   const user = useSelector((state) => state.user.user);
@@ -38,7 +42,6 @@ export const Home = () => {
   const error = useSelector((state) => state.product.error);
 
   const [filter, setFilter] = useState({});
-
   const [recmdProducts, setRecmdProducts] = useState([]);
   const [productDiscounteds, setProductDiscounteds] = useState([]);
   const [banner, setBanner] = useState(null);
@@ -46,10 +49,6 @@ export const Home = () => {
   useEffect(() => {
     dispatch(fetchProducts({ pageNumber: currentPage, pageSize: 20 }));
   }, [dispatch, currentPage]);
-
-  // useEffect(() => {
-  //   dispatch(fecthProductDiscounteds());
-  // }, [dispatch]);
 
   useEffect(() => {
     const fetchRecmdProducts = async () => {
@@ -69,14 +68,17 @@ export const Home = () => {
   useEffect(() => {
     const fecthProductDiscounteds = async () => {
       try {
-        const response = await getProductDiscountedApi({pageNumber: 0, pageSize: 10});
-        setProductDiscounteds(response.content)
-      }catch(err){
+        const response = await getProductDiscountedApi({
+          pageNumber: 0,
+          pageSize: 10,
+        });
+        setProductDiscounteds(response.content);
+      } catch (err) {
         console.error("Error fetching discounted products:", err);
       }
-    }
+    };
     fecthProductDiscounteds();
-  }, [])
+  }, []);
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -90,7 +92,6 @@ export const Home = () => {
 
     fetchBanner();
   }, []);
-
 
   const handlePageClick = (page) => {
     dispatch(setPage(page - 1));
@@ -115,137 +116,198 @@ export const Home = () => {
   if (status === "loading") return <Loading></Loading>;
   if (status === "failed")
     return (
-      // <div className="flex items-center justify-center text-red-700">
-      //   Đã có lỗi xảy ra
-      // </div>
       <Alert severity="error">
         <AlertTitle>Error</AlertTitle>
         {error}
       </Alert>
     );
-    
+
   return (
-    <>
-      <div className="w-full relative">
-        <div className="bg-white flex flex-wrap items-center justify-center gap-20 w-full mx-auto p-4 rounded-md shadow">
-          {categorys?.map((category, index) => (
-            <Link
-              to={`/category/${category.id}`}
-              key={index}
-              className="flex items-center"
-            >
-              <img
-                key={index}
-                className="w-12 h-12 object-contain rounded-lg cursor-pointer hover:scale-105 transition-transform duration-200"
-                src={`data:image/png;base64,${category.categoryImages[0]?.data}`}
-                alt={category?.name || "Ảnh sản phẩm"}
-                // onClick={handleClickOpen}
-              />
-            </Link>
+    <div className="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen">
+      {/* Luxury Category Carousel */}
+      <div className="py-10 px-8 bg-white">
+        <Swiper
+          modules={[Autoplay]}
+          spaceBetween={30}
+          slidesPerView={7}
+          autoplay={{ delay: 3000 }}
+          loop={true}
+          className="mySwiper"
+        >
+          {categorys?.map((category) => (
+            <SwiperSlide key={category.id}>
+              <Link
+                to={`/category/${category.id}`}
+                className="flex flex-col items-center group"
+              >
+                <div className="bg-gray-100 rounded-full p-3 group-hover:bg-gray-200 transition-all duration-300">
+                  <img
+                    className="w-16 h-16 object-cover rounded-full"
+                    src={`data:image/png;base64,${category.categoryImages[0]?.data}`}
+                    alt={category?.name}
+                  />
+                </div>
+                <span className="mt-3 text-sm font-medium text-gray-700 group-hover:text-black text-center">
+                  {category.name}
+                </span>
+              </Link>
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
+      </div>
+
+      {/* Luxury Banner */}
+      <div className="relative h-[80vh] overflow-hidden">
         {banner?.bannerImage?.data ? (
-          <div
-            className="w-full h-80"
-            style={{
-              backgroundImage: `url(data:image/${banner.bannerImage.imageType};base64,${banner.bannerImage.data})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          >
+          <div className="absolute inset-0">
+            <img
+              src={`data:image/${banner.bannerImage.imageType};base64,${banner.bannerImage.data}`}
+              alt="Luxury Banner"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
           </div>
         ) : (
-          <div className="w-full h-80 bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-500">Không có banner hiển thị</span>
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-black flex items-center justify-center">
+            <span className="text-white text-xl font-light tracking-widest">
+              PREMIUM COLLECTION
+            </span>
           </div>
         )}
+        {/* <div className="relative z-10 flex flex-col justify-center h-full px-16 max-w-3xl">
+          <motion.h2
+            className="text-5xl font-serif font-light text-white mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            Timeless Elegance
+          </motion.h2>
+          <motion.p
+            className="text-xl text-gray-200 mb-8 font-light max-w-xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            Discover our exclusive collection crafted with precision and passion
+          </motion.p>
+          <motion.button
+            className="bg-transparent border border-white text-white px-8 py-3 w-48 font-light tracking-wide hover:bg-white hover:text-black transition-all duration-300"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            EXPLORE
+          </motion.button>
+        </div> */}
+      </div>
 
-        <div className="w-full h-11 "></div>
-        <div className="w-3/4 flex items-center mb-5 bg-gradient-to-r from-teal-600  via-blue-600 to-teal-600 p-3 gap-3 absolute bottom-1 shadow-sm rounded-md left-1/2 transform -translate-x-1/2">
-          <select
-            onChange={(e) => {
-              handleChange("categoryId", e.target.value);
-            }}
-            className="border w-52 px-3 py-1 rounded-md"
-            name=""
-            id=""
-          >
-            <option value="">Tất cả sản phẩm</option>
-            {categorys?.map((category) => (
-              <option value={category.id} key={category.id}>
-                {category.name}{" "}
-              </option>
-            ))}
-          </select>
-          <div className="flex items-center gap-2 ">
-            <div
-              className={`border py-1 px-2 rounded-md text-sm cursor-pointer bg-white ${
-                filter.sortDirection === "DESC" ? "text-sky-500" : ""
-              }`}
-              onClick={() => handleChange("sortDirection", "DESC")}
-            >
-              <ArrowDownwardOutlinedIcon></ArrowDownwardOutlinedIcon> Giá cao -
-              thấp
+      {/* Luxury Filter */}
+      <div className="bg-gray-800 py-8 px-16">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <h3 className="text-white text-xl font-light tracking-wider">
+            LỌC SẢN PHẨM
+          </h3>
+
+          <div className="flex items-center space-x-6">
+            <div className="relative">
+              <select
+                onChange={(e) => handleChange("categoryId", e.target.value)}
+                className="bg-transparent border-b border-gray-500 text-white px-4 py-2 appearance-none focus:outline-none focus:border-white transition-all w-52"
+              >
+                <option value="" className="bg-gray-800">
+                  Tất cả danh mục
+                </option>
+                {categorys?.map((category) => (
+                  <option
+                    value={category.id}
+                    key={category.id}
+                    className="bg-gray-800"
+                  >
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <div
-              className={`border py-1 px-2 rounded-md text-sm cursor-pointer bg-white ${
-                filter.sortDirection === "ASC" ? "text-sky-500" : ""
-              }`}
-              onClick={() => handleChange("sortDirection", "ASC")}
-            >
-              <ArrowUpwardOutlinedIcon></ArrowUpwardOutlinedIcon> Giá thấp - cao
+
+            <div className="flex space-x-3">
+              <button
+                className={`px-4 py-2 text-sm font-light tracking-wide ${
+                  filter.sortDirection === "DESC"
+                    ? "bg-white text-black"
+                    : "text-gray-300 hover:text-white"
+                } transition-all`}
+                onClick={() => handleChange("sortDirection", "DESC")}
+              >
+                <ArrowDownwardOutlinedIcon className="mr-1" /> Giá cao - thấp
+              </button>
+              <button
+                className={`px-4 py-2 text-sm font-light tracking-wide ${
+                  filter.sortDirection === "ASC"
+                    ? "bg-white text-black"
+                    : "text-gray-300 hover:text-white"
+                } transition-all`}
+                onClick={() => handleChange("sortDirection", "ASC")}
+              >
+                <ArrowUpwardOutlinedIcon className="mr-1" /> Giá thấp - cao
+              </button>
             </div>
-          </div>
-          <div
-            className="cursor-pointer px-3 py-1 rounded-md text-blue-500 bg-white font-semibold"
-            onClick={handleFilter}
-          >
-            <FilterAltOutlinedIcon></FilterAltOutlinedIcon>Lọc sản phẩm
+
+            <button
+              className="flex items-center gap-2 text-black bg-white px-6 py-2 font-light tracking-wide hover:bg-gray-200 transition-all"
+              onClick={handleFilter}
+            >
+              <FilterAltOutlinedIcon /> Lọc
+            </button>
           </div>
         </div>
       </div>
-      <>
-        <div className="w-full sm:w-3/4 flex justify-start mb-3">
-          <CountdownTimer initialMinutes={180} /> {/* bắt đầu với 3 giờ */}
-        </div>
-        <div className="w-full sm:w-3/4">
-          {/* <Carousel images={adImages}></Carousel> */}
-          <div
-            className="w-full flex gap-2 items-center justify-start shadow-sm bg-blue-100 rounded-xl p-3 overflow-x-auto whitespace-nowrapscrollbar-thin scrollbar-thumb-slate-400
-      scrollbar-track-transparent"
-          >
-            {productDiscounteds?.map((product) => (
-              <div key={product.id} className="">
-                <ProductCart
-                  id={product.id}
-                  image={product.productAvatar.data}
-                  name={product.name}
-                  price={product.firstVariantPrice || 0}
-                  discountDisplayed={product.discountDisplayed}
-                  category={product.category.name}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </>
-      {userId && (
-        <>
-          <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
-            <div className="">DÀNH CHO BẠN</div>
+
+      {/* Premium Promotion Section */}
+      <section className="py-16 px-8 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 border-b border-gray-200 pb-6">
+            <div>
+              <h2 className="text-3xl font-sans font-light text-gray-900 mb-2">
+                Ưu đãi độc quyền
+              </h2>
+              <p className="text-gray-600 font-light">
+                Khuyến mãi đặc biệt trong thời gian có hạn
+              </p>
+            </div>
+            <div className="flex items-center space-x-4 mt-4 md:mt-0">
+              <CountdownTimer initialMinutes={180} />
+            </div>
           </div>
 
-          <div className="w-full sm:w-3/4">
-            {/* <Carousel images={adImages}></Carousel> */}
-            <div
-              className="w-full flex gap-2 items-center justify-start bg-blue-100 rounded-xl p-3 overflow-x-auto whitespace-nowrapscrollbar-thin scrollbar-thumb-slate-400
-      scrollbar-track-transparent"
-            >
-              {recmdProducts?.map((product) => (
-                <div key={product.id} className="">
+          <Swiper
+            modules={[Autoplay]}
+            spaceBetween={30}
+            slidesPerView={4}
+            autoplay={{ delay: 4000 }}
+            loop={true}
+            className="mySwiper"
+          >
+            {productDiscounteds?.map((product) => (
+              <SwiperSlide key={product.id}>
+                <motion.div
+                  className=" overflow-hidden"
+                  transition={{ duration: 0.3 }}
+                >
                   <ProductCart
                     id={product.id}
                     image={product.productAvatar.data}
@@ -253,51 +315,85 @@ export const Home = () => {
                     price={product.firstVariantPrice || 0}
                     discountDisplayed={product.discountDisplayed}
                     category={product.category.name}
+                    premiumStyle={true}
                   />
-                </div>
+                </motion.div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </section>
+
+      {/* Personalized Recommendations */}
+      {userId && recmdProducts.length > 0 && (
+        <section className="py-16 px-8 bg-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-12 text-center">
+              <h2 className="text-3xl font-sans font-light text-gray-900 mb-2">
+                Gợi ý dành riêng cho bạn
+              </h2>
+              <p className="text-gray-600 font-light max-w-2xl mx-auto">
+                Dựa trên sở thích và lịch sử mua sắm của bạn, chúng tôi đã
+                chọn lọc những sản phẩm phù hợp nhất
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {recmdProducts?.map((product) => (
+                <ProductCart
+                  id={product.id}
+                  image={product.productAvatar.data}
+                  name={product.name}
+                  price={product.firstVariantPrice || 0}
+                  discountDisplayed={product.discountDisplayed}
+                  category={product.category.name}
+                  premiumStyle={true}
+                />
               ))}
             </div>
           </div>
-        </>
+        </section>
       )}
 
-      <div className="uppercase text-2xl font-extrabold p-3 text-slate-700 w-full sm:w-3/4">
-        <div className="">SẢN PHẨM HÀNG ĐẦU</div>
-      </div>
+      {/* Signature Collection */}
+      <section className="py-16 px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-sans font-light text-gray-900 mb-4">
+              Sản phẩm hàng đầu
+            </h2>
+            <div className="w-24 h-px bg-gray-400 mx-auto"></div>
+          </div>
 
-      <div className="w-full sm:w-3/4 px-4">
-        <div
-          className="grid gap-8 mx-auto"
-          style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            maxWidth: "1400px", // ✅ giới hạn chiều rộng để Grid không bị dàn quá rộng
-          }}
-        >
-          {products?.map((product) => (
-            <ProductCart
-              key={product.id}
-              id={product.id}
-              image={product.productAvatar.data}
-              name={product.name}
-              price={product.firstVariantPrice || 0}
-              discountDisplayed={product.discountDisplayed}
-              category={product.category.name}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {products?.map((product, index) => (
+              <ProductCart
+                id={product.id}
+                image={product.productAvatar.data}
+                name={product.name}
+                price={product.firstVariantPrice || 0}
+                discountDisplayed={product.discountDisplayed}
+                category={product.category.name}
+                premiumStyle={true}
+              />
+            ))}
+          </div>
+
+          <div className="mt-16 flex justify-center">
+            <Pagination
+              count={totalPages}
+              variant="outlined"
+              shape="rounded"
+              color="primary"
+              size="large"
+              page={currentPage + 1}
+              onChange={(event, value) => handlePageClick(value)}
+              className="border-gray-300"
             />
-          ))}
+          </div>
         </div>
-
-        <div className="flex justify-center mt-6">
-          <Pagination
-            count={totalPages}
-            variant="outlined"
-            color="primary"
-            page={currentPage + 1}
-            onChange={(event, value) => handlePageClick(value)}
-          />
-        </div>
-      </div>
-
+      </section>
       <FloatingChatBot />
-    </>
+    </div>
   );
 };

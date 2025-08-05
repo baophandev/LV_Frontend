@@ -7,10 +7,10 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { fetchCategorys } from "../redux/slices/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ThemeColor from "../constant/theme";
 import { getMyInfo, getUserAddress, logout } from "../redux/slices/userSlice";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
@@ -19,6 +19,29 @@ import { fetchCart } from "../redux/slices/cartSlice";
 import useVoiceSearch from "../hooks/useVoiceSearch";
 import { searchProductApi } from "../api/productApi";
 import _ from "lodash";
+import { styled } from "@mui/system";
+
+// Custom styled components
+const GlassMenu = styled(Menu)(({ theme }) => ({
+  "& .MuiPaper-root": {
+    borderRadius: "16px",
+    boxShadow: "0 8px 32px rgba(31, 38, 135, 0.18)",
+    marginTop: "8px",
+    minWidth: "220px",
+    border: "1px solid rgba(255, 255, 255, 0.18)",
+    background: "rgba(255, 255, 255, 0.85)",
+    backdropFilter: "blur(12px)",
+    color: "#333",
+  },
+  "& .MuiMenuItem-root": {
+    padding: "12px 20px",
+    fontSize: "0.95rem",
+    transition: "all 0.3s ease",
+    "&:hover": {
+      background: "rgba(200, 220, 255, 0.25)",
+    },
+  },
+}));
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -29,6 +52,7 @@ const Header = () => {
   const userId = user.id;
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const searchRef = useRef(null);
 
   // Voice search hook
   const {
@@ -102,6 +126,7 @@ const Header = () => {
   const clearSearch = () => {
     setSearchQuery("");
     resetTranscript();
+    setShowResults(false);
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -127,20 +152,19 @@ const Header = () => {
       } catch (err) {
         console.error("Lỗi tìm kiếm:", err);
       }
-    }, 400) // delay 400ms
+    }, 400)
   ).current;
 
   useEffect(() => {
     debouncedSearch(searchQuery);
     return () => {
-      debouncedSearch.cancel(); // cleanup nếu người dùng gõ quá nhanh
+      debouncedSearch.cancel();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery]);
+  }, [searchQuery, debouncedSearch]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!e.target.closest(".search-dropdown")) {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
         setShowResults(false);
       }
     };
@@ -156,117 +180,162 @@ const Header = () => {
         left: 0,
         right: 0,
         zIndex: 9999,
-        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+        background: "rgba(255, 255, 255, 0.72)",
+        backdropFilter: "blur(16px)",
+        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.7)",
       }}
-      className="bg-blue-50"
     >
-      <div className="flex justify-between items-center px-6 py-2 max-w-screen-xl mx-auto">
+      <div className="flex justify-between items-center px-8 py-3 max-w-screen-xl mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <img
             src={Logo}
             alt="Logo"
-            className="w-24 hidden md:block"
-            style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.1))" }}
+            className="w-32 hidden md:block transition-all duration-300 hover:opacity-90"
+            style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))" }}
           />
         </Link>
 
-        {/* Ô tìm kiếm */}
-        <form
-          onSubmit={handleSearchSubmit}
-          className="h-12 relative flex items-center bg-white px-4 py-3 rounded-full w-64 sm:w-72 md:w-96 border border-blue-100 shadow-sm transition-all duration-300 hover:shadow-md focus-within:shadow-lg focus-within:border-blue-300"
-        >
-          <input
-            className="flex-grow bg-transparent outline-none text-sm pr-2 placeholder-gray-400"
-            spellCheck="false"
-            placeholder={isListening ? "Đang nghe..." : "Tìm kiếm sản phẩm..."}
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={clearSearch}
-              className="mr-2 text-gray-400 hover:text-blue-600 transition-colors"
-              title="Xóa tìm kiếm"
-            >
-              ×
-            </button>
-          )}
-
-          {isSupported && (
-            <button
-              type="button"
-              onClick={handleVoiceSearch}
-              className={`mr-3 p-1 rounded-full transition-all duration-200 ${
-                isListening
-                  ? "bg-red-500 text-white animate-pulse shadow-lg"
-                  : "text-blue-600 hover:bg-emerald-50 hover:text-blue-700"
-              }`}
-              title={
-                isListening
-                  ? "Đang nghe... (Click để dừng)"
-                  : "Tìm kiếm bằng giọng nói"
+        {/* Search Section */}
+        <div className="relative flex-grow max-w-2xl mx-8" ref={searchRef}>
+          <form
+            onSubmit={handleSearchSubmit}
+            className="h-14 relative flex items-center bg-white/90 px-5 py-3 rounded-xl w-full border border-white shadow-lg transition-all duration-300 focus-within:border-blue-300 focus-within:shadow-xl"
+            style={{
+              boxShadow: "0 6px 20px rgba(100, 130, 255, 0.15)",
+            }}
+          >
+            <input
+              className="flex-grow bg-transparent outline-none text-gray-800 placeholder-gray-500 pr-2 text-base"
+              spellCheck="false"
+              placeholder={
+                isListening ? "Đang nghe..." : "Tìm kiếm điện thoại cao cấp..."
               }
-            >
-              {isListening ? (
-                <MicOffIcon fontSize="small" />
-              ) : (
-                <MicIcon fontSize="small" />
-              )}
-            </button>
-          )}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
 
-          <button
-            type="submit"
-            className="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded-full text-white transition-colors shadow-md"
-          >
-            <SearchIcon fontSize="small" />
-          </button>
-        </form>
-        {showResults && searchResults.length > 0 && (
-          <div className="absolute top-full mt-1 left-1/4 w-1/2 bg-blue-50 border rounded-md shadow-lg z-50 max-h-60 overflow-auto">
-            {searchResults.map((item, index) => (
-              <Link
-                to={`/product/${item.id}`} // đường dẫn chi tiết sản phẩm
-                key={index}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-white"
-                onClick={() => {
-                  setShowResults(false);
-                  setSearchQuery("");
-                }}
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={clearSearch}
+                className="mr-3 text-gray-500 hover:text-gray-800 transition-colors text-xl"
+                title="Xóa tìm kiếm"
               >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        )}
+                ×
+              </button>
+            )}
 
-        {/* Các action */}
-        <div className="flex items-center gap-5">
-          {/* Giỏ hàng */}
-          <Link
-            to="/cart"
-            className="relative flex items-center gap-2 text-blue-800 hover:text-blue-600 transition-colors"
-          >
-            <div className="p-2 rounded-full hover:bg-emerald-50 transition-colors">
+            {isSupported && (
+              <button
+                type="button"
+                onClick={handleVoiceSearch}
+                className={`mr-4 p-2 rounded-full transition-all duration-200 ${
+                  isListening
+                    ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white animate-pulse"
+                    : "text-gray-600 hover:text-blue-600"
+                }`}
+                title={
+                  isListening
+                    ? "Đang nghe... (Click để dừng)"
+                    : "Tìm kiếm bằng giọng nói"
+                }
+              >
+                {isListening ? (
+                  <MicOffIcon fontSize="medium" />
+                ) : (
+                  <MicIcon fontSize="medium" />
+                )}
+              </button>
+            )}
+
+            <button
+              type="submit"
+              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 rounded-xl text-white transition-all shadow-md flex items-center justify-center"
+              style={{
+                boxShadow: "0 4px 12px rgba(80, 100, 255, 0.3)",
+              }}
+            >
+              <SearchIcon fontSize="medium" />
+            </button>
+          </form>
+
+          {/* Search Results Dropdown */}
+          {showResults && searchResults.length > 0 && (
+            <div
+              className="absolute top-full mt-2 w-full bg-white/95 backdrop-blur-xl border border-white rounded-xl shadow-2xl z-50 max-h-80 overflow-auto"
+              style={{
+                boxShadow: "0 12px 40px rgba(0, 0, 0, 0.15)",
+                border: "1px solid rgba(255, 255, 255, 0.8)",
+              }}
+            >
+              <div className="py-2">
+                {searchResults.map((item) => (
+                  <Link
+                    to={`/product/${item.id}`}
+                    key={item.id}
+                    className="flex items-center px-5 py-3 text-gray-700 hover:bg-blue-50/60 transition-all border-b border-gray-100 last:border-0"
+                    onClick={() => {
+                      setShowResults(false);
+                      setSearchQuery("");
+                    }}
+                  >
+                    <div className="bg-gray-100 border rounded-lg w-12 h-12 mr-4 flex items-center justify-center">
+                      <div className="bg-gray-200 border-2 border-dashed rounded w-10 h-10" />
+                    </div>
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {item.name}
+                      </div>
+                      <div className="text-blue-600 font-medium text-sm mt-1">
+                        {new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(item.price)}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-6">
+          {/* Cart */}
+          <Link to="/cart" className="relative flex items-center gap-2 group">
+            <div
+              className="p-2.5 rounded-xl bg-white/90 backdrop-blur border border-white shadow-sm hover:shadow transition-all"
+              style={{
+                boxShadow: "0 4px 12px rgba(100, 120, 255, 0.1)",
+              }}
+            >
               <ShoppingCartOutlinedIcon
                 fontSize="medium"
-                style={{ color: ThemeColor.DARK_GREEN }}
+                className="text-gray-700 group-hover:text-blue-600 transition-colors"
               />
             </div>
-            <span className="absolute top-0 right-0 text-xs bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center shadow transform -translate-y-1 translate-x-1">
+            <span
+              className="absolute -top-1.5 -right-1.5 text-xs bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md transform"
+              style={{
+                boxShadow: "0 2px 6px rgba(80, 100, 255, 0.3)",
+              }}
+            >
               {count || 0}
             </span>
           </Link>
 
-          {/* Người dùng */}
+          {/* User */}
           {Object.keys(user).length === 0 ? (
             <Link
               to="/login"
-              className="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-blue-700 text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
+              className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white px-6 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-all shadow-lg hover:shadow-xl"
+              style={{
+                boxShadow: "0 4px 12px rgba(80, 100, 255, 0.3)",
+              }}
             >
               <LoginIcon fontSize="small" />
               <span className="hidden sm:inline">Đăng nhập</span>
@@ -274,63 +343,78 @@ const Header = () => {
           ) : (
             <>
               <Button
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
+                id="glass-menu-button"
+                aria-controls={open ? "glass-menu" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
                 className="focus:outline-none"
               >
                 {user.avatar ? (
-                  <div className="border-2 border-blue-500 rounded-full p-0.5">
+                  <div
+                    className="border border-white rounded-xl p-0.5 bg-white/80 backdrop-blur shadow-sm"
+                    style={{
+                      boxShadow: "0 4px 10px rgba(100, 120, 255, 0.15)",
+                    }}
+                  >
                     <img
-                      className="w-9 h-9 rounded-full object-cover shadow"
+                      className="w-10 h-10 rounded-lg object-cover"
                       src={`data:image/png;base64,${user.avatar?.data}`}
                       alt="Avatar"
                     />
                   </div>
                 ) : (
-                  <div className="p-2 rounded-full bg-emerald-100 text-blue-700">
-                    <AccountCircleOutlinedIcon sx={{ fontSize: 28 }} />
+                  <div
+                    className="p-2.5 rounded-xl bg-white/80 backdrop-blur border border-white shadow-sm"
+                    style={{
+                      boxShadow: "0 4px 10px rgba(100, 120, 255, 0.15)",
+                    }}
+                  >
+                    <AccountCircleOutlinedIcon
+                      sx={{ fontSize: 30 }}
+                      className="text-blue-600"
+                    />
                   </div>
                 )}
               </Button>
 
-              <Menu
-                id="basic-menu"
+              <GlassMenu
+                id="glass-menu"
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
-                MenuListProps={{ "aria-labelledby": "basic-button" }}
-                sx={{
-                  zIndex: 9999,
-                  "& .MuiPaper-root": {
-                    borderRadius: "12px",
-                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                    marginTop: "8px",
-                    minWidth: "200px",
-                  },
-                }}
+                MenuListProps={{ "aria-labelledby": "glass-menu-button" }}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
-                <MenuItem onClick={handleClose} className="hover:bg-emerald-50">
-                  <Link to="/user/account" className="text-blue-700 flex-1">
+                <MenuItem onClick={handleClose}>
+                  <Link
+                    to="/user/account"
+                    className="text-gray-700 hover:text-blue-600 flex items-center gap-3 w-full"
+                  >
+                    <AccountCircleOutlinedIcon fontSize="small" />
                     Tài khoản
                   </Link>
                 </MenuItem>
-                <MenuItem onClick={handleClose} className="hover:bg-emerald-50">
-                  <Link to="/user/purchase" className="text-blue-700 flex-1">
+                <MenuItem onClick={handleClose}>
+                  <Link
+                    to="/user/purchase"
+                    className="text-gray-700 hover:text-blue-600 flex items-center gap-3 w-full"
+                  >
+                    <ShoppingCartOutlinedIcon fontSize="small" />
                     Đơn mua
                   </Link>
                 </MenuItem>
-                <MenuItem onClick={handleClose} className="hover:bg-red-50">
-                  <span
+                <MenuItem onClick={handleClose}>
+                  <div
                     onClick={handleLogout}
-                    className="text-red-500 cursor-pointer flex-1"
+                    className="text-red-500 hover:text-red-600 cursor-pointer flex items-center gap-3 w-full"
                   >
+                    <LoginIcon fontSize="small" className="rotate-180" />
                     Đăng xuất
-                  </span>
+                  </div>
                 </MenuItem>
-              </Menu>
+              </GlassMenu>
             </>
           )}
         </div>

@@ -29,7 +29,7 @@ const CountdownTimer = ({ initialMinutes = 120 }) => {
   };
 
   return (
-    <div className="text-red-600 font-bold text-2xl bg-white px-3 py-1 rounded-md shadow-md">
+    <div className="text-red-600 font-bold text-2xl bg-white px-3 py-1">
       🔥 Flash Sale kết thúc sau: {formatTime(timeLeft)}
     </div>
   );

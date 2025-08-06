@@ -8,12 +8,11 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
-import ThemeColor from "../constant/theme";
 
 const options = [
-  "Create a merge commit",
-  "Squash and merge",
-  "Rebase and merge",
+  "🐕 Sắp xếp theo tên",
+  "💰 Sắp xếp theo giá",
+  "⭐ Sắp xếp theo đánh giá",
 ];
 
 export default function SplitGroup() {
@@ -44,36 +43,55 @@ export default function SplitGroup() {
 
   return (
     <React.Fragment>
-      <ButtonGroup ref={anchorRef} aria-label="Button group with a nested menu">
+      <ButtonGroup
+        ref={anchorRef}
+        aria-label="Pet store sort options"
+        sx={{
+          "& .MuiButton-root": {
+            borderColor: "#f97316 !important",
+            "&:hover": {
+              backgroundColor: "#fed7aa",
+              borderColor: "#ea580c !important",
+            },
+          },
+        }}
+      >
         <Button
           size="small"
           aria-controls={open ? "split-button-menu" : undefined}
           aria-expanded={open ? "true" : undefined}
-          aria-label="select merge strategy"
+          aria-label="select sort strategy"
           aria-haspopup="menu"
           onClick={handleToggle}
-          style={{
-            borderColor: ThemeColor.DARK_GREEN,
+          sx={{
+            color: "#f97316",
+            borderColor: "#f97316",
+            "&:hover": {
+              backgroundColor: "#fed7aa",
+            },
           }}
         >
           <DehazeIcon
             sx={{
-              color: ThemeColor.DARK_GREEN,
+              color: "#f97316",
             }}
           />
         </Button>
         <Button
           onClick={handleClick}
           sx={{
-            color: ThemeColor.DARK_GREEN,
-            borderColor: ThemeColor.DARK_GREEN,
+            color: "#f97316",
+            borderColor: "#f97316",
+            "&:hover": {
+              backgroundColor: "#fed7aa",
+            },
           }}
         >
           {options[selectedIndex]}
         </Button>
       </ButtonGroup>
       <Popper
-        sx={{ zIndex: 1 }}
+        sx={{ zIndex: 1000 }}
         open={open}
         anchorEl={anchorRef.current}
         role={undefined}
@@ -88,15 +106,45 @@ export default function SplitGroup() {
                 placement === "bottom" ? "center top" : "center bottom",
             }}
           >
-            <Paper>
+            <Paper
+              sx={{
+                border: "2px solid #f97316",
+                borderRadius: "12px",
+                overflow: "hidden",
+                boxShadow: "0 10px 25px rgba(249, 115, 22, 0.15)",
+              }}
+            >
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList id="split-button-menu" autoFocusItem>
+                <MenuList
+                  id="split-button-menu"
+                  autoFocusItem
+                  sx={{
+                    padding: 0,
+                    backgroundColor: "#fff9f5",
+                  }}
+                >
                   {options.map((option, index) => (
                     <MenuItem
                       key={option}
-                      disabled={index === 2}
                       selected={index === selectedIndex}
                       onClick={(event) => handleMenuItemClick(event, index)}
+                      sx={{
+                        padding: "12px 16px",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        color: "#374151",
+                        "&:hover": {
+                          backgroundColor: "#fed7aa",
+                          color: "#ea580c",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "#f97316",
+                          color: "white",
+                          "&:hover": {
+                            backgroundColor: "#ea580c",
+                          },
+                        },
+                      }}
                     >
                       {option}
                     </MenuItem>

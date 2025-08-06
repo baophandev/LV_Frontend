@@ -25,11 +25,11 @@ import { styled } from "@mui/system";
 const GlassMenu = styled(Menu)(({ theme }) => ({
   "& .MuiPaper-root": {
     borderRadius: "16px",
-    boxShadow: "0 8px 32px rgba(31, 38, 135, 0.18)",
+    boxShadow: "0 8px 32px rgba(251, 146, 60, 0.25)",
     marginTop: "8px",
     minWidth: "220px",
-    border: "1px solid rgba(255, 255, 255, 0.18)",
-    background: "rgba(255, 255, 255, 0.85)",
+    border: "1px solid rgba(251, 146, 60, 0.2)",
+    background: "rgba(255, 248, 240, 0.9)",
     backdropFilter: "blur(12px)",
     color: "#333",
   },
@@ -38,7 +38,7 @@ const GlassMenu = styled(Menu)(({ theme }) => ({
     fontSize: "0.95rem",
     transition: "all 0.3s ease",
     "&:hover": {
-      background: "rgba(200, 220, 255, 0.25)",
+      background: "rgba(251, 146, 60, 0.15)",
     },
   },
 }));
@@ -180,10 +180,10 @@ const Header = () => {
         left: 0,
         right: 0,
         zIndex: 9999,
-        background: "rgba(255, 255, 255, 0.72)",
+        background: "rgba(255, 248, 240, 0.85)",
         backdropFilter: "blur(16px)",
-        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.7)",
+        boxShadow: "0 4px 20px rgba(251, 146, 60, 0.15)",
+        borderBottom: "1px solid rgba(251, 146, 60, 0.2)",
       }}
     >
       <div className="flex justify-between items-center px-8 py-3 max-w-screen-xl mx-auto">
@@ -192,7 +192,7 @@ const Header = () => {
           <img
             src={Logo}
             alt="Logo"
-            className="w-32 hidden md:block transition-all duration-300 hover:opacity-90"
+            className="w-16 hidden md:block transition-all duration-300 hover:opacity-90"
             style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))" }}
           />
         </Link>
@@ -201,16 +201,18 @@ const Header = () => {
         <div className="relative flex-grow max-w-2xl mx-8" ref={searchRef}>
           <form
             onSubmit={handleSearchSubmit}
-            className="h-14 relative flex items-center bg-white/90 px-5 py-3 rounded-xl w-full border border-white shadow-lg transition-all duration-300 focus-within:border-blue-300 focus-within:shadow-xl"
+            className="h-14 relative flex items-center bg-white/95 px-5 py-3 rounded-xl w-full border border-orange-200 shadow-lg transition-all duration-300 focus-within:border-orange-300 focus-within:shadow-xl"
             style={{
-              boxShadow: "0 6px 20px rgba(100, 130, 255, 0.15)",
+              boxShadow: "0 6px 20px rgba(251, 146, 60, 0.2)",
             }}
           >
             <input
               className="flex-grow bg-transparent outline-none text-gray-800 placeholder-gray-500 pr-2 text-base"
               spellCheck="false"
               placeholder={
-                isListening ? "Đang nghe..." : "Tìm kiếm điện thoại cao cấp..."
+                isListening
+                  ? "🎤 Đang nghe..."
+                  : "🐾 Tìm kiếm sản phẩm cho thú cưng..."
               }
               type="text"
               value={searchQuery}
@@ -234,13 +236,13 @@ const Header = () => {
                 onClick={handleVoiceSearch}
                 className={`mr-4 p-2 rounded-full transition-all duration-200 ${
                   isListening
-                    ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white animate-pulse"
-                    : "text-gray-600 hover:text-blue-600"
+                    ? "bg-gradient-to-r from-orange-500 to-red-500 text-white animate-pulse"
+                    : "text-gray-600 hover:text-orange-600"
                 }`}
                 title={
                   isListening
-                    ? "Đang nghe... (Click để dừng)"
-                    : "Tìm kiếm bằng giọng nói"
+                    ? "🎤 Đang nghe... (Click để dừng)"
+                    : "🎙️ Tìm kiếm bằng giọng nói"
                 }
               >
                 {isListening ? (
@@ -253,9 +255,9 @@ const Header = () => {
 
             <button
               type="submit"
-              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 rounded-xl text-white transition-all shadow-md flex items-center justify-center"
+              className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 rounded-xl text-white transition-all shadow-md flex items-center justify-center"
               style={{
-                boxShadow: "0 4px 12px rgba(80, 100, 255, 0.3)",
+                boxShadow: "0 4px 12px rgba(251, 146, 60, 0.4)",
               }}
             >
               <SearchIcon fontSize="medium" />
@@ -265,35 +267,48 @@ const Header = () => {
           {/* Search Results Dropdown */}
           {showResults && searchResults.length > 0 && (
             <div
-              className="absolute top-full mt-2 w-full bg-white/95 backdrop-blur-xl border border-white rounded-xl shadow-2xl z-50 max-h-80 overflow-auto"
+              className="absolute top-full mt-2 w-full bg-white/96 backdrop-blur-xl border border-orange-200 rounded-xl shadow-2xl z-50 max-h-80 overflow-auto"
               style={{
-                boxShadow: "0 12px 40px rgba(0, 0, 0, 0.15)",
-                border: "1px solid rgba(255, 255, 255, 0.8)",
+                boxShadow: "0 12px 40px rgba(251, 146, 60, 0.2)",
+                border: "1px solid rgba(251, 146, 60, 0.3)",
               }}
             >
               <div className="py-2">
+                <div className="px-4 py-2 text-xs font-medium text-orange-600 border-b border-orange-100">
+                  🐾 Kết quả tìm kiếm sản phẩm thú cưng
+                </div>
                 {searchResults.map((item) => (
                   <Link
                     to={`/product/${item.id}`}
                     key={item.id}
-                    className="flex items-center px-5 py-3 text-gray-700 hover:bg-blue-50/60 transition-all border-b border-gray-100 last:border-0"
+                    className="flex items-center px-5 py-3 text-gray-700 hover:bg-orange-50/80 transition-all border-b border-gray-100 last:border-0"
                     onClick={() => {
                       setShowResults(false);
                       setSearchQuery("");
                     }}
                   >
-                    <div className="bg-gray-100 border rounded-lg w-12 h-12 mr-4 flex items-center justify-center">
-                      <div className="bg-gray-200 border-2 border-dashed rounded w-10 h-10" />
+                    <div className="bg-orange-50 border border-orange-200 rounded-lg w-12 h-12 mr-4 flex items-center justify-center">
+                      {item.productAvatar?.data ? (
+                        <img
+                          src={`data:image/png;base64,${item.productAvatar.data}`}
+                          alt={item.name}
+                          className="w-10 h-10 rounded object-cover"
+                        />
+                      ) : (
+                        <div className="bg-orange-200 border-2 border-dashed border-orange-300 rounded w-10 h-10 flex items-center justify-center text-orange-600">
+                          🐾
+                        </div>
+                      )}
                     </div>
                     <div>
                       <div className="font-medium text-gray-900">
                         {item.name}
                       </div>
-                      <div className="text-blue-600 font-medium text-sm mt-1">
+                      <div className="text-orange-600 font-medium text-sm mt-1">
                         {new Intl.NumberFormat("vi-VN", {
                           style: "currency",
                           currency: "VND",
-                        }).format(item.price)}
+                        }).format(item.price || item.firstVariantPrice || 0)}
                       </div>
                     </div>
                   </Link>
@@ -308,20 +323,20 @@ const Header = () => {
           {/* Cart */}
           <Link to="/cart" className="relative flex items-center gap-2 group">
             <div
-              className="p-2.5 rounded-xl bg-white/90 backdrop-blur border border-white shadow-sm hover:shadow transition-all"
+              className="p-2.5 rounded-xl bg-white/95 backdrop-blur border border-orange-200 shadow-sm hover:shadow transition-all"
               style={{
-                boxShadow: "0 4px 12px rgba(100, 120, 255, 0.1)",
+                boxShadow: "0 4px 12px rgba(251, 146, 60, 0.15)",
               }}
             >
               <ShoppingCartOutlinedIcon
                 fontSize="medium"
-                className="text-gray-700 group-hover:text-blue-600 transition-colors"
+                className="text-gray-700 group-hover:text-orange-600 transition-colors"
               />
             </div>
             <span
-              className="absolute -top-1.5 -right-1.5 text-xs bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md transform"
+              className="absolute -top-1.5 -right-1.5 text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md transform"
               style={{
-                boxShadow: "0 2px 6px rgba(80, 100, 255, 0.3)",
+                boxShadow: "0 2px 6px rgba(251, 146, 60, 0.4)",
               }}
             >
               {count || 0}
@@ -332,13 +347,12 @@ const Header = () => {
           {Object.keys(user).length === 0 ? (
             <Link
               to="/login"
-              className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white px-6 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-all shadow-lg hover:shadow-xl"
+              className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white px-6 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-all shadow-lg hover:shadow-xl"
               style={{
-                boxShadow: "0 4px 12px rgba(80, 100, 255, 0.3)",
+                boxShadow: "0 4px 12px rgba(251, 146, 60, 0.4)",
               }}
             >
-              <LoginIcon fontSize="small" />
-              <span className="hidden sm:inline">Đăng nhập</span>
+              <span className="hidden sm:inline">🐾 Đăng nhập</span>
             </Link>
           ) : (
             <>
@@ -352,9 +366,9 @@ const Header = () => {
               >
                 {user.avatar ? (
                   <div
-                    className="border border-white rounded-xl p-0.5 bg-white/80 backdrop-blur shadow-sm"
+                    className="border border-orange-200 rounded-xl p-0.5 bg-white/90 backdrop-blur shadow-sm"
                     style={{
-                      boxShadow: "0 4px 10px rgba(100, 120, 255, 0.15)",
+                      boxShadow: "0 4px 10px rgba(251, 146, 60, 0.2)",
                     }}
                   >
                     <img
@@ -365,14 +379,14 @@ const Header = () => {
                   </div>
                 ) : (
                   <div
-                    className="p-2.5 rounded-xl bg-white/80 backdrop-blur border border-white shadow-sm"
+                    className="p-2.5 rounded-xl bg-white/90 backdrop-blur border border-orange-200 shadow-sm"
                     style={{
-                      boxShadow: "0 4px 10px rgba(100, 120, 255, 0.15)",
+                      boxShadow: "0 4px 10px rgba(251, 146, 60, 0.2)",
                     }}
                   >
                     <AccountCircleOutlinedIcon
                       sx={{ fontSize: 30 }}
-                      className="text-blue-600"
+                      className="text-orange-600"
                     />
                   </div>
                 )}
@@ -390,19 +404,19 @@ const Header = () => {
                 <MenuItem onClick={handleClose}>
                   <Link
                     to="/user/account"
-                    className="text-gray-700 hover:text-blue-600 flex items-center gap-3 w-full"
+                    className="text-gray-700 hover:text-orange-600 flex items-center gap-3 w-full"
                   >
                     <AccountCircleOutlinedIcon fontSize="small" />
-                    Tài khoản
+                    👤 Tài khoản
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
                   <Link
                     to="/user/purchase"
-                    className="text-gray-700 hover:text-blue-600 flex items-center gap-3 w-full"
+                    className="text-gray-700 hover:text-orange-600 flex items-center gap-3 w-full"
                   >
                     <ShoppingCartOutlinedIcon fontSize="small" />
-                    Đơn mua
+                    🛒 Đơn mua
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
@@ -411,7 +425,7 @@ const Header = () => {
                     className="text-red-500 hover:text-red-600 cursor-pointer flex items-center gap-3 w-full"
                   >
                     <LoginIcon fontSize="small" className="rotate-180" />
-                    Đăng xuất
+                    🚪 Đăng xuất
                   </div>
                 </MenuItem>
               </GlassMenu>

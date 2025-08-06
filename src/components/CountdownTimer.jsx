@@ -29,8 +29,20 @@ const CountdownTimer = ({ initialMinutes = 120 }) => {
   };
 
   return (
-    <div className="text-red-600 font-bold text-2xl bg-white px-3 py-1">
-      🔥 Flash Sale kết thúc sau: {formatTime(timeLeft)}
+    <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold text-lg sm:text-xl px-4 py-3 rounded-lg shadow-lg animate-pulse">
+      <div className="flex items-center justify-center gap-2 flex-wrap">
+        <span className="text-yellow-300 text-xl">🎉</span>
+        <span className="text-center">Flash Sale Thú Cưng kết thúc sau:</span>
+        <div className="bg-white/20 px-3 py-1 rounded-md backdrop-blur-sm">
+          <span className="text-yellow-100 font-mono text-lg sm:text-xl">
+            {formatTime(timeLeft)}
+          </span>
+        </div>
+        <span className="text-yellow-300 text-xl">🐾</span>
+      </div>
+      <div className="text-center text-xs sm:text-sm text-yellow-100 mt-1">
+        Nhanh tay săn deal cho boss nhà bạn!
+      </div>
     </div>
   );
 };

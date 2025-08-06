@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-import ThemeColor from "../constant/theme";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import { Link } from "react-router-dom";
@@ -18,7 +17,7 @@ const STATUS_MAP = {
   4: "DELIVERED",
   5: "CANCELLED",
   6: "REFUNDED",
-}; 
+};
 
 export const PersonalPurchase = () => {
   const user = useSelector((state) => state.user.user);
@@ -33,15 +32,23 @@ export const PersonalPurchase = () => {
     const ordersCached = orderByStatus[selectedStatus];
     if (!ordersCached) {
       dispatch(
-        fetchOrders({ pageNumber: 0, pageSize: 100, status: selectedStatus, userId: userId })
+        fetchOrders({
+          pageNumber: 0,
+          pageSize: 100,
+          status: selectedStatus,
+          userId: userId,
+        })
       );
     }
   }, [dispatch, selectedStatus, orderByStatus, userId]);
 
   if (status === ReduxStuatus.LOADING) {
     return (
-      <div className="w-full h-full flex justify-center items-center text-sky-400">
-        Loading...
+      <div className="w-full h-full flex justify-center items-center text-orange-500">
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-4xl animate-bounce">🐾</span>
+          <span className="font-medium">Đang tải đơn hàng...</span>
+        </div>
       </div>
     );
   }
@@ -49,10 +56,10 @@ export const PersonalPurchase = () => {
   const renderStatusButton = (index, label) => {
     return (
       <div
-        className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors whitespace-nowrap  ${
+        className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors whitespace-nowrap cursor-pointer ${
           isFocused === index
-            ? " bg-blue-600 text-white shadow-md"
-            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            ? " bg-orange-500 text-white shadow-md"
+            : "bg-orange-100 text-orange-700 hover:bg-orange-200"
         }`}
         onClick={() => setIsFocused(index)}
       >
@@ -62,47 +69,47 @@ export const PersonalPurchase = () => {
   };
 
   return (
-    <div className="p-5 w-full sm:w-4/5">
-      <div
-        className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white text-blue-500"
-      >
-        {user.displayName || "Không rõ tên"}
+    <div className="p-5 w-full sm:w-4/5 bg-gradient-to-br from-orange-50 to-red-50 min-h-screen">
+      <div className="p-5 rounded-lg mb-4 uppercase text-xl font-extrabold bg-white text-orange-600 shadow-md">
+        🐾 {user.displayName || "Khách hàng thú cưng"}
       </div>
       <div className="flex gap-2">
-        <div className="w-1/4 rounded-md p-5 bg-white">
-          <Link className=" text-slate-700  items-center flex cursor-pointer mb-2">
-            <PermIdentityOutlinedIcon />
-            Tài khoản của tôi
+        <div className="w-1/4 rounded-lg p-5 bg-white shadow-md">
+          <Link className="text-orange-700 items-center flex cursor-pointer mb-2 font-medium">
+            <PermIdentityOutlinedIcon
+              sx={{ color: "#ea580c", marginRight: 1 }}
+            />
+            🐱 Tài khoản của tôi
           </Link>
           <Link
             to={"/user/account"}
-            className="  items-center flex cursor-pointer text-slate-700 hover:text-sky-400 mb-2 ml-4"
+            className="items-center flex cursor-pointer text-slate-700 hover:text-orange-500 mb-2 ml-4"
           >
-            Hồ sơ
+            📝 Hồ sơ
           </Link>
           <Link
             to={"/user/address"}
-            className=" text-slate-700 hover:text-sky-400  items-center flex cursor-pointer mb-2 ml-4 "
+            className="text-slate-700 hover:text-orange-500 items-center flex cursor-pointer mb-2 ml-4"
           >
-            Địa chỉ
+            📍 Địa chỉ
           </Link>
           <Link
             to={"/user/purchase"}
-            className=" text-sky-400 items-center flex cursor-pointer "
+            className="text-orange-500 items-center flex cursor-pointer font-medium"
           >
-            <AssignmentOutlinedIcon />
-            Đơn mua
+            <AssignmentOutlinedIcon sx={{ color: "#ea580c", marginRight: 1 }} />
+            🛍️ Đơn mua
           </Link>
         </div>
-        <div className="w-full rounded-md">
-          <div className="flex flex-wrap cursor-pointer justify-center gap-1 sm:gap-2 p-3 bg-white border-b shadow-sm mb-4 rounded-md">
-            {renderStatusButton(0, "Tất cả")}
-            {renderStatusButton(1, "Chờ xác nhận")}
-            {renderStatusButton(2, "Đã xác nhận")}
-            {renderStatusButton(3, "Đang vận chuyển")}
-            {renderStatusButton(4, "Đã giao hàng")}
-            {renderStatusButton(5, "Đã hủy")}
-            {renderStatusButton(6, "Yêu cầu hoàn tiền")}
+        <div className="w-full rounded-lg">
+          <div className="flex flex-wrap cursor-pointer justify-center gap-1 sm:gap-2 p-3 bg-white border-b border-orange-200 shadow-md mb-4 rounded-lg">
+            {renderStatusButton(0, "📋 Tất cả")}
+            {renderStatusButton(1, "⏳ Chờ xác nhận")}
+            {renderStatusButton(2, "✅ Đã xác nhận")}
+            {renderStatusButton(3, "🚚 Đang vận chuyển")}
+            {renderStatusButton(4, "🎉 Đã giao hàng")}
+            {renderStatusButton(5, "❌ Đã hủy")}
+            {renderStatusButton(6, "💸 Yêu cầu hoàn tiền")}
           </div>
           <div className="w-full mt-2">
             {orders ? (
@@ -111,12 +118,20 @@ export const PersonalPurchase = () => {
                   product={item.items}
                   status={item.status}
                   id={item.orderId}
-                  method = {item.method}
+                  method={item.method}
                 ></OrderCard>
               ))
             ) : (
-              <div className="w-full h-full flex justify-center items-center text-sky-400">
-                Không có đơn hàng nào
+              <div className="w-full h-full flex justify-center items-center text-orange-500 py-12">
+                <div className="flex flex-col items-center gap-3">
+                  <span className="text-6xl">🐾</span>
+                  <span className="font-medium text-lg">
+                    Không có đơn hàng nào
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    Hãy mua sắm cho thú cưng của bạn!
+                  </span>
+                </div>
               </div>
             )}
           </div>

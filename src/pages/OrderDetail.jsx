@@ -1,6 +1,5 @@
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import ThemeColor from "../constant/theme";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import ReceiptIcon from "@mui/icons-material/Receipt";
@@ -112,74 +111,78 @@ export const OrderDetail = () => {
 
     const currentStep = statusStep[orderDetail.status] || 0;
     return currentStep >= step
-      ? "text-green-500 border-green-500"
+      ? "text-orange-500 border-orange-500"
       : "text-gray-400 border-gray-400";
   };
 
   return (
-    <div className="p-5 w-full sm:w-4/5">
+    <div className="p-5 w-full sm:w-4/5 bg-gradient-to-br from-orange-50 to-red-50 min-h-screen">
       {orderDetail ? (
         <>
           <div
-            className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
+            className="p-5 rounded-lg mb-4 uppercase text-xl font-extrabold bg-white shadow-md"
             style={{
-              color: ThemeColor.MAIN_GRREN,
+              color: "#ea580c",
             }}
           >
-            {user.displayName || "Không rõ tên"}
+            🐾 {user.displayName || "Khách hàng thú cưng"}
           </div>
           <div className="flex gap-2">
-            <div className="w-1/4 rounded-md p-5 bg-white">
-              <Link className=" text-slate-700  items-center flex cursor-pointer mb-2">
-                <PermIdentityOutlinedIcon />
-                Tài khoản của tôi
+            <div className="w-1/4 rounded-lg p-5 bg-white shadow-md">
+              <Link className="text-orange-700 items-center flex cursor-pointer mb-2 font-medium">
+                <PermIdentityOutlinedIcon
+                  sx={{ color: "#ea580c", marginRight: 1 }}
+                />
+                🐱 Tài khoản của tôi
               </Link>
               <Link
                 to={"/user/account"}
-                className="  items-center flex cursor-pointer text-slate-700 hover:text-sky-400 mb-2 ml-4"
+                className="items-center flex cursor-pointer text-slate-700 hover:text-orange-500 mb-2 ml-4"
               >
-                Hồ sơ
+                📝 Hồ sơ
               </Link>
               <Link
                 to={"/user/address"}
-                className=" text-slate-700 hover:text-sky-400  items-center flex cursor-pointer mb-2 ml-4 "
+                className="text-slate-700 hover:text-orange-500 items-center flex cursor-pointer mb-2 ml-4"
               >
-                Địa chỉ
+                📍 Địa chỉ
               </Link>
               <Link
                 to={"/user/purchase"}
-                className=" text-sky-400 items-center flex cursor-pointer "
+                className="text-orange-500 items-center flex cursor-pointer font-medium"
               >
-                <AssignmentOutlinedIcon />
-                Đơn mua
+                <AssignmentOutlinedIcon
+                  sx={{ color: "#ea580c", marginRight: 1 }}
+                />
+                🛍️ Đơn mua
               </Link>
             </div>
             <div
-              className="w-full rounded-md"
+              className="w-full rounded-lg shadow-md"
               style={{
-                backgroundColor: ThemeColor.LIGHT_GRAY,
+                backgroundColor: "#fef7ed",
               }}
             >
-              <div className="flex bg-white rounded-b-md p-2 border-b border-dashed">
+              <div className="flex bg-white rounded-b-lg p-3 border-b border-dashed border-orange-200">
                 <Link
-                  className="text-gray-400 uppercase text-sm flex items-center"
+                  className="text-orange-500 uppercase text-sm flex items-center hover:text-orange-600 font-medium"
                   to={"/user/purchase"}
                 >
-                  <ArrowBackIosIcon fontSize="" />
-                  Trở lại
+                  <ArrowBackIosIcon fontSize="small" />
+                  🔙 Trở lại
                 </Link>
                 <div className="flex gap-2 ml-auto items-center">
-                  <div className="text-sm uppercase">
-                    MÃ ĐƠN HÀNG:{" "}
+                  <div className="text-sm uppercase text-orange-700 font-medium">
+                    📋 MÃ ĐƠN HÀNG:{" "}
                     {orderDetail ? orderDetail.orderId.split("-")[0] : "-"}
                   </div>
-                  <div className="text-sm">|</div>
-                  <div className="text-blue-600 font-semibold text-sm uppercase">
+                  <div className="text-orange-300 text-sm">|</div>
+                  <div className="text-orange-600 font-bold text-sm uppercase">
                     {renderStatus()}
                   </div>
                 </div>
               </div>
-              <div className="rounded-md py-10 bg-white flex flex-col items-center justify-center gap-3">
+              <div className="rounded-lg py-10 bg-white flex flex-col items-center justify-center gap-3 shadow-sm">
                 <div className="flex justify-center items-center">
                   {/* Đơn hàng đã đặt */}
                   <div
@@ -192,7 +195,7 @@ export const OrderDetail = () => {
                   <div
                     className={`w-20 h-1 ${
                       orderDetail && orderDetail.status !== "PENDING"
-                        ? "bg-green-500"
+                        ? "bg-orange-400"
                         : "bg-gray-400"
                     }`}
                   ></div>
@@ -209,7 +212,7 @@ export const OrderDetail = () => {
                     className={`w-20 h-1 ${
                       (orderDetail && orderDetail.status === "SHIPPING") ||
                       orderDetail.status === "DELIVERED"
-                        ? "bg-green-500"
+                        ? "bg-orange-400"
                         : "bg-gray-400"
                     }`}
                   ></div>
@@ -225,7 +228,7 @@ export const OrderDetail = () => {
                   <div
                     className={`w-20 h-1 ${
                       orderDetail && orderDetail.status === "DELIVERED"
-                        ? "bg-green-500"
+                        ? "bg-orange-400"
                         : "bg-gray-400"
                     }`}
                   ></div>
@@ -239,43 +242,51 @@ export const OrderDetail = () => {
                     <CheckCircleIcon fontSize="large" />
                   </div>
                 </div>
-                <div className="flex gap-6 text-sm text-green-500">
-                  <div>Đơn hàng đã đặt</div>
-                  <div>Đã xác nhận đơn hàng</div>
-                  <div>Đang vận chuyển</div>
-                  <div>Đã nhận hàng</div>
+                <div className="flex gap-6 text-sm text-orange-600 font-medium">
+                  <div>📋 Đơn hàng đã đặt</div>
+                  <div>✅ Đã xác nhận đơn hàng</div>
+                  <div>🚚 Đang vận chuyển</div>
+                  <div>🎉 Đã nhận hàng</div>
                 </div>
               </div>
 
-              <div className="h-[4px] bg-[length:44px_44px] bg-[repeating-linear-gradient(45deg,#f18d9b_0px,#f18d9b_25px,white_25px,white_38px,#6fa6d6_38px,#6fa6d6_44px)]"></div>
+              <div className="h-[4px] bg-[length:44px_44px] bg-[repeating-linear-gradient(45deg,#fb923c_0px,#fb923c_25px,white_25px,white_38px,#ea580c_38px,#ea580c_44px)]"></div>
               <div className="bg-white p-5">
-                <div className="text-lg text-slate-400">Địa Chỉ Nhận Hàng</div>
-                <div className="mt-2">{orderDetail.receiverName}</div>
-                <div className="text-sm text-gray-500">
-                  {orderDetail.receiverPhone}
+                <div className="text-lg text-orange-600 font-bold">
+                  📍 Địa Chỉ Nhận Hàng
                 </div>
-                <div className="text-sm text-gray-500">
-                  {orderDetail.address}
+                <div className="mt-2 font-medium text-orange-800">
+                  👤 {orderDetail.receiverName}
+                </div>
+                <div className="text-sm text-gray-600">
+                  📞 {orderDetail.receiverPhone}
+                </div>
+                <div className="text-sm text-gray-600">
+                  🏠 {orderDetail.address}
                 </div>
               </div>
-              <div className="flex flex-col gap-2 bg-slate-50 p-4">
+              <div className="flex flex-col gap-2 bg-orange-50 p-4 rounded-lg">
                 {Array.isArray(orderDetail.items) &&
                 orderDetail.items.length > 0
                   ? orderDetail.items.map((item) => (
-                      <div className="flex gap-1 items-center">
+                      <div className="flex gap-1 items-center bg-white p-3 rounded-lg shadow-sm">
                         <div className="">
-                          <Link to={`/product/${item.prdId}`}>
-                            {item.name || "-"}
+                          <Link
+                            to={`/product/${item.prdId}`}
+                            className="text-orange-600 hover:text-orange-700 font-medium"
+                          >
+                            🐾 {item.name || "-"}
                           </Link>
-                          <div className="text-sm text-gray-400">
-                            Phân lọai: {item.color || "-"}
+                          <div className="text-sm text-gray-500">
+                            🏷️ Phân loại: {item.color || "-"}
                           </div>
-                          <div className="text-sm text-gray-400">
-                            Số lượng: {item.quantity || "-"}
+                          <div className="text-sm text-gray-500">
+                            📦 Số lượng: {item.quantity || "-"}
                           </div>
                         </div>
                         <div className="ml-auto flex gap-3 items-center">
-                          <div>
+                          <div className="text-orange-600 font-bold">
+                            💰{" "}
                             {item.discountedPrice.toLocaleString("vi-VN") +
                               "đ" || "-"}
                           </div>
@@ -283,9 +294,9 @@ export const OrderDetail = () => {
                           !item.isReviewed ? (
                             <button
                               onClick={() => setOpenReviewDialogId(item.id)}
-                              className="px-4 py-2 bg-sky-500 rounded-md text-white"
+                              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 rounded-lg text-white font-medium transition-colors"
                             >
-                              Viết nhận xét
+                              ⭐ Viết nhận xét
                             </button>
                           ) : (
                             ""
@@ -305,20 +316,25 @@ export const OrderDetail = () => {
                     ))
                   : ""}
               </div>
-              <div className="flex w-full ml-auto p-5 bg-white">
+              <div className="flex w-full ml-auto p-5 bg-white rounded-lg shadow-sm">
                 <div className="ml-auto">
-                  Thành tiền:{" "}
-                  <span className="text-sky-500 text-lg">
+                  <span className="text-orange-700 font-medium">
+                    💸 Thành tiền:{" "}
+                  </span>
+                  <span className="text-orange-600 text-xl font-bold">
                     {orderDetail.totalPrice.toLocaleString("vi-VN")}đ
                   </span>
                 </div>
               </div>
-              <div className="bg-sky-50 text-sm px-5 py-2 border border-sky-300">
-                Vui lòng thanh toán{" "}
-                <span className="text-sky-500 font-semibold">
+              <div className="bg-orange-50 text-sm px-5 py-3 border border-orange-200 rounded-lg">
+                <span className="text-orange-700">💳 Vui lòng thanh toán </span>
+                <span className="text-orange-600 font-bold">
                   {orderDetail.totalPrice.toLocaleString("vi-VN")}đ
-                </span>{" "}
-                khi nhận hàng
+                </span>
+                <span className="text-orange-700">
+                  {" "}
+                  khi nhận hàng cho thú cưng của bạn! 🐾
+                </span>
               </div>
             </div>
           </div>
@@ -330,7 +346,13 @@ export const OrderDetail = () => {
   );
 };
 
-export const ReviewDialog = ({ productId, orderItemId, open, onClose, onSubmit }) => {
+export const ReviewDialog = ({
+  productId,
+  orderItemId,
+  open,
+  onClose,
+  onSubmit,
+}) => {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [images, setImages] = useState([]);
@@ -354,43 +376,76 @@ export const ReviewDialog = ({ productId, orderItemId, open, onClose, onSubmit }
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>
-        Đánh giá sản phẩm
+      <DialogTitle sx={{ backgroundColor: "#fed7aa", color: "#ea580c" }}>
+        🐾 Đánh giá sản phẩm thú cưng
         <IconButton
           aria-label="close"
           onClick={onClose}
-          sx={{ position: "absolute", right: 8, top: 8 }}
+          sx={{ position: "absolute", right: 8, top: 8, color: "#ea580c" }}
         >
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent dividers sx={{ backgroundColor: "#fef7ed" }}>
         <Box display="flex" flexDirection="column" gap={3}>
           <Box>
-            <Typography component="legend">Đánh giá:</Typography>
+            <Typography
+              component="legend"
+              sx={{ color: "#ea580c", fontWeight: "bold" }}
+            >
+              ⭐ Đánh giá:
+            </Typography>
             <Rating
               name="rating"
               value={rating}
               onChange={(event, newValue) => {
                 setRating(newValue);
               }}
+              sx={{
+                "& .MuiRating-iconFilled": {
+                  color: "#fb923c",
+                },
+                "& .MuiRating-iconHover": {
+                  color: "#ea580c",
+                },
+              }}
             />
           </Box>
           <TextField
-            label="Nhận xét"
+            label="💬 Nhận xét về sản phẩm"
             multiline
             rows={4}
             fullWidth
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             variant="outlined"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  borderColor: "#fb923c",
+                },
+              },
+              "& .MuiInputLabel-root": {
+                "&.Mui-focused": {
+                  color: "#ea580c",
+                },
+              },
+            }}
           />
           <Button
             variant="outlined"
             component="label"
             startIcon={<ImageIcon />}
+            sx={{
+              borderColor: "#fb923c",
+              color: "#ea580c",
+              "&:hover": {
+                borderColor: "#ea580c",
+                backgroundColor: "#fef7ed",
+              },
+            }}
           >
-            Tải hình ảnh
+            📷 Tải hình ảnh
             <input
               type="file"
               accept="image/*"
@@ -400,18 +455,29 @@ export const ReviewDialog = ({ productId, orderItemId, open, onClose, onSubmit }
             />
           </Button>
           {images.length > 0 && (
-            <Typography variant="body2" color="textSecondary">
-              {images.length} hình ảnh đã chọn
+            <Typography variant="body2" sx={{ color: "#ea580c" }}>
+              🖼️ {images.length} hình ảnh đã chọn
             </Typography>
           )}
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Hủy</Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary">
-          Gửi đánh giá
+      <DialogActions sx={{ backgroundColor: "#fed7aa", gap: 1 }}>
+        <Button onClick={onClose} sx={{ color: "#9ca3af" }}>
+          ❌ Hủy
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          sx={{
+            backgroundColor: "#ea580c",
+            "&:hover": {
+              backgroundColor: "#dc2626",
+            },
+          }}
+        >
+          🚀 Gửi đánh giá
         </Button>
       </DialogActions>
     </Dialog>
   );
-}
+};

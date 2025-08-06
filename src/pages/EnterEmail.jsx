@@ -7,7 +7,6 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import { Link } from "react-router-dom";
 
-
 export const EnterEmail = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -24,13 +23,13 @@ export const EnterEmail = () => {
 
     if (!email.trim()) {
       setStatus("error");
-      setMessage("Vui lòng nhập email của bạn");
+      setMessage("📧 Vui lòng nhập email của bạn");
       return;
     }
 
     if (!validateEmail(email)) {
       setStatus("error");
-      setMessage("Email không hợp lệ");
+      setMessage("📧 Email không hợp lệ");
       return;
     }
 
@@ -43,30 +42,32 @@ export const EnterEmail = () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Replace with actual API call
-      await forgotPasswordApi({email: email});
+      await forgotPasswordApi({ email: email });
 
       setStatus("success");
-      setMessage("Email đã được gửi! Kiểm tra hộp thư của bạn.");
+      setMessage("📧 Email đã được gửi! Kiểm tra hộp thư để đặt lại mật khẩu.");
     } catch (err) {
       console.log(err);
       setStatus("error");
-      setMessage("Có lỗi xảy ra. Vui lòng thử lại sau.");
+      setMessage("❌ Có lỗi xảy ra. Vui lòng thử lại sau.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-orange-400 via-red-400 to-pink-500 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-full mb-4 backdrop-blur-sm">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/15 rounded-full mb-4 backdrop-blur-sm shadow-lg">
             <EmailOutlinedIcon className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white mb-2">Quên mật khẩu?</h1>
-          <p className="text-blue-100 text-sm">
-            Nhập email của bạn để nhận liên kết đặt lại mật khẩu
+          <h1 className="text-2xl font-bold text-white mb-2">
+            🐾 Quên mật khẩu?
+          </h1>
+          <p className="text-orange-100 text-sm">
+            Nhập email để nhận liên kết đặt lại mật khẩu cho tài khoản thú cưng
           </p>
         </div>
 
@@ -74,13 +75,16 @@ export const EnterEmail = () => {
         <div className="space-y-6">
           {/* Email Input */}
           <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <span className="text-orange-300 text-lg"></span>
+            </div>
             <input
               type="email"
               placeholder="Email của bạn"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleSubmit(e)}
-              className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-200"
+              className="w-full pl-12 pr-4 py-3 bg-white/10 border border-orange-300/30 rounded-xl text-white placeholder-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent backdrop-blur-sm transition-all duration-200"
               disabled={isLoading}
             />
           </div>
@@ -95,11 +99,16 @@ export const EnterEmail = () => {
               }`}
             >
               {status === "success" ? (
-                <CheckCircleOutlineOutlinedIcon className="w-5 h-5" />
+                <>
+                  <CheckCircleOutlineOutlinedIcon className="w-5 h-5" />
+                  <span className="text-sm">🎉 {message}</span>
+                </>
               ) : (
-                <ErrorOutlineOutlinedIcon className="w-5 h-5" />
+                <>
+                  <ErrorOutlineOutlinedIcon className="w-5 h-5" />
+                  <span className="text-sm">❌ {message}</span>
+                </>
               )}
-              <span className="text-sm">{message}</span>
             </div>
           )}
 
@@ -107,10 +116,10 @@ export const EnterEmail = () => {
           <div className="flex gap-3">
             <button
               type="button"
-              className="flex-shrink-0 p-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white transition-all duration-200 backdrop-blur-sm"
+              className="flex-shrink-0 p-3 bg-white/10 hover:bg-white/20 border border-orange-300/30 rounded-xl text-white transition-all duration-200 backdrop-blur-sm hover:border-orange-300/50"
               disabled={isLoading}
             >
-              <Link to={'/login'}>
+              <Link to={"/login"}>
                 <ArrowBackOutlinedIcon className="w-5 h-5" />
               </Link>
             </button>
@@ -119,17 +128,17 @@ export const EnterEmail = () => {
               type="submit"
               onClick={handleSubmit}
               disabled={isLoading || !email.trim()}
-              className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-medium rounded-xl transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 disabled:from-gray-500 disabled:to-gray-600 text-white font-medium rounded-xl transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  <span>Đang gửi...</span>
+                  <span>🐾 Đang gửi...</span>
                 </>
               ) : (
                 <>
                   <SendOutlinedIcon className="w-5 h-5" />
-                  <span>Gửi email</span>
+                  <span>📧 Gửi email</span>
                 </>
               )}
             </button>
@@ -138,17 +147,17 @@ export const EnterEmail = () => {
 
         {/* Footer */}
         <div className="mt-8 text-center">
-          <p className="text-blue-100 text-sm">
+          <p className="text-orange-100 text-sm">
             Nhớ ra mật khẩu?{" "}
             <Link
               to={"/login"}
-              className="text-blue-300 hover:text-white font-medium underline transition-colors duration-200"
+              className="text-orange-200 hover:text-white font-medium underline transition-colors duration-200"
             >
-              Đăng nhập
+              🔑 Đăng nhập
             </Link>
           </p>
         </div>
       </div>
     </div>
   );
-}
+};

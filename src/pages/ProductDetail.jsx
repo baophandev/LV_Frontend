@@ -139,7 +139,7 @@ export const ProductDetail = () => {
 
   const handleAddToCart = async () => {
     if (!selectedItems) {
-      alert("Vui lòng chọn một biến thể trước khi thêm vào giỏ hàng!");
+      alert("⚠️ Vui lòng chọn một biến thể trước khi thêm vào giỏ hàng!");
       return;
     }
 
@@ -151,23 +151,23 @@ export const ProductDetail = () => {
       });
       setAmount(1);
       dispatch(fetchCart(userId));
-      setToastMessage("Đã thêm sản phẩm vào giỏ hàng");
+      setToastMessage("🎉 Đã thêm sản phẩm vào giỏ hàng thành công!");
       setToastSeverity("success");
       setOpenToast(true);
     } catch (error) {
-      alert("Đã có lỗi xảy ra khi thêm vào giỏ hàng");
-      setToastMessage("Lỗi khi cập nhật sản phẩm.");
+      alert("❌ Đã có lỗi xảy ra khi thêm vào giỏ hàng");
+      setToastMessage("❌ Lỗi khi cập nhật sản phẩm.");
       setToastSeverity("error");
       setOpenToast(true);
     }
   };
-  
+
   return (
     <>
-      <div className="w-2/3 p-5 bg-white mt-5 mb-4">
+      <div className="w-2/3 p-5 bg-gradient-to-br from-orange-50 to-yellow-50 mt-5 mb-4 rounded-xl shadow-lg border border-orange-200">
         <div className="flex gap-7 p-2 py-5 rounded-md">
           <div className="flex justify-center gap-2 w-1/2">
-            <div className="w-[85%] h-80 rounded-md bg-white">
+            <div className="w-[85%] h-80 rounded-md bg-white shadow-sm border border-orange-100">
               {displayImages.length > 0 ? (
                 <>
                   <img
@@ -201,7 +201,7 @@ export const ProductDetail = () => {
               {displayImages.map((image, index) => (
                 <div
                   key={index}
-                  className="w-full h-24 cursor-pointer rounded-md bg-white"
+                  className="w-full h-24 cursor-pointer rounded-md bg-white shadow-sm border border-orange-100"
                   onClick={() => setImageIndex(index)}
                 >
                   <img
@@ -215,8 +215,8 @@ export const ProductDetail = () => {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="uppercase text-2xl font-extrabold">
-              {displayedProduct?.name || "Tên sản phẩm"}
+            <div className="uppercase text-2xl font-extrabold text-gray-800">
+              🐾 {displayedProduct?.name || "Tên sản phẩm"}
             </div>
             <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
               <Rating
@@ -244,8 +244,8 @@ export const ProductDetail = () => {
                 return (
                   <>
                     {/* Giá sau giảm (nếu có giảm), hoặc giá gốc */}
-                    <div className="text-2xl font-extrabold text-sky-500">
-                      {discountedPrice.toLocaleString("vi-VN")} VNĐ
+                    <div className="text-2xl font-extrabold text-orange-600">
+                      💰 {discountedPrice.toLocaleString("vi-VN")} VNĐ
                     </div>
 
                     {/* Nếu có giảm giá, hiển thị giá gốc + phần trăm */}
@@ -255,7 +255,7 @@ export const ProductDetail = () => {
                           {price.toLocaleString("vi-VN")} VNĐ
                         </span>
                         <span className="bg-red-100 text-red-500 px-2 py-0.5 rounded font-semibold">
-                          -{discount}%
+                          🔥 -{discount}%
                         </span>
                       </div>
                     )}
@@ -264,8 +264,10 @@ export const ProductDetail = () => {
               })()}
             </div>
 
-            <div className="text-gray-400">Chọn màu sắc:</div>
-            <div className="flex gap-2 flex-wrap border-b border-b-gray-200 pb-2">
+            <div className="text-gray-600 font-medium">
+              🎨 Chọn màu sắc cho thú cưng:
+            </div>
+            <div className="flex gap-2 flex-wrap border-b border-b-orange-200 pb-2">
               {displayedProduct?.variants &&
               displayedProduct.variants.length > 0 ? (
                 displayedProduct.variants.map(
@@ -278,28 +280,34 @@ export const ProductDetail = () => {
                           backgroundColor: _variant.colorCode || "#fff",
                           border:
                             selectedItems?.id === _variant.id
-                              ? `3px solid #16a34a `
-                              : "1px solid #ccc",
+                              ? `3px solid #ea580c `
+                              : "1px solid #fed7aa",
                           cursor: "pointer",
+                          boxShadow:
+                            selectedItems?.id === _variant.id
+                              ? "0 4px 12px rgba(234, 88, 12, 0.3)"
+                              : "0 2px 4px rgba(251, 146, 60, 0.2)",
                         }}
                         onClick={() => handleSelectedItems(_variant)}
                       ></div>
                     )
                 )
               ) : (
-                <div>Không có lựa chọn màu sắc</div>
+                <div className="text-gray-500 italic">
+                  🚫 Không có lựa chọn màu sắc
+                </div>
               )}
             </div>
             {selectedItems && (
               <div className="flex gap-2 mt-3">
-                <div className="flex items-center gap-2 px-3 bg-sky-50 border border-sky-200 rounded-xl shadow-sm">
-                  <span className="text-sm text-gray-600">Đã bán:</span>
-                  <span className="font-semibold text-sky-600">
+                <div className="flex items-center gap-2 px-3 bg-orange-50 border border-orange-200 rounded-xl shadow-sm">
+                  <span className="text-sm text-gray-600">📦 Đã bán:</span>
+                  <span className="font-semibold text-orange-600">
                     {selectedItems?.sold || "0"}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 px-3 bg-green-50 border border-green-200 rounded-xl shadow-sm">
-                  <span className="text-sm text-gray-600">Còn lại:</span>
+                  <span className="text-sm text-gray-600">✅ Còn lại:</span>
                   <span className="font-semibold text-green-700">
                     {selectedItems?.stock || "0"}
                   </span>
@@ -307,15 +315,15 @@ export const ProductDetail = () => {
               </div>
             )}
             <div className="text-white flex gap-1">
-              <div className="flex items-center bg-gray-100 px-4 py-2 rounded-lg shadow-sm">
+              <div className="flex items-center bg-gradient-to-r from-orange-100 to-yellow-100 px-4 py-2 rounded-lg shadow-sm border border-orange-200">
                 <div className="flex items-center gap-3">
-                  <div className="text-sky-700 text-sm font-medium">
-                    Chọn số lượng:
+                  <div className="text-orange-700 text-sm font-medium">
+                    🔢 Chọn số lượng:
                   </div>
                   <input
                     type="number"
                     min="1"
-                    className="w-20 h-9 text-center text-black bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition"
+                    className="w-20 h-9 text-center text-black bg-white border border-orange-300 rounded-xl outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition"
                     value={amount}
                     onChange={(e) =>
                       setAmount(Math.max(1, parseInt(e.target.value) || 1))
@@ -325,40 +333,47 @@ export const ProductDetail = () => {
               </div>
 
               <button
-                className="py-1 px-6 font-semibold rounded-2xl bg-sky-100 text-sky-500  border border-sky-200"
+                className="py-1 px-6 font-semibold rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white border border-orange-400 transition-all duration-200 shadow-lg hover:shadow-xl"
                 onClick={handleAddToCart}
               >
-                <AddShoppingCartOutlinedIcon sx={{ color: "e0f2fe" }} />
-                Thêm vào giỏ hàng
+                <AddShoppingCartOutlinedIcon sx={{ color: "white" }} />
+                🛒 Thêm vào giỏ hàng
               </button>
             </div>
           </div>
         </div>
-        <div class="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-md shadow-sm font-semibold">
-          <i class="fa-solid fa-shield-halved text-blue-600"></i>
+        <div class="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-sm font-semibold border border-green-200 mt-4">
+          <i class="fa-solid fa-shield-halved text-green-600"></i>
           <span className="">
-            Bảo hành 12 tháng - 1 đổi 1 nếu có lỗi từ nhà sản xuất
+            🏥 Bảo hành sức khỏe thú cưng 10 ngày - 🔄 1 đổi 1 nếu có lỗi từ nhà
+            cung cấp
           </span>
         </div>
-        <div className="mt-2  p-5 text-gray-700 border-t border-gray-200">
-          <div className="uppercase text-2xl font-extrabold mb-2 text-blue-500">
-            Mô tả:{" "}
+        <div className="mt-4 p-5 text-gray-700 border-t border-orange-200 bg-white rounded-lg shadow-sm">
+          <div className="uppercase text-2xl font-extrabold mb-3 text-orange-600">
+            📝 Mô tả sản phẩm:{" "}
           </div>
-          <p>{displayedProduct?.description || "Chưa có mô tả"}</p>
+          <p className="text-gray-600 leading-relaxed">
+            {displayedProduct?.description || "Chưa có mô tả"}
+          </p>
           <AttributeTable productId={displayedProduct?.id} />
         </div>
-        <div className="mt-3 pt-3 border-t border-b-gray-200">
-          <div className="uppercase text-2xl font-extrabold text-gray-700">
-            Đánh giá của người mua:
+        <div className="mt-4 pt-4 border-t border-orange-200 bg-white rounded-lg shadow-sm p-5">
+          <div className="uppercase text-2xl font-extrabold text-orange-600 mb-4">
+            ⭐ Đánh giá của khách hàng:
           </div>
           {reviews.length > 0 ? (
-            reviews.map((review) => <ReviewCard review={review} />)
+            reviews.map((review) => (
+              <ReviewCard key={review.id} review={review} />
+            ))
           ) : (
-            <div>Không có đánh giá</div>
+            <div className="text-gray-500 italic text-center py-8">
+              📝 Chưa có đánh giá nào cho sản phẩm này
+            </div>
           )}
-          <div className="w-full flex justify-center mt-3">
-            <div className="px-5 py-2 rounded-2xl text-center text-gray-700 cursor-pointer border border-gray-200 w-1/3">
-              Hiển thị thêm
+          <div className="w-full flex justify-center mt-4">
+            <div className="px-6 py-3 rounded-2xl text-center text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 cursor-pointer border border-orange-400 w-1/3 transition-all duration-200 shadow-lg hover:shadow-xl">
+              📖 Hiển thị thêm đánh giá
             </div>
           </div>
         </div>

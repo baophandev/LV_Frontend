@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import ThemeColor from "../constant/theme";
 import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
 import { getVariantDiscount } from "../api/productApi";
@@ -36,7 +35,7 @@ export const Cart = () => {
 
   const [address, setAddress] = useState(null);
 
-  console.log("Selected item: ", selectedItems)
+  console.log("Selected item: ", selectedItems);
 
   useEffect(() => {
     if (memoizedAddressList.length > 0) {
@@ -129,15 +128,15 @@ export const Cart = () => {
   };
 
   const handleDeleteItem = async (itemId) => {
-    try{
-      const response = await deleteCartItemApi({userId, itemId});
+    try {
+      const response = await deleteCartItemApi({ userId, itemId });
       window.location.reload();
       return response;
-    }catch(err){
+    } catch (err) {
       console.error("Lỗi khi xóa sản phẩm khỏi giỏ hàng", err);
       throw new Error("Lỗi khi xóa sản phẩm khỏi giỏ hàng", err);
     }
-  }
+  };
 
   useEffect(() => {
     setCount(Object.keys(selectedItems).length);
@@ -179,31 +178,48 @@ export const Cart = () => {
     }
   };
 
-
   if (status === "loading") return <Loading></Loading>;
 
   return (
-    <div className="w-4/5 p-5 min-h-screen">
-      <div className="text-blue-500 p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white">
-        Giỏ hàng
+    <div className="w-4/5 p-5 min-h-screen bg-gradient-to-br from-orange-50 to-red-50">
+      <div className="text-orange-600 p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white shadow-md">
+        🛒 Giỏ hàng thú cưng
       </div>
       <TableContainer component={Paper} elevation={0}>
         <Table>
-          <TableHead style={{ backgroundColor: "white" }}>
+          <TableHead sx={{ backgroundColor: "white" }}>
             <TableRow>
               <TableCell>
                 <Checkbox
                   checked={selectAll}
                   onChange={(e) => handleSelectAll(e.target.checked)}
+                  sx={{
+                    color: "#fb923c",
+                    "&.Mui-checked": { color: "#fb923c" },
+                  }}
                 />
               </TableCell>
-              <TableCell>Ảnh</TableCell>
-              <TableCell>Tên sản phẩm</TableCell>
-              <TableCell>Phân loại</TableCell>
-              <TableCell>Đơn giá</TableCell>
-              <TableCell>SL</TableCell>
-              <TableCell>Tổng tiền</TableCell>
-              <TableCell>Xóa</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ea580c" }}>
+                🖼️ Ảnh
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ea580c" }}>
+                🐾 Tên sản phẩm
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ea580c" }}>
+                🏷️ Phân loại
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ea580c" }}>
+                💰 Đơn giá
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ea580c" }}>
+                📦 SL
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ea580c" }}>
+                💸 Tổng tiền
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ea580c" }}>
+                🗑️ Xóa
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -219,6 +235,10 @@ export const Cart = () => {
                     <Checkbox
                       checked={!!selectedItems[item.itemId]}
                       onChange={(e) => handleSelectItem(item, e.target.checked)}
+                      sx={{
+                        color: "#fb923c",
+                        "&.Mui-checked": { color: "#fb923c" },
+                      }}
                     />
                   </TableCell>
                   <TableCell>
@@ -254,7 +274,7 @@ export const Cart = () => {
                   </TableCell>
                   <TableCell>
                     <input
-                      className="w-16 border border-gray-300 rounded px-2 py-1"
+                      className="w-16 border-2 border-orange-300 rounded-lg px-2 py-1 focus:border-orange-500 focus:outline-none"
                       type="number"
                       min={1}
                       value={item.quantity || 0}
@@ -282,10 +302,16 @@ export const Cart = () => {
               <TableRow>
                 <TableCell
                   colSpan={8}
-                  className="text-center"
-                  style={{ color: ThemeColor.MAIN_BLUE, textAlign: "center" }}
+                  className="text-center py-8"
+                  style={{ color: "#ea580c", textAlign: "center" }}
                 >
-                  Không có sản phẩm nào
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="text-4xl">🐾</span>
+                    <span className="text-lg font-medium">Giỏ hàng trống</span>
+                    <span className="text-sm text-gray-500">
+                      Hãy thêm một số sản phẩm cho thú cưng của bạn!
+                    </span>
+                  </div>
                 </TableCell>
               </TableRow>
             )}
@@ -293,18 +319,20 @@ export const Cart = () => {
         </Table>
       </TableContainer>
       <div
-        className="bg-white fixed z-100 w-4/5 bottom-5 rounded-md p-5 flex items-center shadow-md"
+        className="bg-white fixed z-100 w-4/5 bottom-5 rounded-lg p-5 flex items-center shadow-lg border-t-4 border-orange-400"
         style={{
           left: "50%",
           transform: "translateX(-50%)",
         }}
       >
-        <div className="flex gap-2 border-r pr-3 ml-auto">
-          <div>Địa chỉ: </div>
-          <div className="text-slate-500">
+        <div className="flex gap-2 border-r border-orange-200 pr-3 ml-auto">
+          <div className="text-orange-700 font-medium">
+            📍 Địa chỉ giao hàng:{" "}
+          </div>
+          <div className="text-slate-600">
             {address ? (
               <>
-                <div className="text-sm">
+                <div className="text-sm font-medium">
                   {address.receiverName || ""}, {address.receiverPhone || ""}
                 </div>
                 <div className="text-sm">
@@ -318,32 +346,36 @@ export const Cart = () => {
               <div className="text-gray-500 text-sm">Chưa có địa chỉ</div>
             )}
             <div
-              className="text-sky-500 text-sm cursor-pointer"
+              className="text-orange-500 text-sm cursor-pointer hover:text-orange-600 font-medium"
               onClick={handleClickOpen}
             >
               Thay đổi
             </div>
           </div>
         </div>
-        <div className="flex gap-2 border-r px-2">
-          <div>Đã chọn: </div>
-          <div className="text-slate-500">{count}</div>
+        <div className="flex gap-2 border-r border-orange-200 px-2">
+          <div className="text-orange-700 font-medium">✅ Đã chọn: </div>
+          <div className="text-slate-600 font-bold">{count}</div>
         </div>
-        <div className="flex gap-2 px-2 border-r">
-          <div>Tổng thanh toán: </div>
-          <div className="text-slate-500">
+        <div className="flex gap-2 px-2 border-r border-orange-200">
+          <div className="text-orange-700 font-medium">
+            💰 Tổng thanh toán:{" "}
+          </div>
+          <div className="text-slate-600 font-bold text-lg">
             {totalPrice.toLocaleString("vi-VN") + "đ"}
           </div>
         </div>
         <div className="px-2">
           <button
-            className={`mt-4 px-4 py-2 font-bold text-white rounded ${
-              count === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500"
+            className={`mt-4 px-6 py-3 font-bold text-white rounded-lg transition-colors ${
+              count === 0
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-orange-500 hover:bg-orange-600 shadow-md"
             }`}
             onClick={() => setOrderOpen(true)}
             disabled={count === 0}
           >
-            Mua hàng
+            🛍️ Mua hàng
           </button>
         </div>
       </div>

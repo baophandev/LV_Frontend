@@ -48,6 +48,15 @@ const router = createBrowserRouter([
         },
       },
       {
+        path: "/reset-password",
+        async lazy() {
+          let { ResetPassword } = await import("../pages/ResetPassword");
+          return {
+            Component: ResetPassword,
+          };
+        },
+      },
+      {
         path: "register",
         element: <AuthLayout />,
         children: [
@@ -162,15 +171,6 @@ const router = createBrowserRouter([
               let { OrderDetail } = await import("../pages/OrderDetail");
               return {
                 Component: OrderDetail,
-              };
-            },
-          },
-          {
-            path: "/reset-password",
-            async lazy() {
-              let { ResetPassword } = await import("../pages/ResetPassword");
-              return {
-                Component: ResetPassword,
               };
             },
           },

@@ -27,7 +27,7 @@ export const VNPaySuccess = () => {
         THANH TOÁN THÀNH CÔNG
       </span>
       <span className="text-slate-600">NEXOR chân thành cảm ơn quý khách!</span>
-      <a href="/user" className="text-blue-500 underline">
+      <a href="user/purchase" className="text-blue-500 underline">
         Xem đơn hàng
       </a>
     </div>

@@ -20,6 +20,7 @@ const CreateAddressDialog = ({ open, handleClose }) => {
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
   const [detail, setDetail] = useState("");
+  const [errors, setErrors] = useState({});
 
   const filteredDistricts = db.district.filter(
     (district) =>
@@ -34,48 +35,50 @@ const CreateAddressDialog = ({ open, handleClose }) => {
   );
 
   const validateFields = () => {
-    if (
-      !receiverName ||
-      !receiverPhone ||
-      !selectedProvince ||
-      !selectedDistrict ||
-      !selectedCommune ||
-      !detail
-    ) {
-      alert("Vui lòng nhập đầy đủ thông tin");
-      return false;
+    const newErrors = {};
+    if (!receiverName) newErrors.receiverName = "Vui lòng nhập tên người nhận";
+    if (!receiverPhone) {
+      newErrors.receiverPhone = "Vui lòng nhập số điện thoại";
+    } else if (!/^\d{9,11}$/.test(receiverPhone)) {
+      newErrors.receiverPhone = "Số điện thoại không hợp lệ";
     }
-    return true;
+    if (!selectedProvince) newErrors.selectedProvince = "Chọn tỉnh/thành phố";
+    if (!selectedDistrict) newErrors.selectedDistrict = "Chọn quận/huyện";
+    if (!selectedCommune) newErrors.selectedCommune = "Chọn xã/phường";
+    if (!detail) newErrors.detail = "Nhập chi tiết địa chỉ";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-   const handleCreateAddress = async () => {
-     if (!validateFields()) return;
+  const handleCreateAddress = async () => {
+    if (!validateFields()) return;
 
-     try {
-       const response = await createAddressApi({
-         address: {
-           userId: userId,
-           province: selectedProvince,
-           district: selectedDistrict,
-           ward: selectedCommune,
-           detail: detail,
-           receiverName: receiverName,
-           receiverPhone: receiverPhone,
-         },
-       });
+    try {
+      const response = await createAddressApi({
+        address: {
+          userId: userId,
+          province: selectedProvince,
+          district: selectedDistrict,
+          ward: selectedCommune,
+          detail: detail,
+          receiverName: receiverName,
+          receiverPhone: receiverPhone,
+        },
+      });
 
-       if (response.status >= 200 && response.status < 300) {
-         alert("Tạo địa chỉ thành công");
-         handleClose();
-         window.location.reload();
-       } else {
-         throw new Error("Lỗi khi tạo địa chỉ");
-       }
-     } catch (err) {
-       alert("Tạo địa chỉ thất bại");
-       console.log(err);
-     }
-   };
+      if (response.status >= 200 && response.status < 300) {
+        alert("Tạo địa chỉ thành công");
+        handleClose();
+        window.location.reload();
+      } else {
+        throw new Error("Lỗi khi tạo địa chỉ");
+      }
+    } catch (err) {
+      alert("Tạo địa chỉ thất bại");
+      console.log(err);
+    }
+  };
 
   return (
     <Dialog
@@ -91,12 +94,16 @@ const CreateAddressDialog = ({ open, handleClose }) => {
             onChange={(e) => setReceiverName(e.target.value)}
             label="Tên người nhận"
             fullWidth
+            error={!!errors.receiverName}
+            helperText={errors.receiverName}
           />
           <TextField
             value={receiverPhone}
             onChange={(e) => setReceiverPhone(e.target.value)}
             label="Số điện thoại"
             fullWidth
+            error={!!errors.receiverPhone}
+            helperText={errors.receiverPhone}
           />
           <div className="font-bold">Thêm địa chỉ mới: </div>
 
@@ -106,9 +113,11 @@ const CreateAddressDialog = ({ open, handleClose }) => {
               setSelectedProvince(e.target.value);
               setSelectedDistrict("");
               setSelectedCommune("");
+              setErrors((prev) => ({ ...prev, selectedProvince: undefined }));
             }}
             displayEmpty
             fullWidth
+            error={!!errors.selectedProvince}
           >
             <MenuItem value="" disabled>
               Chọn Tỉnh/Thành phố
@@ -119,16 +128,23 @@ const CreateAddressDialog = ({ open, handleClose }) => {
               </MenuItem>
             ))}
           </Select>
+          {errors.selectedProvince && (
+            <div className="text-red-500 text-sm">
+              {errors.selectedProvince}
+            </div>
+          )}
 
           <Select
             value={selectedDistrict}
             onChange={(e) => {
               setSelectedDistrict(e.target.value);
               setSelectedCommune("");
+              setErrors((prev) => ({ ...prev, selectedDistrict: undefined }));
             }}
             displayEmpty
             fullWidth
             disabled={!selectedProvince}
+            error={!!errors.selectedDistrict}
           >
             <MenuItem value="" disabled>
               Chọn Quận/Huyện
@@ -139,6 +155,11 @@ const CreateAddressDialog = ({ open, handleClose }) => {
               </MenuItem>
             ))}
           </Select>
+          {errors.selectedDistrict && (
+            <div className="text-red-500 text-sm">
+              {errors.selectedDistrict}
+            </div>
+          )}
 
           <Select
             value={selectedCommune}
@@ -146,6 +167,7 @@ const CreateAddressDialog = ({ open, handleClose }) => {
             displayEmpty
             fullWidth
             disabled={!selectedDistrict}
+            error={!!errors.selectedCommune}
           >
             <MenuItem value="" disabled>
               Chọn Xã/Phường
@@ -156,13 +178,18 @@ const CreateAddressDialog = ({ open, handleClose }) => {
               </MenuItem>
             ))}
           </Select>
+          {errors.selectedCommune && (
+            <div className="text-red-500 text-sm">{errors.selectedCommune}</div>
+          )}
 
           <TextField
             value={detail}
             onChange={(e) => setDetail(e.target.value)}
             label="Chi tiết"
             fullWidth
-            spellCheck = "false"
+            spellCheck="false"
+            error={!!errors.detail}
+            helperText={errors.detail}
           />
           <button
             onClick={handleCreateAddress}

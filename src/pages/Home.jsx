@@ -104,22 +104,21 @@ export const Home = () => {
     }));
   };
 
- const handleFilter = () => {
-   const params = new URLSearchParams();
+  const handleFilter = () => {
+    const params = new URLSearchParams();
 
-   if (filter.categoryId) {
-     params.append("categoryId", filter.categoryId);
-   }
+    if (filter.categoryId) {
+      params.append("categoryId", filter.categoryId);
+    }
 
-   if (filter.sortDirection) {
-     params.append("sortDirection", filter.sortDirection);
-   }
+    if (filter.sortDirection) {
+      params.append("sortDirection", filter.sortDirection);
+    }
 
-   params.append("status", "ACTIVE"); // nếu bạn luôn muốn gửi status
+    params.append("status", "ACTIVE"); // nếu bạn luôn muốn gửi status
 
-   window.location = `/product/filter?${params.toString()}`;
- };
-
+    window.location = `/product/filter?${params.toString()}`;
+  };
 
   if (status === "loading") return <Loading></Loading>;
   if (status === "failed")
@@ -134,34 +133,25 @@ export const Home = () => {
     <div className="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen">
       {/* Luxury Category Carousel */}
       <div className="py-10 px-8 bg-white">
-        <Swiper
-          modules={[Autoplay]}
-          spaceBetween={30}
-          slidesPerView={7}
-          autoplay={{ delay: 3000 }}
-          loop={true}
-          className="mySwiper"
-        >
+        <div className="flex justify-center gap-7">
           {categorys?.map((category) => (
-            <SwiperSlide key={category.id}>
-              <Link
-                to={`/category/${category.id}`}
-                className="flex flex-col items-center group"
-              >
-                <div className="bg-gray-100 rounded-full p-3 group-hover:bg-gray-200 transition-all duration-300">
-                  <img
-                    className="w-16 h-16 object-cover rounded-full"
-                    src={`data:image/png;base64,${category.categoryImages[0]?.data}`}
-                    alt={category?.name}
-                  />
-                </div>
-                <span className="mt-3 text-sm font-medium text-gray-700 group-hover:text-black text-center">
-                  {category.name}
-                </span>
-              </Link>
-            </SwiperSlide>
+            <Link
+              to={`/category/${category.id}`}
+              className="flex flex-col items-center group"
+            >
+              <div className="bg-gray-100 rounded-full p-3 group-hover:bg-gray-200 transition-all duration-300">
+                <img
+                  className="w-16 h-16 object-cover rounded-full"
+                  src={`data:image/png;base64,${category.categoryImages[0]?.data}`}
+                  alt={category?.name}
+                />
+              </div>
+              <span className="mt-3 text-sm font-medium text-gray-700 group-hover:text-black text-center">
+                {category.name}
+              </span>
+            </Link>
           ))}
-        </Swiper>
+        </div>
       </div>
 
       {/* Luxury Banner */}
@@ -173,7 +163,6 @@ export const Home = () => {
               alt="Luxury Banner"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
           </div>
         ) : (
           <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-black flex items-center justify-center">
@@ -421,7 +410,7 @@ export const Home = () => {
           </p>
           <Link
             to={"/login"}
-            className="bg-transparent border  bg-black text-white border-black px-10 py-3 font-light tracking-wider transition-all duration-300"
+            className=" border  bg-black text-white border-black px-10 py-3 font-light tracking-wider transition-all duration-300"
           >
             ĐĂNG KÝ NGAY
           </Link>

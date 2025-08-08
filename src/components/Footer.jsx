@@ -71,9 +71,9 @@ const Footer = () => {
             </Link>
           ))}
         </div>
-        <div className="flex flex-col gap-3">
+        {/* <div className="flex flex-col gap-3">
           <div className="text-orange-600 font-semibold text-lg">
-            🛡️ Dịch vụ chăm sóc
+            🛡️ Dịch vụ tại cửa hàng
           </div>
           <Link className="text-gray-600 hover:text-orange-600 transition-colors duration-200 flex items-center gap-2">
             🏥 Khám sức khỏe thú cưng
@@ -87,7 +87,7 @@ const Footer = () => {
           <Link className="text-gray-600 hover:text-orange-600 transition-colors duration-200 flex items-center gap-2">
             🎓 Huấn luyện thú cưng
           </Link>
-        </div>
+        </div> */}
         <div className="flex flex-col gap-3">
           <div className="text-orange-600 font-semibold text-lg">
             📞 Hỗ trợ khách hàng

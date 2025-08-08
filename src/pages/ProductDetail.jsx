@@ -8,12 +8,15 @@ import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 import UpSizeImage from "../components/UpSizeImage";
-import AttributeTable from "../components/AttributeTable";
 import ReviewCard from "../components/ReviewCard";
 import { getProductReview, getVariantDiscount } from "../api/productApi";
 import { addtoCartApi } from "../api/cartApi";
 import { fetchCart } from "../redux/slices/cartSlice";
 import { Snackbar, Alert } from "@mui/material";
+import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import PaletteOutlinedIcon from "@mui/icons-material/PaletteOutlined";
+import PetsOutlinedIcon from "@mui/icons-material/PetsOutlined";
+import Typography from "@mui/material/Typography";
 
 export const ProductDetail = () => {
   const [amount, setAmount] = useState(1);
@@ -216,19 +219,26 @@ export const ProductDetail = () => {
           </div>
           <div className="flex flex-col gap-3">
             <div className="uppercase text-2xl font-extrabold text-gray-800">
-              🐾 {displayedProduct?.name || "Tên sản phẩm"}
+              <PetsOutlinedIcon /> {displayedProduct?.name || "Tên sản phẩm"}
             </div>
             <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
-              <Rating
-                name="text-feedback"
-                value={displayedProduct?.rating || 0}
-                readOnly
-                precision={0.5}
-                emptyIcon={
-                  <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
-                }
-              />
+              {displayedProduct?.rating && displayedProduct.rating > 0 ? (
+                <Rating
+                  name="text-feedback"
+                  value={displayedProduct.rating}
+                  readOnly
+                  precision={0.5}
+                  emptyIcon={
+                    <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
+                  }
+                />
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  (Chưa có đánh giá nào)
+                </Typography>
+              )}
             </Box>
+
             <div className="flex flex-col gap-1 pb-2 border-b border-gray-200">
               {/* Tính giá gốc và phần trăm giảm */}
               {(() => {
@@ -245,7 +255,8 @@ export const ProductDetail = () => {
                   <>
                     {/* Giá sau giảm (nếu có giảm), hoặc giá gốc */}
                     <div className="text-2xl font-extrabold text-orange-600">
-                      💰 {discountedPrice.toLocaleString("vi-VN")} VNĐ
+                      <MonetizationOnOutlinedIcon />{" "}
+                      {discountedPrice.toLocaleString("vi-VN")} VNĐ
                     </div>
 
                     {/* Nếu có giảm giá, hiển thị giá gốc + phần trăm */}
@@ -265,7 +276,7 @@ export const ProductDetail = () => {
             </div>
 
             <div className="text-gray-600 font-medium">
-              🎨 Chọn màu sắc cho thú cưng:
+              <PaletteOutlinedIcon /> Chọn màu sắc cho thú cưng:
             </div>
             <div className="flex gap-2 flex-wrap border-b border-b-orange-200 pb-2">
               {displayedProduct?.variants &&
@@ -337,7 +348,7 @@ export const ProductDetail = () => {
                 onClick={handleAddToCart}
               >
                 <AddShoppingCartOutlinedIcon sx={{ color: "white" }} />
-                🛒 Thêm vào giỏ hàng
+                Thêm vào giỏ hàng
               </button>
             </div>
           </div>
@@ -345,18 +356,17 @@ export const ProductDetail = () => {
         <div class="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-sm font-semibold border border-green-200 mt-4">
           <i class="fa-solid fa-shield-halved text-green-600"></i>
           <span className="">
-            🏥 Bảo hành sức khỏe thú cưng 10 ngày - 🔄 1 đổi 1 nếu có lỗi từ nhà
-            cung cấp
+            🏥 Bảo hành sức khỏe thú cưng 10 ngày - 1 đổi 1 nếu có vấn đề về sức
+            khỏe
           </span>
         </div>
         <div className="mt-4 p-5 text-gray-700 border-t border-orange-200 bg-white rounded-lg shadow-sm">
           <div className="uppercase text-2xl font-extrabold mb-3 text-orange-600">
-            📝 Mô tả sản phẩm:{" "}
+            Mô tả sản phẩm:{" "}
           </div>
           <p className="text-gray-600 leading-relaxed">
             {displayedProduct?.description || "Chưa có mô tả"}
           </p>
-          <AttributeTable productId={displayedProduct?.id} />
         </div>
         <div className="mt-4 pt-4 border-t border-orange-200 bg-white rounded-lg shadow-sm p-5">
           <div className="uppercase text-2xl font-extrabold text-orange-600 mb-4">

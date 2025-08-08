@@ -80,9 +80,9 @@ export const PersonalPage = () => {
         <div className="flex gap-2">
           <div className="w-1/4 rounded-lg p-5 bg-white shadow-md">
             <Link className="text-orange-700 items-center flex cursor-pointer mb-2 font-medium">
-              <PermIdentityOutlinedIcon
+              {/* <PermIdentityOutlinedIcon
                 sx={{ color: "#ea580c", marginRight: 1 }}
-              />
+              /> */}
               🐱 Tài khoản của tôi
             </Link>
             <Link
@@ -101,15 +101,15 @@ export const PersonalPage = () => {
               to={"/user/purchase"}
               className="text-slate-700 items-center flex cursor-pointer hover:text-orange-500"
             >
-              <AssignmentOutlinedIcon
+              {/* <AssignmentOutlinedIcon
                 sx={{ color: "#9ca3af", marginRight: 1 }}
-              />
+              /> */}
               🛍️ Đơn mua
             </Link>
           </div>
           <div className="w-full rounded-lg p-5 bg-white shadow-md">
             <div className="uppercase font-bold text-orange-600 flex items-center gap-2">
-              👤 Quản lý hồ sơ thú cưng
+              👤 Quản lý hồ sơ
             </div>
             <div className="border-b border-orange-200 text-sm text-gray-500 pb-2 mb-4">
               🔒 Quản lý thông tin hồ sơ để bảo mật tài khoản và chăm sóc thú

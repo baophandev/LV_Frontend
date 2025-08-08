@@ -23,7 +23,6 @@ export const VNPaySuccess = () => {
     <div className="w-full h-screen flex flex-col items-center justify-center gap-6 bg-gradient-to-br from-orange-50 to-red-50">
       <div className="bg-white rounded-xl shadow-lg p-8 max-w-md mx-4 text-center">
         <div className="mb-6">
-          <span className="text-6xl block mb-4">🎉</span>
           <img src={vnpayLogo} alt="VNPay Logo" className="mx-auto mb-4 w-24" />
         </div>
 

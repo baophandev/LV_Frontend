@@ -407,7 +407,7 @@ const Header = () => {
                     className="text-gray-700 hover:text-orange-600 flex items-center gap-3 w-full"
                   >
                     <AccountCircleOutlinedIcon fontSize="small" />
-                    👤 Tài khoản
+                    Tài khoản
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
@@ -416,7 +416,7 @@ const Header = () => {
                     className="text-gray-700 hover:text-orange-600 flex items-center gap-3 w-full"
                   >
                     <ShoppingCartOutlinedIcon fontSize="small" />
-                    🛒 Đơn mua
+                    Đơn mua
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
@@ -425,7 +425,7 @@ const Header = () => {
                     className="text-red-500 hover:text-red-600 cursor-pointer flex items-center gap-3 w-full"
                   >
                     <LoginIcon fontSize="small" className="rotate-180" />
-                    🚪 Đăng xuất
+                    Đăng xuất
                   </div>
                 </MenuItem>
               </GlassMenu>

@@ -141,16 +141,9 @@ export const Home = () => {
             Khám phá các sản phẩm dành cho thú cưng yêu quý
           </p>
         </div>
-        <Swiper
-          modules={[Autoplay]}
-          spaceBetween={30}
-          slidesPerView={7}
-          autoplay={{ delay: 3000 }}
-          loop={true}
-          className="mySwiper"
-        >
-          {categorys?.map((category) => (
-            <SwiperSlide key={category.id}>
+          <div className="flex gap-6 flex-wrap justify-center">
+            {categorys?.map((category) => (
+            <div className="flex" key={category.id}>
               <Link
                 to={`/category/${category.id}`}
                 className="flex flex-col items-center group"
@@ -166,9 +159,9 @@ export const Home = () => {
                   {category.name}
                 </span>
               </Link>
-            </SwiperSlide>
+            </div>
           ))}
-        </Swiper>
+          </div>
       </div>
 
       {/* Luxury Banner */}
@@ -180,7 +173,7 @@ export const Home = () => {
               alt="Luxury Banner"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
+            {/* <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" /> */}
           </div>
         ) : (
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-green-500 flex items-center justify-center">
@@ -189,7 +182,7 @@ export const Home = () => {
             </span>
           </div>
         )}
-        <div className="relative z-10 flex flex-col justify-center h-full px-16 max-w-3xl">
+        {/* <div className="relative z-10 flex flex-col justify-center h-full px-16 max-w-3xl">
           <motion.h2
             className="text-5xl font-serif font-light text-white mb-6"
             initial={{ opacity: 0, y: 20 }}
@@ -215,7 +208,7 @@ export const Home = () => {
           >
             KHÁM PHÁ NGAY
           </motion.button>
-        </div>
+        </div> */}
       </div>
 
       {/* Luxury Filter */}
@@ -340,7 +333,7 @@ export const Home = () => {
         </div>
       </section>
       <div className="bg-green-100 text-gray-800 py-20 px-8 text-center">
-        <h3 className="text-3xl font-serif font-light mb-6">
+        <h3 className="text-3xl font-sans font-light mb-6">
           🏥 Bảo hành sức khỏe thú cưng 10 ngày 🩺
         </h3>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -393,7 +386,7 @@ export const Home = () => {
       {/* Luxury Footer Banner */}
       {userId ? (
         <div className="bg-blue-100 text-gray-800 py-20 px-8 text-center">
-          <h3 className="text-3xl font-serif font-light mb-6">
+          <h3 className="text-3xl font-sans font-light mb-6">
             🎁 Chương trình khách hàng thân thiết 🎁
           </h3>
           <p className="max-w-2xl mx-auto mb-8 font-light">
@@ -403,7 +396,7 @@ export const Home = () => {
         </div>
       ) : (
         <div className="bg-purple-100 text-gray-800 py-20 px-8 text-center">
-          <h3 className="text-3xl font-serif font-light mb-6">
+          <h3 className="text-3xl font-sans font-light mb-6">
             🐾 Trở thành thành viên của gia đình Pet Store 🐾
           </h3>
           <p className="max-w-2xl mx-auto mb-8 font-light">

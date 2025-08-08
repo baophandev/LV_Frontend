@@ -64,6 +64,7 @@ export const getProductReview = async ({ pageNumber = 0, pageSize = 6, productId
       params:{
         page: pageNumber,
         size: pageSize,
+        isShowed: true,
         productId: productId
       }
     })

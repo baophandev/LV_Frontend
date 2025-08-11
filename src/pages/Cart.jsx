@@ -5,8 +5,10 @@ import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
 import { getVariantDiscount } from "../api/productApi";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import SelectAddressDialog from "../components/SelectAddressDialog";
 import OrderDialog from "../components/OrderDialog";
+import VariantSelector from "../components/VariantSelector";
 import {
   Table,
   TableBody,
@@ -16,8 +18,14 @@ import {
   TableRow,
   Paper,
   Checkbox,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
-import { deleteCartItemApi, updateCartQuantityApi } from "../api/cartApi";
+import {
+  deleteCartItemApi,
+  updateCartQuantityApi,
+  updateCartVariantApi,
+} from "../api/cartApi";
 
 export const Cart = () => {
   const { cart, status } = useSelector((state) => state.cart);
@@ -25,6 +33,8 @@ export const Cart = () => {
   const [updatedCart, setUpdatedCart] = useState(null);
   const [open, setOpen] = useState(false);
   const [orderOpen, setOrderOpen] = useState(false);
+  const [variantSelectorOpen, setVariantSelectorOpen] = useState(false);
+  const [selectedCartItem, setSelectedCartItem] = useState(null);
   const addressList = useSelector((state) => state.user.address);
   const memoizedAddressList = useMemo(() => addressList || [], [addressList]);
   const [count, setCount] = useState(0);
@@ -36,7 +46,7 @@ export const Cart = () => {
 
   const [address, setAddress] = useState(null);
 
-  console.log("Selected item: ", selectedItems)
+  console.log("Selected item: ", selectedItems);
 
   useEffect(() => {
     if (memoizedAddressList.length > 0) {
@@ -129,15 +139,15 @@ export const Cart = () => {
   };
 
   const handleDeleteItem = async (itemId) => {
-    try{
-      const response = await deleteCartItemApi({userId, itemId});
+    try {
+      const response = await deleteCartItemApi({ userId, itemId });
       window.location.reload();
       return response;
-    }catch(err){
+    } catch (err) {
       console.error("Lỗi khi xóa sản phẩm khỏi giỏ hàng", err);
       throw new Error("Lỗi khi xóa sản phẩm khỏi giỏ hàng", err);
     }
-  }
+  };
 
   useEffect(() => {
     setCount(Object.keys(selectedItems).length);
@@ -179,6 +189,40 @@ export const Cart = () => {
     }
   };
 
+  const handleEditVariant = (item) => {
+    console.log("handleEditVariant được gọi với item:", item);
+    if (!item || !item.productId || !item.productVariantId) {
+      console.error("Item không hợp lệ:", item);
+      alert("Không thể chỉnh sửa phân loại cho sản phẩm này");
+      return;
+    }
+    setSelectedCartItem(item);
+    setVariantSelectorOpen(true);
+  };
+
+  const handleVariantChange = async (newVariant) => {
+    if (!selectedCartItem) return;
+
+    try {
+      await updateCartVariantApi({
+        userId: userId,
+        cartItemId: selectedCartItem.itemId,
+        newVariantId: newVariant.id,
+      });
+
+      // Reload trang để cập nhật giỏ hàng
+      window.location.reload();
+    } catch (error) {
+      console.error("Lỗi cập nhật variant:", error);
+      alert("Có lỗi xảy ra khi thay đổi phân loại sản phẩm");
+    }
+  };
+
+  const handleCloseVariantSelector = () => {
+    console.log("Đóng VariantSelector");
+    setVariantSelectorOpen(false);
+    setSelectedCartItem(null);
+  };
 
   if (status === "loading") return <Loading></Loading>;
 
@@ -203,7 +247,7 @@ export const Cart = () => {
               <TableCell>Đơn giá</TableCell>
               <TableCell>SL</TableCell>
               <TableCell>Tổng tiền</TableCell>
-              <TableCell>Xóa</TableCell>
+              <TableCell>Thao tác</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -233,7 +277,20 @@ export const Cart = () => {
                       {item.productName}
                     </Link>
                   </TableCell>
-                  <TableCell>{item.productColor}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <span>{item.productColor}</span>
+                      <Tooltip title="Chỉnh sửa phân loại">
+                        <IconButton
+                          size="small"
+                          onClick={() => handleEditVariant(item)}
+                          sx={{ color: "#1976d2" }}
+                        >
+                          <EditOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  </TableCell>
                   <TableCell>
                     {item.discountValue > 0
                       ? `${(
@@ -272,16 +329,25 @@ export const Cart = () => {
                     đ
                   </TableCell>
                   <TableCell>
-                    <button onClick={() => handleDeleteItem(item.itemId)}>
-                      <DeleteOutlineOutlinedIcon className="text-red-500 cursor-pointer" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      
+                      <Tooltip title="Xóa khỏi giỏ hàng">
+                        <IconButton
+                          size="small"
+                          onClick={() => handleDeleteItem(item.itemId)}
+                          sx={{ color: "#d32f2f" }}
+                        >
+                          <DeleteOutlineOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={8}
+                  colSpan={9}
                   className="text-center"
                   style={{ color: ThemeColor.MAIN_BLUE, textAlign: "center" }}
                 >
@@ -363,6 +429,13 @@ export const Cart = () => {
         address={address}
         totalPrice={totalPrice}
       ></OrderDialog>
+
+      <VariantSelector
+        open={variantSelectorOpen}
+        onClose={handleCloseVariantSelector}
+        currentItem={selectedCartItem}
+        onVariantSelect={handleVariantChange}
+      />
     </div>
   );
 };

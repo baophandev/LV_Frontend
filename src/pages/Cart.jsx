@@ -455,7 +455,7 @@ export const Cart = () => {
                     <span className="text-4xl">🐾</span>
                     <span className="text-lg font-medium">Giỏ hàng trống</span>
                     <span className="text-sm text-gray-500">
-                      Hãy thêm một số sản phẩm cho thú cưng của bạn!
+                      Hãy thêm một số sản phẩm!
                     </span>
                   </div>
                 </TableCell>

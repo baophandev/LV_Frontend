@@ -215,7 +215,7 @@ export const Home = () => {
       <div className="bg-orange-600 py-8 px-16">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h3 className="text-white text-xl font-light tracking-wider">
-            🔍 TÌM KIẾM SẢN PHẨM CHO THÚ CƯNG
+            🔍 TÌM KIẾM SẢN PHẨM
           </h3>
 
           <div className="flex items-center space-x-6">

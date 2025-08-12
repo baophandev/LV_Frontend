@@ -88,6 +88,16 @@ const CreateAddressDialog = ({ open, handleClose }) => {
       className="pet-dialog"
       maxWidth="md"
       fullWidth
+      sx={{
+        "& .MuiDialog-container": {
+          alignItems: "flex-start",
+          paddingTop: "100px", // Đẩy dialog xuống dưới header
+        },
+        "& .MuiDialog-paper": {
+          marginTop: "0px",
+          maxHeight: "calc(100vh - 100px)", // Đảm bảo dialog không quá cao
+        },
+      }}
     >
       <div className="bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 p-4">
         <h2 className="text-xl font-bold text-white text-center">

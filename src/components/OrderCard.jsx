@@ -144,7 +144,7 @@ const OrderCard = ({ product, status, id, orderDate, method }) => {
         <div className="text-gray-600 text-sm flex items-center gap-1">
           🛍️{" "}
           <span className="font-medium">
-            {product.length} sản phẩm cho thú cưng
+            {product.length} sản phẩm đã chọn
           </span>
         </div>
         <div className="text-right">

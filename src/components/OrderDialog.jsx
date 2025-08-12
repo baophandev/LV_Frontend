@@ -141,7 +141,7 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
         {/* Danh sách sản phẩm */}
         <div className="mb-6">
           <div className="font-semibold text-lg mb-3 text-orange-700">
-            🐾 Sản phẩm cho thú cưng
+            🐾 Sản phẩm đã chọn
           </div>
           {order && Object.values(order).length > 0 ? (
             <TableContainer
@@ -221,7 +221,7 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
             <div className="text-center text-orange-500 py-8 bg-white rounded-xl border border-dashed border-orange-300">
               <div className="flex flex-col items-center gap-2">
                 <span className="text-4xl">🐾</span>
-                <span>Chưa chọn sản phẩm cho thú cưng</span>
+                <span>Chưa chọn sản phẩm</span>
               </div>
             </div>
           )}

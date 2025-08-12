@@ -211,7 +211,7 @@ const Header = () => {
               placeholder={
                 isListening
                   ? "🎤 Đang nghe..."
-                  : "🐾 Tìm kiếm sản phẩm cho thú cưng..."
+                  : "🐾 Tìm kiếm sản phẩm..."
               }
               type="text"
               value={searchQuery}

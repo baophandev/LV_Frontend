@@ -5,13 +5,14 @@ const axiosInstance = axios.create({
   timeout: 10000,
 });
 
-const token = localStorage.getItem("authToken");
+// Lấy token mỗi lần gọi API để đảm bảo token luôn mới nhất
+const getAuthToken = () => localStorage.getItem("authToken");
 
 export const fetchCartApi = async (userId) => {
   try {
     const response = await axiosInstance.get(`/cart/${userId}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${getAuthToken()}`,
       },
     });
     return response.data;
@@ -27,7 +28,7 @@ export const addtoCartApi = async ({ userId, variantId, quantity }) => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${getAuthToken()}`,
         },
         params: {
           userId,
@@ -49,7 +50,7 @@ export const deleteCartItemApi = async ({userId, itemId}) => {
       "/cart/deleteItem",
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${getAuthToken()}`,
         },
         params: {
           userId,
@@ -72,9 +73,29 @@ export const updateCartQuantityApi = async ({ userId, cartItemId, quantity }) =>
 
   const response = await axiosInstance.post("/cart/updateQuantity", params, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${getAuthToken()}`,
     },
   });
 
   return response.data;
+};
+
+export const updateCartVariantApi = async ({ userId, cartItemId, newVariantId }) => {
+  try {
+    const params = new URLSearchParams();
+    params.append("userId", userId);
+    params.append("cartItemId", cartItemId);
+    params.append("variantId", newVariantId);
+
+    const response = await axiosInstance.post("/cart/updateVariant", params, {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi API updateCartVariantApi:", error?.response?.data || error);
+    throw error;
+  }
 };

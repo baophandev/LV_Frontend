@@ -58,6 +58,25 @@ export const getVariantDiscount = async (variantId) => {
   }
 };
 
+export const getProductVariantApi = async (variantId) => {
+  try {
+    const response = await axiosInstance.get(`/product/variant/${variantId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVariantImageApi = async (variantId) => {
+  try {
+    const response = await axiosInstance.get(`/product/variant/${variantId}/image`);
+    return response.data;
+  } catch (error) {
+    console.warn("Không thể lấy ảnh biến thể:", error);
+    return null;
+  }
+};
+
 export const getProductReview = async ({ pageNumber = 0, pageSize = 6, productId }) => {
   try{
     const response = await axiosInstance.get('/review', {

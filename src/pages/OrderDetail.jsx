@@ -30,6 +30,8 @@ export const OrderDetail = () => {
   const { orderId } = useParams();
   const [orderDetail, setOrderDetail] = useState(null);
   const [openReviewDialogId, setOpenReviewDialogId] = useState(null);
+  const [submittingReviewId, setSubmittingReviewId] = useState(null);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     const getOrderDetail = async () => {
@@ -69,6 +71,9 @@ export const OrderDetail = () => {
 
   const handleSubmitReview = async (reviewData) => {
     console.log("Review submitted:", reviewData);
+    const orderItemId = reviewData.orderItemId;
+    setSubmittingReviewId(orderItemId);
+
     try {
       const formData = new FormData();
 
@@ -94,9 +99,21 @@ export const OrderDetail = () => {
 
       // Reset lại sau khi update
       setOpenReviewDialogId(false);
-      window.location.reload(); // Tải lại trang để cập nhật biến thể
+
+      // Hiển thị toast notification
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 5000);
+
+      // Thay vì reload toàn bộ trang, chỉ cập nhật orderDetail
+      const updatedOrderDetail = await fetchOrderByIdApi(orderId);
+      setOrderDetail(updatedOrderDetail);
     } catch (err) {
-      console.log("Lỗi khi cập nhật biến thể:", err);
+      console.log("Lỗi khi tạo đánh giá:", err);
+      throw err; // Re-throw to handle in ReviewDialog
+    } finally {
+      setSubmittingReviewId(null);
     }
   };
 
@@ -294,10 +311,22 @@ export const OrderDetail = () => {
                           !item.isReviewed ? (
                             <button
                               onClick={() => setOpenReviewDialogId(item.id)}
-                              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 rounded-lg text-white font-medium transition-colors"
+                              disabled={submittingReviewId === item.id}
+                              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                                submittingReviewId === item.id
+                                  ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                                  : "bg-orange-500 hover:bg-orange-600 text-white"
+                              }`}
                             >
-                              ⭐ Viết nhận xét
+                              {submittingReviewId === item.id
+                                ? "⏳ Đang xử lý..."
+                                : "⭐ Viết nhận xét"}
                             </button>
+                          ) : orderDetail.status === "DELIVERED" &&
+                            item.isReviewed ? (
+                            <span className="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-medium">
+                              ✅ Đã đánh giá
+                            </span>
                           ) : (
                             ""
                           )}
@@ -342,6 +371,31 @@ export const OrderDetail = () => {
       ) : (
         ""
       )}
+
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="fixed top-4 right-4 z-50 transform transition-all duration-500 ease-in-out">
+          <div className="bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px]">
+            <div className="flex-shrink-0">
+              <CheckCircleIcon className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="font-medium text-white">
+                ✅ Đánh giá thành công
+              </div>
+              <div className="text-green-100 text-sm">
+                Cảm ơn bạn đã đánh giá sản phẩm!
+              </div>
+            </div>
+            <button
+              onClick={() => setShowToast(false)}
+              className="flex-shrink-0 ml-4 text-green-100 hover:text-white transition-colors"
+            >
+              <CloseIcon className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -356,22 +410,36 @@ export const ReviewDialog = ({
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [images, setImages] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setImages(files);
   };
 
-  const handleSubmit = () => {
-    const reviewData = {
-      productId,
-      rating,
-      comment,
-      images,
-      orderItemId,
-    };
-    onSubmit(reviewData);
-    onClose();
+  const handleSubmit = async () => {
+    if (isSubmitting) return; // Prevent double submission
+
+    setIsSubmitting(true);
+    try {
+      const reviewData = {
+        productId,
+        rating,
+        comment,
+        images,
+        orderItemId,
+      };
+      await onSubmit(reviewData);
+      onClose();
+      // Reset form
+      setRating(5);
+      setComment("");
+      setImages([]);
+    } catch (error) {
+      console.error("Error submitting review:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -445,7 +513,7 @@ export const ReviewDialog = ({
               },
             }}
           >
-            📷 Tải hình ảnh
+            Tải hình ảnh
             <input
               type="file"
               accept="image/*"
@@ -468,14 +536,18 @@ export const ReviewDialog = ({
         <Button
           onClick={handleSubmit}
           variant="contained"
+          disabled={isSubmitting}
           sx={{
             backgroundColor: "#ea580c",
             "&:hover": {
               backgroundColor: "#dc2626",
             },
+            "&:disabled": {
+              backgroundColor: "#9ca3af",
+            },
           }}
         >
-          🚀 Gửi đánh giá
+          {isSubmitting ? "⏳ Đang gửi..." : "🚀 Gửi đánh giá"}
         </Button>
       </DialogActions>
     </Dialog>

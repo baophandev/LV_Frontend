@@ -30,7 +30,7 @@ export const ProductDetail = () => {
   const [reviews, setReviews] = useState([]);
   const [selectedItems, setSelectedItems] = useState(null);
   const user = useSelector((state) => state.user.user);
-  const userId = user.id;
+  const userId = user?.id;
   const [openToast, setOpenToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastSeverity, setToastSeverity] = useState("success");
@@ -142,7 +142,11 @@ export const ProductDetail = () => {
 
   const handleAddToCart = async () => {
     if (!selectedItems) {
-      alert("⚠️ Vui lòng chọn một biến thể trước khi thêm vào giỏ hàng!");
+      setToastMessage(
+        "⚠️ Vui lòng chọn một biến thể trước khi thêm vào giỏ hàng!"
+      );
+      setToastSeverity("warning");
+      setOpenToast(true);
       return;
     }
 
@@ -158,8 +162,7 @@ export const ProductDetail = () => {
       setToastSeverity("success");
       setOpenToast(true);
     } catch (error) {
-      alert("❌ Đã có lỗi xảy ra khi thêm vào giỏ hàng");
-      setToastMessage("❌ Lỗi khi cập nhật sản phẩm.");
+      setToastMessage("❌ Đã có lỗi xảy ra khi thêm vào giỏ hàng");
       setToastSeverity("error");
       setOpenToast(true);
     }
@@ -325,32 +328,39 @@ export const ProductDetail = () => {
                 </div>
               </div>
             )}
-            <div className="text-white flex gap-1">
-              <div className="flex items-center bg-gradient-to-r from-orange-100 to-yellow-100 px-4 py-2 rounded-lg shadow-sm border border-orange-200">
-                <div className="flex items-center gap-3">
-                  <div className="text-orange-700 text-sm font-medium">
-                    🔢 Chọn số lượng:
+            {user && userId ? (
+              <div className="text-white flex gap-1">
+                <div className="flex items-center bg-gradient-to-r from-orange-100 to-yellow-100 px-4 py-2 rounded-lg shadow-sm border border-orange-200">
+                  <div className="flex items-center gap-3">
+                    <div className="text-orange-700 text-sm font-medium">
+                      🔢 Chọn số lượng:
+                    </div>
+                    <input
+                      type="number"
+                      min="1"
+                      className="w-20 h-9 text-center text-black bg-white border border-orange-300 rounded-xl outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition"
+                      value={amount}
+                      onChange={(e) =>
+                        setAmount(Math.max(1, parseInt(e.target.value) || 1))
+                      }
+                    />
                   </div>
-                  <input
-                    type="number"
-                    min="1"
-                    className="w-20 h-9 text-center text-black bg-white border border-orange-300 rounded-xl outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-500 transition"
-                    value={amount}
-                    onChange={(e) =>
-                      setAmount(Math.max(1, parseInt(e.target.value) || 1))
-                    }
-                  />
                 </div>
-              </div>
 
-              <button
-                className="py-1 px-6 font-semibold rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white border border-orange-400 transition-all duration-200 shadow-lg hover:shadow-xl"
-                onClick={handleAddToCart}
-              >
-                <AddShoppingCartOutlinedIcon sx={{ color: "white" }} />
-                Thêm vào giỏ hàng
-              </button>
-            </div>
+                <button
+                  className="py-1 px-6 font-semibold rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white border border-orange-400 transition-all duration-200 shadow-lg hover:shadow-xl"
+                  onClick={handleAddToCart}
+                >
+                  <AddShoppingCartOutlinedIcon sx={{ color: "white" }} />
+                  Thêm vào giỏ hàng
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 bg-yellow-50 text-yellow-700 px-4 py-3 rounded-lg shadow-sm font-medium border border-yellow-200">
+                <span className="text-lg">🔒</span>
+                <span>Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng</span>
+              </div>
+            )}
           </div>
         </div>
         <div class="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-sm font-semibold border border-green-200 mt-4">

@@ -133,7 +133,7 @@ export const Register = () => {
       await registerApi(formData);
 
       setSuccessMessage(
-        "🎉 Tạo tài khoản thành công! Chào mừng bạn đến với cộng đồng yêu thú cưng!"
+        "Tạo tài khoản thành công! Chào mừng bạn đến với cộng đồng yêu thú cưng!"
       );
       setTimeout(() => {
         console.log("Navigate to login");

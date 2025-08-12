@@ -45,7 +45,7 @@ export const EnterEmail = () => {
       await forgotPasswordApi({ email: email });
 
       setStatus("success");
-      setMessage("📧 Email đã được gửi! Kiểm tra hộp thư để đặt lại mật khẩu.");
+      setMessage("Email đã được gửi! Kiểm tra hộp thư để đặt lại mật khẩu.");
     } catch (err) {
       console.log(err);
       setStatus("error");
@@ -138,7 +138,7 @@ export const EnterEmail = () => {
               ) : (
                 <>
                   <SendOutlinedIcon className="w-5 h-5" />
-                  <span>📧 Gửi email</span>
+                  <span>Gửi email</span>
                 </>
               )}
             </button>

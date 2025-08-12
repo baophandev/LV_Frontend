@@ -185,7 +185,7 @@ const OrderCard = ({ product, status, id, orderDate, method }) => {
               className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 px-6 py-3 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
               onClick={() => handleStatusChange("CANCELLED")}
             >
-              <HighlightOffOutlinedIcon className="w-5 h-5" />❌ Hủy đơn hàng
+              <HighlightOffOutlinedIcon className="w-5 h-5" />Hủy đơn hàng
             </button>
           </div>
         )}

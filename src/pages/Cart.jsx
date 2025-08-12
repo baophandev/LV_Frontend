@@ -2,10 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
-import { getVariantDiscount } from "../api/productApi";
+import {
+  getVariantDiscount,
+  fetchProductApi,
+  getVariantImageApi,
+} from "../api/productApi";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import SelectAddressDialog from "../components/SelectAddressDialog";
 import OrderDialog from "../components/OrderDialog";
+import EditVariantDialog from "../components/EditVariantDialog";
 import {
   Table,
   TableBody,
@@ -16,7 +22,11 @@ import {
   Paper,
   Checkbox,
 } from "@mui/material";
-import { deleteCartItemApi, updateCartQuantityApi } from "../api/cartApi";
+import {
+  deleteCartItemApi,
+  updateCartQuantityApi,
+  addtoCartApi,
+} from "../api/cartApi";
 
 export const Cart = () => {
   const { cart, status } = useSelector((state) => state.cart);
@@ -24,6 +34,8 @@ export const Cart = () => {
   const [updatedCart, setUpdatedCart] = useState(null);
   const [open, setOpen] = useState(false);
   const [orderOpen, setOrderOpen] = useState(false);
+  const [editVariantOpen, setEditVariantOpen] = useState(false);
+  const [selectedCartItem, setSelectedCartItem] = useState(null);
   const addressList = useSelector((state) => state.user.address);
   const memoizedAddressList = useMemo(() => addressList || [], [addressList]);
   const [count, setCount] = useState(0);
@@ -34,6 +46,41 @@ export const Cart = () => {
   const userId = user.id;
 
   const [address, setAddress] = useState(null);
+
+  // Helper function để lấy ảnh biến thể
+  const getVariantImage = (item) => {
+    // Ưu tiên: ảnh riêng của biến thể > ảnh từ variantImages > ảnh avatar biến thể > ảnh sản phẩm
+    if (item.variantImage?.data) {
+      return {
+        src: `data:image/png;base64,${item.variantImage.data}`,
+        alt: `${item.productName} - ${item.productColor}`,
+        isVariantImage: true,
+      };
+    }
+
+    if (item.variantDetails?.variantImages?.length > 0) {
+      return {
+        src: `data:image/png;base64,${item.variantDetails.variantImages[0].data}`,
+        alt: `${item.productName} - ${item.productColor}`,
+        isVariantImage: true,
+      };
+    }
+
+    if (item.variantDetails?.avatar?.data) {
+      return {
+        src: `data:image/png;base64,${item.variantDetails.avatar.data}`,
+        alt: `${item.productName} - ${item.productColor}`,
+        isVariantImage: true,
+      };
+    }
+
+    // Fallback về ảnh sản phẩm
+    return {
+      src: `data:image/png;base64,${item.productAvatar.data}`,
+      alt: item.productName,
+      isVariantImage: false,
+    };
+  };
 
   console.log("Selected item: ", selectedItems);
 
@@ -60,36 +107,69 @@ export const Cart = () => {
       return;
     }
 
-    const updateVariantsWithDiscount = async () => {
+    const updateVariantsWithDetails = async () => {
       try {
         const updatedVariants = await Promise.all(
           cart.data.items.map(async (cartItem) => {
             try {
+              // Lấy thông tin discount
               const discountResponse = await getVariantDiscount(
                 cartItem.productVariantId
               );
+
+              // Thử lấy ảnh biến thể riêng biệt
+              const variantImageResponse = await getVariantImageApi(
+                cartItem.productVariantId
+              );
+
+              // Lấy thông tin sản phẩm để có được variants với ảnh (fallback)
+              const productResponse = await fetchProductApi(cartItem.productId);
+
+              // Tìm biến thể tương ứng trong sản phẩm
+              const variantDetails = productResponse?.variants?.find(
+                (variant) => variant.id === cartItem.productVariantId
+              );
+
+              console.log(
+                "Product response for",
+                cartItem.productName,
+                ":",
+                productResponse
+              );
+              console.log("Found variant details:", variantDetails);
+              console.log("Variant image response:", variantImageResponse);
+
               return {
                 ...cartItem,
-                discountValue: discountResponse?.discountValue || 0, // Thêm discountValue
+                discountValue: discountResponse?.discountValue || 0,
+                variantDetails: variantDetails || null,
+                variantImage: variantImageResponse || null,
               };
             } catch (err) {
-              console.error("Lỗi khi lấy discount:", err);
-              return { ...cartItem, discountValue: 0 };
+              console.error("Lỗi khi lấy thông tin biến thể:", err);
+              return {
+                ...cartItem,
+                discountValue: 0,
+                variantDetails: null,
+                variantImage: null,
+              };
             }
           })
         );
 
-        setUpdatedCart({ ...cart.data, items: updatedVariants }); // Cập nhật items với discountValue
+        setUpdatedCart({ ...cart.data, items: updatedVariants });
       } catch (error) {
-        console.error("Lỗi khi cập nhật variants với discount:", error);
+        console.error("Lỗi khi cập nhật variants với chi tiết:", error);
       }
     };
 
-    updateVariantsWithDiscount();
-  }, [cart?.data?.items, cart]); // Theo dõi thay đổi trong cart.items
+    updateVariantsWithDetails();
+  }, [cart?.data?.items, cart]);
 
   const displayedCartItem =
     updatedCart?.items?.length > 0 ? updatedCart.items : cartData;
+
+  console.log("Cart items với variant details:", displayedCartItem);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -178,6 +258,52 @@ export const Cart = () => {
     }
   };
 
+  const handleEditVariant = (cartItem) => {
+    setSelectedCartItem(cartItem);
+    setEditVariantOpen(true);
+  };
+
+  const handleUpdateVariant = async (cartItemId, newVariantId) => {
+    try {
+      console.log("Đang cập nhật biến thể:", {
+        cartItemId,
+        newVariantId,
+        userId,
+      });
+
+      // Tìm cart item hiện tại để lấy số lượng
+      const currentItem = displayedCartItem.find(
+        (item) => item.itemId === cartItemId
+      );
+      if (!currentItem) {
+        throw new Error("Không tìm thấy sản phẩm trong giỏ hàng");
+      }
+
+      // Xóa item cũ
+      await deleteCartItemApi({ userId, itemId: cartItemId });
+
+      // Thêm item mới với variant mới
+      await addtoCartApi({
+        userId: userId,
+        variantId: newVariantId,
+        quantity: currentItem.quantity,
+      });
+
+      console.log("Cập nhật biến thể thành công");
+
+      // Reload trang để cập nhật dữ liệu mới
+      window.location.reload();
+    } catch (error) {
+      console.error("Lỗi cập nhật biến thể:", error);
+      alert("Có lỗi xảy ra khi cập nhật biến thể. Vui lòng thử lại!");
+    }
+  };
+
+  const handleCloseEditVariant = () => {
+    setEditVariantOpen(false);
+    setSelectedCartItem(null);
+  };
+
   if (status === "loading") return <Loading></Loading>;
 
   return (
@@ -218,7 +344,7 @@ export const Cart = () => {
                 💸 Tổng tiền
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", color: "#ea580c" }}>
-                🗑️ Xóa
+                ⚙️ Thao tác
               </TableCell>
             </TableRow>
           </TableHead>
@@ -242,11 +368,18 @@ export const Cart = () => {
                     />
                   </TableCell>
                   <TableCell>
-                    <img
-                      className="w-20 rounded-md"
-                      src={`data:image/png;base64,${item.productAvatar.data}`}
-                      alt=""
-                    />
+                    {(() => {
+                      const imageData = getVariantImage(item);
+                      return (
+                        <div className="relative">
+                          <img
+                            className="w-20 h-20 object-cover rounded-md border"
+                            src={imageData.src}
+                            alt={imageData.alt}
+                          />
+                        </div>
+                      );
+                    })()}
                   </TableCell>
                   <TableCell>
                     <Link to={`/product/${item.productId}`}>
@@ -292,9 +425,22 @@ export const Cart = () => {
                     đ
                   </TableCell>
                   <TableCell>
-                    <button onClick={() => handleDeleteItem(item.itemId)}>
-                      <DeleteOutlineOutlinedIcon className="text-red-500 cursor-pointer" />
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEditVariant(item)}
+                        className="text-orange-500 hover:text-orange-600"
+                        title="Chỉnh sửa biến thể"
+                      >
+                        <EditOutlinedIcon />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteItem(item.itemId)}
+                        className="text-red-500 hover:text-red-600"
+                        title="Xóa sản phẩm"
+                      >
+                        <DeleteOutlineOutlinedIcon />
+                      </button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
@@ -395,6 +541,12 @@ export const Cart = () => {
         address={address}
         totalPrice={totalPrice}
       ></OrderDialog>
+      <EditVariantDialog
+        open={editVariantOpen}
+        onClose={handleCloseEditVariant}
+        cartItem={selectedCartItem}
+        onUpdateVariant={handleUpdateVariant}
+      />
     </div>
   );
 };

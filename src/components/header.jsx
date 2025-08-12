@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 import { fetchCategorys } from "../redux/slices/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
-import ThemeColor from "../constant/theme";
 import { getMyInfo, getUserAddress, logout } from "../redux/slices/userSlice";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LoginIcon from "@mui/icons-material/Login";
@@ -265,9 +264,9 @@ const Header = () => {
           </form>
 
           {/* Search Results Dropdown */}
-          {showResults && searchResults.length > 0 && (
+          {showResults && (
             <div
-              className="absolute top-full mt-2 w-full bg-white/96 backdrop-blur-xl border border-orange-200 rounded-xl shadow-2xl z-50 max-h-80 overflow-auto"
+              className="absolute top-full mt-2 w-full bg-white border border-orange-200 rounded-xl shadow-2xl z-50 max-h-80 overflow-auto"
               style={{
                 boxShadow: "0 12px 40px rgba(251, 146, 60, 0.2)",
                 border: "1px solid rgba(251, 146, 60, 0.3)",
@@ -277,42 +276,56 @@ const Header = () => {
                 <div className="px-4 py-2 text-xs font-medium text-orange-600 border-b border-orange-100">
                   🐾 Kết quả tìm kiếm sản phẩm thú cưng
                 </div>
-                {searchResults.map((item) => (
-                  <Link
-                    to={`/product/${item.id}`}
-                    key={item.id}
-                    className="flex items-center px-5 py-3 text-gray-700 hover:bg-orange-50/80 transition-all border-b border-gray-100 last:border-0"
-                    onClick={() => {
-                      setShowResults(false);
-                      setSearchQuery("");
-                    }}
-                  >
-                    <div className="bg-orange-50 border border-orange-200 rounded-lg w-12 h-12 mr-4 flex items-center justify-center">
-                      {item.productAvatar?.data ? (
-                        <img
-                          src={`data:image/png;base64,${item.productAvatar.data}`}
-                          alt={item.name}
-                          className="w-10 h-10 rounded object-cover"
-                        />
-                      ) : (
-                        <div className="bg-orange-200 border-2 border-dashed border-orange-300 rounded w-10 h-10 flex items-center justify-center text-orange-600">
-                          🐾
+                {searchResults.length > 0 ? (
+                  searchResults.map((item) => (
+                    <Link
+                      to={`/product/${item.id}`}
+                      key={item.id}
+                      className="flex items-center px-5 py-3 text-gray-700 bg-white hover:bg-gray-100 transition-all border-b border-gray-100 last:border-0"
+                      onClick={() => {
+                        setShowResults(false);
+                        setSearchQuery("");
+                      }}
+                    >
+                      <div className="bg-orange-50 border border-orange-200 rounded-lg w-12 h-12 mr-4 flex items-center justify-center">
+                        {item.productAvatar?.data ? (
+                          <img
+                            src={`data:image/png;base64,${item.productAvatar.data}`}
+                            alt={item.name}
+                            className="w-10 h-10 rounded object-cover"
+                          />
+                        ) : (
+                          <div className="bg-orange-200 border-2 border-dashed border-orange-300 rounded w-10 h-10 flex items-center justify-center text-orange-600">
+                            🐾
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          {item.name}
                         </div>
-                      )}
-                    </div>
-                    <div>
-                      <div className="font-medium text-gray-900">
-                        {item.name}
+                        <div className="text-orange-600 font-medium text-sm mt-1">
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(item.price || item.firstVariantPrice || 0)}
+                        </div>
                       </div>
-                      <div className="text-orange-600 font-medium text-sm mt-1">
-                        {new Intl.NumberFormat("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(item.price || item.firstVariantPrice || 0)}
+                    </Link>
+                  ))
+                ) : (
+                  <div className="flex items-center justify-center px-5 py-8 text-gray-500 bg-white">
+                    <div className="text-center">
+                      <div className="text-4xl mb-2">🔍</div>
+                      <div className="font-medium">
+                        Không tìm thấy sản phẩm tương ứng
+                      </div>
+                      <div className="text-sm mt-1">
+                        Hãy thử từ khóa khác cho thú cưng của bạn
                       </div>
                     </div>
-                  </Link>
-                ))}
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -320,28 +333,30 @@ const Header = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-6">
-          {/* Cart */}
-          <Link to="/cart" className="relative flex items-center gap-2 group">
-            <div
-              className="p-2.5 rounded-xl bg-white/95 backdrop-blur border border-orange-200 shadow-sm hover:shadow transition-all"
-              style={{
-                boxShadow: "0 4px 12px rgba(251, 146, 60, 0.15)",
-              }}
-            >
-              <ShoppingCartOutlinedIcon
-                fontSize="medium"
-                className="text-gray-700 group-hover:text-orange-600 transition-colors"
-              />
-            </div>
-            <span
-              className="absolute -top-1.5 -right-1.5 text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md transform"
-              style={{
-                boxShadow: "0 2px 6px rgba(251, 146, 60, 0.4)",
-              }}
-            >
-              {count || 0}
-            </span>
-          </Link>
+          {/* Cart - chỉ hiển thị khi đã đăng nhập */}
+          {Object.keys(user).length > 0 && (
+            <Link to="/cart" className="relative flex items-center gap-2 group">
+              <div
+                className="p-2.5 rounded-xl bg-white/95 backdrop-blur border border-orange-200 shadow-sm hover:shadow transition-all"
+                style={{
+                  boxShadow: "0 4px 12px rgba(251, 146, 60, 0.15)",
+                }}
+              >
+                <ShoppingCartOutlinedIcon
+                  fontSize="medium"
+                  className="text-gray-700 group-hover:text-orange-600 transition-colors"
+                />
+              </div>
+              <span
+                className="absolute -top-1.5 -right-1.5 text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md transform"
+                style={{
+                  boxShadow: "0 2px 6px rgba(251, 146, 60, 0.4)",
+                }}
+              >
+                {count || 0}
+              </span>
+            </Link>
+          )}
 
           {/* User */}
           {Object.keys(user).length === 0 ? (

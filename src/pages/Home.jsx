@@ -346,11 +346,11 @@ export const Home = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-sans font-light text-gray-900 mb-4">
-              🌟 Sản phẩm bán chạy cho thú cưng 🌟
+              🌟 Sản phẩm được quan tâm nhất 🌟
             </h2>
             <div className="w-24 h-px bg-orange-400 mx-auto"></div>
             <p className="text-gray-600 mt-4">
-              Những sản phẩm được yêu thích nhất bởi các "boss" bốn chân
+              Những sản phẩm được yêu thích nhất của các "Con Sen"
             </p>
           </div>
 

@@ -54,7 +54,7 @@ export const Login = () => {
       if (_response.success) {
         localStorage.setItem("authToken", response.data.token);
         localStorage.setItem("ROLE", "USER");
-        setMessage("🎉 Đăng nhập thành công! Chào mừng bạn trở lại!");
+        setMessage("Đăng nhập thành công! Chào mừng bạn trở lại!");
         setTimeout(() => {
           window.location.href = "/";
           console.log("Redirect to dashboard");
@@ -66,6 +66,13 @@ export const Login = () => {
       setMessage("❌ Lỗi đăng nhập: " + error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Handle Enter key press
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !loading) {
+      handleLogin();
     }
   };
 
@@ -107,6 +114,7 @@ export const Login = () => {
                     setErrors((prev) => ({ ...prev, phoneNumber: null }));
                   }
                 }}
+                onKeyPress={handleKeyPress}
                 className={`w-full pl-10 pr-4 py-3 bg-white/10 border ${
                   errors.phoneNumber
                     ? "border-red-500/50"
@@ -139,6 +147,7 @@ export const Login = () => {
                     setErrors((prev) => ({ ...prev, password: null }));
                   }
                 }}
+                onKeyPress={handleKeyPress}
                 className={`w-full pl-10 pr-12 py-3 bg-white/10 border ${
                   errors.password ? "border-red-500/50" : "border-orange-300/30"
                 } rounded-xl text-white placeholder-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent backdrop-blur-sm transition-all duration-200`}

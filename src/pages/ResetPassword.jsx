@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { resetPasswordApi } from "../api/userApi";
 
 export const ResetPassword = () => {
@@ -7,12 +8,27 @@ export const ResetPassword = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [token, setToken] = useState("");
+  const [countdown, setCountdown] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tokenFromUrl = params.get("token");
     setToken(tokenFromUrl);
   }, []);
+
+  // Xử lý countdown và điều hướng khi đặt lại mật khẩu thành công
+  useEffect(() => {
+    let timer;
+    if (success && countdown > 0) {
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+    } else if (success && countdown === 0) {
+      navigate("/login");
+    }
+    return () => clearTimeout(timer);
+  }, [success, countdown, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,17 +45,22 @@ export const ResetPassword = () => {
       return;
     }
 
-    await resetPasswordApi({
-      token: token,
-      newPassword: password,
-      confirmPassword: confirmPassword,
-    });
+    try {
+      await resetPasswordApi({
+        token: token,
+        newPassword: password,
+        confirmPassword: confirmPassword,
+      });
 
-    setSuccess(
-      "🎉 Mật khẩu đã được thay đổi thành công! Bạn có thể đăng nhập với mật khẩu mới."
-    );
-    setPassword("");
-    setConfirmPassword("");
+      setSuccess(
+        "Mật khẩu đã được thay đổi thành công! Bạn có thể đăng nhập với mật khẩu mới."
+      );
+      setPassword("");
+      setConfirmPassword("");
+      setCountdown(5); // Bắt đầu countdown 5 giây
+    } catch (error) {
+      setError("❌ Có lỗi xảy ra khi đặt lại mật khẩu. Vui lòng thử lại.");
+    }
   };
 
   return (
@@ -107,8 +128,15 @@ export const ResetPassword = () => {
           )}
           {success && (
             <div className="flex items-center gap-2 p-3 rounded-xl bg-green-100 border border-green-200 text-green-700">
-              <span className="text-lg">🎉</span>
-              <p className="text-sm font-medium">{success}</p>
+              <div className="flex flex-col">
+                <p className="text-sm font-medium">{success}</p>
+                {countdown > 0 && (
+                  <p className="text-xs text-green-600 mt-1">
+                    🕒 Tự động chuyển đến trang đăng nhập sau {countdown}{" "}
+                    giây...
+                  </p>
+                )}
+              </div>
             </div>
           )}
           <div className="pt-2">

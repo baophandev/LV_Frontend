@@ -29,7 +29,7 @@ const Carousel = ({ images }) => {
             <div className="relative w-full h-full">
               <img
                 src={image}
-                alt={`🐾 Hình ảnh sản phẩm thú cưng ${index + 1}`}
+                alt={`🐾 Hình ảnh sản phẩm ${index + 1}`}
                 style={{
                   width: "100%",
                   height: "100%",

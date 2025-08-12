@@ -445,7 +445,7 @@ export const ReviewDialog = ({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle sx={{ backgroundColor: "#fed7aa", color: "#ea580c" }}>
-        🐾 Đánh giá sản phẩm thú cưng
+        🐾 Đánh giá sản phẩm
         <IconButton
           aria-label="close"
           onClick={onClose}

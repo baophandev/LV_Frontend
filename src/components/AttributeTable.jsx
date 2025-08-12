@@ -41,7 +41,7 @@ const AttributeTable = ({ productId }) => {
       key: "size",
       icon: <Scale fontSize="small" />,
     },
-    { label: "Màu sắc", key: "color", icon: <Palette fontSize="small" /> },
+    { label: "Biến thể", key: "color", icon: <Palette fontSize="small" /> },
     {
       label: "Chất liệu",
       key: "material",

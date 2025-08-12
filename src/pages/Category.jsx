@@ -44,7 +44,7 @@ export const Category = () => {
     return (
       <Alert severity="error" className="m-4">
         <AlertTitle>❌ Đã có lỗi xảy ra</AlertTitle>
-        {error || "Không thể tải sản phẩm thú cưng. Vui lòng thử lại sau."}
+        {error || "Không thể tải sản phẩm. Vui lòng thử lại sau."}
       </Alert>
     );
   return (
@@ -79,7 +79,7 @@ export const Category = () => {
             <span className="text-6xl mb-4">🐾</span>
             <h3 className="text-xl font-semibold mb-2">Chưa có sản phẩm nào</h3>
             <p className="text-sm">
-              Danh mục này hiện tại chưa có sản phẩm thú cưng nào.
+              Danh mục này hiện tại chưa có sản phẩm nào.
             </p>
           </div>
         )}

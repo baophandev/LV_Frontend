@@ -274,7 +274,7 @@ const Header = () => {
             >
               <div className="py-2">
                 <div className="px-4 py-2 text-xs font-medium text-orange-600 border-b border-orange-100">
-                  🐾 Kết quả tìm kiếm sản phẩm thú cưng
+                  🐾 Kết quả tìm kiếm sản phẩm
                 </div>
                 {searchResults.length > 0 ? (
                   searchResults.map((item) => (

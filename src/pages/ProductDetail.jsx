@@ -279,7 +279,7 @@ export const ProductDetail = () => {
             </div>
 
             <div className="text-gray-600 font-medium">
-              <PaletteOutlinedIcon /> Chọn màu sắc cho thú cưng:
+              <PaletteOutlinedIcon /> Chọn biến thể:
             </div>
             <div className="flex gap-2 flex-wrap border-b border-b-orange-200 pb-2">
               {displayedProduct?.variants &&
@@ -309,7 +309,7 @@ export const ProductDetail = () => {
                 )
               ) : (
                 <div className="text-gray-500 italic">
-                  🚫 Không có lựa chọn màu sắc
+                  Không có lựa chọn biến thể
                 </div>
               )}
             </div>

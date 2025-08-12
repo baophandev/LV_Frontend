@@ -36,7 +36,7 @@ export function ProductFilterPage() {
       setProducts(response.content || []);
       setTotalPages(response.totalPages || 1);
     } catch (err) {
-      setError(err?.message || "❌ Đã có lỗi xảy ra khi tải sản phẩm thú cưng");
+      setError(err?.message || "❌ Đã có lỗi xảy ra khi tải sản phẩm");
     } finally {
       setLoading(false);
     }
@@ -75,7 +75,7 @@ export function ProductFilterPage() {
   return (
     <div className="p-5 w-full sm:w-3/4 mx-auto bg-gradient-to-br from-orange-50 to-red-50 min-h-screen">
       <div className="text-white p-4 rounded-lg mb-4 uppercase text-xl font-extrabold shadow-md bg-gradient-to-r from-orange-500 to-orange-600">
-        🔍 Kết quả tìm kiếm sản phẩm thú cưng
+        🔍 Kết quả tìm kiếm sản phẩm
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

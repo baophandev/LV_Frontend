@@ -26,7 +26,7 @@ const ProductCart = ({
       <div className="flex pt-3 px-2 h-36">
         <div className="w-full">
           <div className="text-orange-500 font-medium text-sm flex items-center gap-1">
-            🐾 {category || "Sản phẩm thú cưng"}
+            🐾 {category || "Sản phẩm"}
           </div>
           <Link
             to={`/product/${id}`}

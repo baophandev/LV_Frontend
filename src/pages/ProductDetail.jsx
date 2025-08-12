@@ -289,9 +289,8 @@ export const ProductDetail = () => {
                     _variant.isActive && (
                       <div
                         key={_variant.id || idx}
-                        className="w-10 h-10 rounded-full border border-gray-300 "
+                        className="rounded-md px-3 py-1 border border-gray-300 "
                         style={{
-                          backgroundColor: _variant.colorCode || "#fff",
                           border:
                             selectedItems?.id === _variant.id
                               ? `3px solid #ea580c `
@@ -303,7 +302,9 @@ export const ProductDetail = () => {
                               : "0 2px 4px rgba(251, 146, 60, 0.2)",
                         }}
                         onClick={() => handleSelectedItems(_variant)}
-                      ></div>
+                      >
+                        {_variant.color}
+                      </div>
                     )
                 )
               ) : (

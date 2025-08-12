@@ -131,39 +131,6 @@ export const Home = () => {
 
   return (
     <div className="bg-gradient-to-b from-blue-50 to-green-50 min-h-screen">
-      {/* Pet Category Carousel */}
-      <div className="py-10 px-8 bg-white shadow-sm">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-light text-gray-800 mb-2">
-            🐾 Danh mục sản phẩm 🐾
-          </h2>
-          <p className="text-gray-600">
-            Khám phá các sản phẩm dành cho thú cưng yêu quý
-          </p>
-        </div>
-          <div className="flex gap-6 flex-wrap justify-center">
-            {categorys?.map((category) => (
-            <div className="flex" key={category.id}>
-              <Link
-                to={`/category/${category.id}`}
-                className="flex flex-col items-center group"
-              >
-                <div className="bg-gradient-to-br from-orange-100 to-yellow-100 rounded-full p-4 group-hover:from-orange-200 group-hover:to-yellow-200 transition-all duration-300 shadow-md">
-                  <img
-                    className="w-16 h-16 object-cover rounded-full"
-                    src={`data:image/png;base64,${category.categoryImages[0]?.data}`}
-                    alt={category?.name}
-                  />
-                </div>
-                <span className="mt-3 text-sm font-medium text-gray-700 group-hover:text-orange-600 text-center transition-colors">
-                  {category.name}
-                </span>
-              </Link>
-            </div>
-          ))}
-          </div>
-      </div>
-
       {/* Luxury Banner */}
       <div className="relative h-[80vh] overflow-hidden">
         {banner?.bannerImage?.data ? (
@@ -209,6 +176,39 @@ export const Home = () => {
             KHÁM PHÁ NGAY
           </motion.button>
         </div> */}
+      </div>
+
+      {/* Pet Category Carousel */}
+      <div className="py-10 px-8 bg-white shadow-sm">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-light text-gray-800 mb-2">
+            🐾 Danh mục sản phẩm 🐾
+          </h2>
+          <p className="text-gray-600">
+            Khám phá các sản phẩm dành cho thú cưng yêu quý
+          </p>
+        </div>
+          <div className="flex gap-6 flex-wrap justify-center">
+            {categorys?.map((category) => (
+            <div className="flex" key={category.id}>
+              <Link
+                to={`/category/${category.id}`}
+                className="flex flex-col items-center group"
+              >
+                <div className="bg-gradient-to-br from-orange-100 to-yellow-100 rounded-full p-4 group-hover:from-orange-200 group-hover:to-yellow-200 transition-all duration-300 shadow-md">
+                  <img
+                    className="w-16 h-16 object-cover rounded-full"
+                    src={`data:image/png;base64,${category.categoryImages[0]?.data}`}
+                    alt={category?.name}
+                  />
+                </div>
+                <span className="mt-3 text-sm font-medium text-gray-700 group-hover:text-orange-600 text-center transition-colors">
+                  {category.name}
+                </span>
+              </Link>
+            </div>
+          ))}
+          </div>
       </div>
 
       {/* Luxury Filter */}

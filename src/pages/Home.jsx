@@ -322,7 +322,8 @@ export const Home = () => {
       </section>
 
       {/* Personalized Recommendations */}
-      {userId && recmdProducts.length > 0 && (
+      {/* Personalized Recommendations */}
+      {userId && recmdProducts.length >= 4 && (
         <section className="py-16 px-8 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="mb-12 text-center">
@@ -338,6 +339,7 @@ export const Home = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {recmdProducts?.map((product) => (
                 <ProductCart
+                  key={product.id}
                   id={product.id}
                   image={product.productAvatar.data}
                   name={product.name}
@@ -351,6 +353,7 @@ export const Home = () => {
           </div>
         </section>
       )}
+
       <div className="bg-slate-200 text-black py-20 px-8 text-center">
         <h3 className="text-3xl font-serif font-light  mb-6">
           Bảo hành 12 tháng - 1 đổi 1 trong vòng 30 ngày

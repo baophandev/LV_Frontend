@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProduct } from "../redux/slices/productSlice";
 import Loading from "../components/Loading";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
@@ -23,10 +23,12 @@ export const ProductDetail = () => {
   const product = useSelector((state) => state.product?.products);
   const status = useSelector((state) => state.product.status);
   const { productId } = useParams();
+  const navigate = useNavigate();
   const [updatedProduct, setUpdatedProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [selectedItems, setSelectedItems] = useState(null);
   const user = useSelector((state) => state.user.user);
+  const token = useSelector((state) => state.auth.token);
   const userId = user.id;
   const [openToast, setOpenToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -138,8 +140,24 @@ export const ProductDetail = () => {
   };
 
   const handleAddToCart = async () => {
+    // Kiểm tra đăng nhập trước khi thêm vào giỏ hàng
+    if (!token || !user || !user.id) {
+      setToastMessage("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+      setToastSeverity("warning");
+      setOpenToast(true);
+      // Chuyển hướng đến trang đăng nhập sau 2 giây
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+      return;
+    }
+
     if (!selectedItems) {
-      alert("Vui lòng chọn một biến thể trước khi thêm vào giỏ hàng!");
+      setToastMessage(
+        "Vui lòng chọn một biến thể trước khi thêm vào giỏ hàng!"
+      );
+      setToastSeverity("warning");
+      setOpenToast(true);
       return;
     }
 
@@ -155,13 +173,12 @@ export const ProductDetail = () => {
       setToastSeverity("success");
       setOpenToast(true);
     } catch (error) {
-      alert("Đã có lỗi xảy ra khi thêm vào giỏ hàng");
-      setToastMessage("Lỗi khi cập nhật sản phẩm.");
+      setToastMessage("Lỗi khi thêm sản phẩm vào giỏ hàng");
       setToastSeverity("error");
       setOpenToast(true);
     }
   };
-  
+
   return (
     <>
       <div className="w-2/3 p-5 bg-white mt-5 mb-4">
@@ -306,6 +323,19 @@ export const ProductDetail = () => {
                 </div>
               </div>
             )}
+
+            {/* Thông báo yêu cầu đăng nhập nếu chưa đăng nhập */}
+            {(!token || !user || !user.id) && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 my-3">
+                <div className="flex items-center gap-2 text-yellow-700">
+                  <i className="fa-solid fa-exclamation-triangle"></i>
+                  <span className="text-sm font-medium">
+                    Bạn cần đăng nhập để có thể thêm sản phẩm vào giỏ hàng
+                  </span>
+                </div>
+              </div>
+            )}
+
             <div className="text-white flex gap-1">
               <div className="flex items-center bg-gray-100 px-4 py-2 rounded-lg shadow-sm">
                 <div className="flex items-center gap-3">
@@ -325,11 +355,23 @@ export const ProductDetail = () => {
               </div>
 
               <button
-                className="py-1 px-6 font-semibold rounded-2xl bg-sky-100 text-sky-500  border border-sky-200"
+                className={`py-1 px-6 font-semibold rounded-2xl border ${
+                  !token || !user || !user.id
+                    ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                    : "bg-sky-100 text-sky-500 border-sky-200 hover:bg-sky-200 transition-colors"
+                }`}
                 onClick={handleAddToCart}
+                disabled={!token || !user || !user.id}
+                title={
+                  !token || !user || !user.id
+                    ? "Vui lòng đăng nhập để thêm vào giỏ hàng"
+                    : "Thêm vào giỏ hàng"
+                }
               >
                 <AddShoppingCartOutlinedIcon sx={{ color: "e0f2fe" }} />
-                Thêm vào giỏ hàng
+                {!token || !user || !user.id
+                  ? "Đăng nhập để mua hàng"
+                  : "Thêm vào giỏ hàng"}
               </button>
             </div>
           </div>

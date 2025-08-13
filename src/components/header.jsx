@@ -305,28 +305,30 @@ const Header = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-6">
-          {/* Cart */}
-          <Link to="/cart" className="relative flex items-center gap-2 group">
-            <div
-              className="p-2.5 rounded-xl bg-white/90 backdrop-blur border border-white shadow-sm hover:shadow transition-all"
-              style={{
-                boxShadow: "0 4px 12px rgba(100, 120, 255, 0.1)",
-              }}
-            >
-              <ShoppingCartOutlinedIcon
-                fontSize="medium"
-                className="text-gray-700 group-hover:text-blue-600 transition-colors"
-              />
-            </div>
-            <span
-              className="absolute -top-1.5 -right-1.5 text-xs bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md transform"
-              style={{
-                boxShadow: "0 2px 6px rgba(80, 100, 255, 0.3)",
-              }}
-            >
-              {count || 0}
-            </span>
-          </Link>
+          {/* Cart - Only show when user is logged in */}
+          {Object.keys(user).length > 0 && (
+            <Link to="/cart" className="relative flex items-center gap-2 group">
+              <div
+                className="p-2.5 rounded-xl bg-white/90 backdrop-blur border border-white shadow-sm hover:shadow transition-all"
+                style={{
+                  boxShadow: "0 4px 12px rgba(100, 120, 255, 0.1)",
+                }}
+              >
+                <ShoppingCartOutlinedIcon
+                  fontSize="medium"
+                  className="text-gray-700 group-hover:text-blue-600 transition-colors"
+                />
+              </div>
+              <span
+                className="absolute -top-1.5 -right-1.5 text-xs bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md transform"
+                style={{
+                  boxShadow: "0 2px 6px rgba(80, 100, 255, 0.3)",
+                }}
+              >
+                {count || 0}
+              </span>
+            </Link>
+          )}
 
           {/* User */}
           {Object.keys(user).length === 0 ? (

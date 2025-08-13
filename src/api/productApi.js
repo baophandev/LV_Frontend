@@ -64,7 +64,8 @@ export const getProductReview = async ({ pageNumber = 0, pageSize = 6, productId
       params:{
         page: pageNumber,
         size: pageSize,
-        productId: productId
+        productId: productId,
+        isShowed: "true"
       }
     })
     return response.data;

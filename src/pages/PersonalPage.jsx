@@ -109,11 +109,7 @@ export const PersonalPage = () => {
           </div>
           <div className="w-full rounded-lg p-5 bg-white shadow-md">
             <div className="uppercase font-bold text-orange-600 flex items-center gap-2">
-              👤 Quản lý hồ sơ
-            </div>
-            <div className="border-b border-orange-200 text-sm text-gray-500 pb-2 mb-4">
-              🔒 Quản lý thông tin hồ sơ để bảo mật tài khoản và chăm sóc thú
-              cưng tốt hơn
+              Quản lý hồ sơ
             </div>
             <div className="space-y-4">
               <div className="text-center p-5 flex flex-col items-center justify-center gap-2 bg-orange-50 rounded-lg">

@@ -26,9 +26,6 @@ export const PersonalAddressPage = () => {
       <div className="flex gap-2">
         <div className="w-1/4 rounded-lg p-5 bg-white shadow-md">
           <Link className="text-orange-700 items-center flex cursor-pointer mb-2 font-medium">
-            <PermIdentityOutlinedIcon
-              sx={{ color: "#ea580c", marginRight: 1 }}
-            />
             🐱 Tài khoản của tôi
           </Link>
           <Link
@@ -47,7 +44,6 @@ export const PersonalAddressPage = () => {
             to={"/user/purchase"}
             className="text-slate-700 items-center flex cursor-pointer hover:text-orange-500"
           >
-            <AssignmentOutlinedIcon sx={{ color: "#9ca3af", marginRight: 1 }} />
             🛍️ Đơn mua
           </Link>
         </div>

@@ -27,36 +27,36 @@ export const Register = () => {
 
     switch (name) {
       case "displayName":
-        if (!value.trim()) error = "👤 Vui lòng nhập họ và tên";
+        if (!value.trim()) error = "Vui lòng nhập họ và tên";
         else if (value.length < 2)
-          error = "👤 Họ và tên phải có ít nhất 2 ký tự";
+          error = "Họ và tên phải có ít nhất 2 ký tự";
         break;
       case "email":
-        if (!value.trim()) error = "📧 Vui lòng nhập email";
+        if (!value.trim()) error = "Vui lòng nhập email";
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
-          error = "📧 Email không hợp lệ";
+          error = "Email không hợp lệ";
         break;
       case "phoneNumber":
-        if (!value.trim()) error = "📱 Vui lòng nhập số điện thoại";
+        if (!value.trim()) error = "Vui lòng nhập số điện thoại";
         else if (!/^[0-9]{10,11}$/.test(value.replace(/\s/g, "")))
-          error = "📱 Số điện thoại không hợp lệ";
+          error = "Số điện thoại không hợp lệ";
         break;
       case "password":
-        if (!value.trim()) error = "🔒 Vui lòng nhập mật khẩu";
+        if (!value.trim()) error = "Vui lòng nhập mật khẩu";
         else if (value.length < 6)
-          error = "🔒 Mật khẩu phải có ít nhất 6 ký tự";
+          error = "Mật khẩu phải có ít nhất 6 ký tự";
         break;
       case "repeatPassword":
-        if (!value.trim()) error = "🔑 Vui lòng nhập lại mật khẩu";
-        else if (value !== userData.password) error = "🔑 Mật khẩu không khớp";
+        if (!value.trim()) error = "Vui lòng nhập lại mật khẩu";
+        else if (value !== userData.password) error = "Mật khẩu không khớp";
         break;
       case "dob":
-        if (!value.trim()) error = "🎂 Vui lòng chọn ngày sinh";
+        if (!value.trim()) error = "Vui lòng chọn ngày sinh";
         else {
           const today = new Date();
           const birthDate = new Date(value);
           const age = today.getFullYear() - birthDate.getFullYear();
-          if (age < 13) error = "🎂 Bạn phải từ 13 tuổi trở lên";
+          if (age < 13) error = "Bạn phải từ 13 tuổi trở lên";
         }
         break;
       default:
@@ -141,7 +141,7 @@ export const Register = () => {
       }, 2000);
     } catch (error) {
       console.log(error);
-      setErrors({ general: "❌ Có lỗi xảy ra. Vui lòng thử lại." });
+      setErrors({ general: "Có lỗi xảy ra. Vui lòng thử lại." });
     } finally {
       setLoading(false);
     }
@@ -186,7 +186,7 @@ export const Register = () => {
               />
             </div>
             {errors.displayName && (
-              <div className="flex items-center gap-2 text-red-400 text-sm">
+              <div className="flex items-center gap-2 text-white text-sm">
                 <ErrorOutlineOutlinedIcon className="w-4 h-4" />
                 <span>{errors.displayName}</span>
               </div>
@@ -214,7 +214,7 @@ export const Register = () => {
               />
             </div>
             {errors.phoneNumber && (
-              <div className="flex items-center gap-2 text-red-400 text-sm">
+              <div className="flex items-center gap-2 text-white text-sm">
                 <ErrorOutlineOutlinedIcon className="w-4 h-4" />
                 <span>{errors.phoneNumber}</span>
               </div>
@@ -240,7 +240,7 @@ export const Register = () => {
               />
             </div>
             {errors.email && (
-              <div className="flex items-center gap-2 text-red-400 text-sm">
+              <div className="flex items-center gap-2 text-white text-sm">
                 <ErrorOutlineOutlinedIcon className="w-4 h-4" />
                 <span>{errors.email}</span>
               </div>
@@ -266,7 +266,7 @@ export const Register = () => {
               />
             </div>
             {errors.dob && (
-              <div className="flex items-center gap-2 text-red-400 text-sm">
+              <div className="flex items-center gap-2 text-white text-sm">
                 <ErrorOutlineOutlinedIcon className="w-4 h-4" />
                 <span>{errors.dob}</span>
               </div>
@@ -304,7 +304,7 @@ export const Register = () => {
               </button>
             </div>
             {errors.password && (
-              <div className="flex items-center gap-2 text-red-400 text-sm">
+              <div className="flex items-center gap-2 text-white text-sm">
                 <ErrorOutlineOutlinedIcon className="w-4 h-4" />
                 <span>{errors.password}</span>
               </div>
@@ -344,7 +344,7 @@ export const Register = () => {
               </button>
             </div>
             {errors.repeatPassword && (
-              <div className="flex items-center gap-2 text-red-400 text-sm">
+              <div className="flex items-center gap-2 text-white text-sm">
                 <ErrorOutlineOutlinedIcon className="w-4 h-4" />
                 <span>{errors.repeatPassword}</span>
               </div>
@@ -378,14 +378,14 @@ export const Register = () => {
           {successMessage && (
             <div className="flex items-center gap-2 p-3 rounded-xl bg-green-500/20 border border-green-500/30 text-green-100">
               <ErrorOutlineOutlinedIcon className="w-5 h-5" />
-              <span className="text-sm">🎉 {successMessage}</span>
+              <span className="text-sm">{successMessage}</span>
             </div>
           )}
 
           {errors.general && (
             <div className="flex items-center gap-2 p-3 rounded-xl bg-red-500/20 border border-red-500/30 text-red-100">
               <ErrorOutlineOutlinedIcon className="w-5 h-5" />
-              <span className="text-sm">❌ {errors.general}</span>
+              <span className="text-sm">{errors.general}</span>
             </div>
           )}
 
@@ -403,7 +403,7 @@ export const Register = () => {
             ) : (
               <>
                 <PersonAddOutlinedIcon className="w-5 h-5" />
-                <span>🚀 Tạo tài khoản</span>
+                <span>Tạo tài khoản</span>
               </>
             )}
           </button>

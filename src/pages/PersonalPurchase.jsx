@@ -76,9 +76,6 @@ export const PersonalPurchase = () => {
       <div className="flex gap-2">
         <div className="w-1/4 rounded-lg p-5 bg-white shadow-md">
           <Link className="text-orange-700 items-center flex cursor-pointer mb-2 font-medium">
-            <PermIdentityOutlinedIcon
-              sx={{ color: "#ea580c", marginRight: 1 }}
-            />
             🐱 Tài khoản của tôi
           </Link>
           <Link
@@ -97,7 +94,6 @@ export const PersonalPurchase = () => {
             to={"/user/purchase"}
             className="text-orange-500 items-center flex cursor-pointer font-medium"
           >
-            <AssignmentOutlinedIcon sx={{ color: "#ea580c", marginRight: 1 }} />
             🛍️ Đơn mua
           </Link>
         </div>

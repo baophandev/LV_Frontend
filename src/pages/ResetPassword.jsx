@@ -36,12 +36,12 @@ export const ResetPassword = () => {
     setSuccess("");
 
     if (!password || !confirmPassword) {
-      setError("🔒 Vui lòng nhập đầy đủ mật khẩu.");
+      setError("Vui lòng nhập đầy đủ mật khẩu.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("🔑 Mật khẩu nhập lại không khớp.");
+      setError("Mật khẩu nhập lại không khớp.");
       return;
     }
 
@@ -74,7 +74,7 @@ export const ResetPassword = () => {
             🐾 Tạo Mật Khẩu Mới
           </h2>
           <p className="text-gray-600 text-sm">
-            Vui lòng nhập mật khẩu mới cho tài khoản thú cưng của bạn
+            Vui lòng nhập mật khẩu mới cho tài khoản của bạn
           </p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -95,7 +95,6 @@ export const ResetPassword = () => {
                 placeholder="Nhập mật khẩu mới"
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-orange-400 text-lg">🔒</span>
               </div>
             </div>
           </div>
@@ -116,7 +115,6 @@ export const ResetPassword = () => {
                 placeholder="Xác nhận lại mật khẩu"
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-orange-400 text-lg">🔑</span>
               </div>
             </div>
           </div>

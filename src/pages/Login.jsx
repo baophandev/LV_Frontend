@@ -19,15 +19,15 @@ export const Login = () => {
     const newErrors = {};
 
     if (!phoneNumber.trim()) {
-      newErrors.phoneNumber = "📱 Vui lòng nhập số điện thoại";
+      newErrors.phoneNumber = "Vui lòng nhập số điện thoại";
     } else if (!/^[0-9]{10,11}$/.test(phoneNumber.replace(/\s/g, ""))) {
-      newErrors.phoneNumber = "📱 Số điện thoại không hợp lệ";
+      newErrors.phoneNumber = "Số điện thoại không hợp lệ";
     }
 
     if (!password.trim()) {
-      newErrors.password = "🔒 Vui lòng nhập mật khẩu";
+      newErrors.password = "Vui lòng nhập mật khẩu";
     } else if (password.length < 6) {
-      newErrors.password = "🔒 Mật khẩu phải có ít nhất 6 ký tự";
+      newErrors.password = "Mật khẩu phải có ít nhất 6 ký tự";
     }
 
     setErrors(newErrors);
@@ -60,10 +60,10 @@ export const Login = () => {
           console.log("Redirect to dashboard");
         }, 1500);
       } else {
-        setMessage("❌ Đăng nhập thất bại! " + response.message);
+        setMessage("Đăng nhập thất bại! " + response.message);
       }
     } catch (error) {
-      setMessage("❌ Lỗi đăng nhập: " + error.message);
+      setMessage("Số điện thoại hoặc mật khẩu không đúng");
     } finally {
       setLoading(false);
     }
@@ -124,7 +124,7 @@ export const Login = () => {
               />
             </div>
             {errors.phoneNumber && (
-              <div className="flex items-center gap-2 text-red-400 text-sm">
+              <div className="flex items-center gap-2 text-white text-sm">
                 <CheckCircleOutlineOutlinedIcon className="w-4 h-4" />
                 <span>{errors.phoneNumber}</span>
               </div>
@@ -167,7 +167,7 @@ export const Login = () => {
               </button>
             </div>
             {errors.password && (
-              <div className="flex items-center gap-2 text-red-400 text-sm">
+              <div className="flex items-center gap-2 text-sm text-white">
                 <ErrorOutlineOutlinedIcon className="w-4 h-4" />
                 <span>{errors.password}</span>
               </div>
@@ -186,12 +186,12 @@ export const Login = () => {
               {message.includes("thành công") ? (
                 <>
                   <CheckCircleOutlineOutlinedIcon className="w-5 h-5" />
-                  <span className="text-sm">🎉 {message}</span>
+                  <span className="text-sm">{message}</span>
                 </>
               ) : (
                 <>
                   <ErrorOutlineOutlinedIcon className="w-5 h-5" />
-                  <span className="text-sm">❌ {message}</span>
+                  <span className="text-sm">{message}</span>
                 </>
               )}
             </div>

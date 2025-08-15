@@ -23,13 +23,13 @@ export const EnterEmail = () => {
 
     if (!email.trim()) {
       setStatus("error");
-      setMessage("📧 Vui lòng nhập email của bạn");
+      setMessage("Vui lòng nhập email của bạn");
       return;
     }
 
     if (!validateEmail(email)) {
       setStatus("error");
-      setMessage("📧 Email không hợp lệ");
+      setMessage("Email không hợp lệ");
       return;
     }
 
@@ -49,7 +49,7 @@ export const EnterEmail = () => {
     } catch (err) {
       console.log(err);
       setStatus("error");
-      setMessage("❌ Có lỗi xảy ra. Vui lòng thử lại sau.");
+      setMessage("Email không tồn tại hoặc chưa đăng ký tài khoản");
     } finally {
       setIsLoading(false);
     }
@@ -101,12 +101,12 @@ export const EnterEmail = () => {
               {status === "success" ? (
                 <>
                   <CheckCircleOutlineOutlinedIcon className="w-5 h-5" />
-                  <span className="text-sm">🎉 {message}</span>
+                  <span className="text-sm">{message}</span>
                 </>
               ) : (
                 <>
                   <ErrorOutlineOutlinedIcon className="w-5 h-5" />
-                  <span className="text-sm">❌ {message}</span>
+                  <span className="text-sm">{message}</span>
                 </>
               )}
             </div>

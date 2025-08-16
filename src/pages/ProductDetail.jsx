@@ -14,6 +14,7 @@ import { getProductReview, getVariantDiscount } from "../api/productApi";
 import { addtoCartApi } from "../api/cartApi";
 import { fetchCart } from "../redux/slices/cartSlice";
 import { Snackbar, Alert } from "@mui/material";
+import { getErrorMessage, getSuccessMessage } from "../utils/messageUtils";
 
 export const ProductDetail = () => {
   const [amount, setAmount] = useState(1);
@@ -169,11 +170,15 @@ export const ProductDetail = () => {
       });
       setAmount(1);
       dispatch(fetchCart(userId));
-      setToastMessage("Đã thêm sản phẩm vào giỏ hàng");
+      setToastMessage(getSuccessMessage("ADD_TO_CART_SUCCESS"));
       setToastSeverity("success");
       setOpenToast(true);
     } catch (error) {
-      setToastMessage("Lỗi khi thêm sản phẩm vào giỏ hàng");
+      const errorMsg = getErrorMessage(
+        error,
+        "Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại."
+      );
+      setToastMessage(errorMsg);
       setToastSeverity("error");
       setOpenToast(true);
     }

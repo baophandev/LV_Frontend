@@ -9,6 +9,7 @@ import { updateUserApi } from "../api/userApi";
 import { useDispatch } from "react-redux";
 import { getMyInfo } from "../redux/slices/userSlice";
 import { Snackbar, Alert } from "@mui/material";
+import { getErrorMessage, getSuccessMessage } from "../utils/messageUtils";
 
 export const PersonalPage = () => {
   const token = useSelector((state) => state.auth.token);
@@ -60,11 +61,15 @@ export const PersonalPage = () => {
       if (token) {
         dispatch(getMyInfo(token));
       }
-      setToastMessage("Cập nhật thông tin thành công!");
+      setToastMessage(getSuccessMessage("PROFILE_UPDATE_SUCCESS"));
       setToastSeverity("success");
       setOpenToast(true);
     } catch (err) {
-      setToastMessage("Lỗi khi cập nhật thông tin.");
+      const errorMsg = getErrorMessage(
+        err,
+        "Không thể cập nhật thông tin. Vui lòng thử lại."
+      );
+      setToastMessage(errorMsg);
       setToastSeverity("error");
       setOpenToast(true);
     }
@@ -73,9 +78,7 @@ export const PersonalPage = () => {
   return (
     <>
       <div className="p-5 w-full sm:w-2/3">
-        <div
-          className="text-blue-500 p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
-        >
+        <div className="text-blue-500 p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white">
           {user.displayName || "Không rõ tên"}
         </div>
         <div className="flex gap-2">

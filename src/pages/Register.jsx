@@ -5,6 +5,8 @@ import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import { registerApi } from "../api/authApi";
 import { Link } from "react-router-dom";
+import UserNotification from "../components/UserNotification";
+import { getErrorMessage, getSuccessMessage } from "../utils/messageUtils";
 
 export const Register = () => {
   const [userData, setUserData] = useState({
@@ -21,6 +23,8 @@ export const Register = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationSeverity, setNotificationSeverity] = useState("info");
 
   const validateField = (name, value) => {
     let error = "";
@@ -130,14 +134,23 @@ export const Register = () => {
 
       await registerApi(formData);
 
-      setSuccessMessage("Tạo tài khoản thành công!");
+      const successMsg = getSuccessMessage("REGISTER_SUCCESS");
+      setSuccessMessage(successMsg);
+      setNotificationSeverity("success");
+      setShowNotification(true);
       setTimeout(() => {
         console.log("Navigate to login");
         // navigate("/login");
       }, 2000);
     } catch (error) {
       console.log(error);
-      setErrors({ general: "Có lỗi xảy ra. Vui lòng thử lại." });
+      const errorMsg = getErrorMessage(
+        error,
+        "Có lỗi xảy ra khi tạo tài khoản. Vui lòng thử lại."
+      );
+      setErrors({ general: errorMsg });
+      setNotificationSeverity("error");
+      setShowNotification(true);
     } finally {
       setLoading(false);
     }
@@ -383,7 +396,7 @@ export const Register = () => {
           <p className="text-blue-100 text-sm">
             Đã có tài khoản?{" "}
             <Link
-             to={'/login'}
+              to={"/login"}
               className="text-blue-300 hover:text-white font-medium underline transition-colors duration-200 inline-flex items-center gap-1"
               disabled={loading}
             >
@@ -392,6 +405,15 @@ export const Register = () => {
           </p>
         </div>
       </div>
+
+      {/* User Notification */}
+      <UserNotification
+        open={showNotification}
+        onClose={() => setShowNotification(false)}
+        message={successMessage || errors.general}
+        severity={notificationSeverity}
+        duration={5000}
+      />
     </div>
   );
-}
+};

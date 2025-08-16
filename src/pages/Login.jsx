@@ -6,6 +6,8 @@ import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { Link } from "react-router-dom";
 import Logo from "../assets/Logo.png";
+import UserNotification from "../components/UserNotification";
+import { getErrorMessage, getSuccessMessage } from "../utils/messageUtils";
 
 export const Login = () => {
   const [phoneNumber, setPhone] = useState("");
@@ -14,6 +16,8 @@ export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationSeverity, setNotificationSeverity] = useState("info");
 
   const validateForm = () => {
     const newErrors = {};
@@ -41,6 +45,7 @@ export const Login = () => {
 
     setLoading(true);
     setMessage("");
+    setShowNotification(false);
 
     try {
       // Simulate API call
@@ -54,18 +59,34 @@ export const Login = () => {
       if (_response.success) {
         localStorage.setItem("authToken", response.data.token);
         localStorage.setItem("ROLE", "USER");
-        setMessage("Đăng nhập thành công!");
+        setMessage(getSuccessMessage("LOGIN_SUCCESS"));
+        setNotificationSeverity("success");
+        setShowNotification(true);
         setTimeout(() => {
           window.location.href = "/";
           console.log("Redirect to dashboard");
         }, 1500);
       } else {
-        setMessage("Đăng nhập thất bại! " + response.message);
+        const errorMsg = getErrorMessage(
+          response.message || "INVALID_CREDENTIALS"
+        );
+        setMessage(errorMsg);
+        setNotificationSeverity("error");
+        setShowNotification(true);
       }
     } catch (error) {
-      setMessage("Lỗi đăng nhập: " + error.message);
+      const errorMsg = getErrorMessage(error);
+      setMessage(errorMsg);
+      setNotificationSeverity("error");
+      setShowNotification(true);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
     }
   };
 
@@ -100,6 +121,7 @@ export const Login = () => {
                     setErrors((prev) => ({ ...prev, phoneNumber: null }));
                   }
                 }}
+                onKeyDown={handleKeyDown}
                 className={`w-full pl-10 pr-4 py-3 bg-white/10 border ${
                   errors.phoneNumber ? "border-red-500/50" : "border-white/20"
                 } rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-200`}
@@ -127,6 +149,7 @@ export const Login = () => {
                     setErrors((prev) => ({ ...prev, password: null }));
                   }
                 }}
+                onKeyDown={handleKeyDown}
                 className={`w-full pl-10 pr-12 py-3 bg-white/10 border ${
                   errors.password ? "border-red-500/50" : "border-white/20"
                 } rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-200`}
@@ -215,6 +238,15 @@ export const Login = () => {
           </p>
         </div>
       </div>
+
+      {/* User Notification */}
+      <UserNotification
+        open={showNotification}
+        onClose={() => setShowNotification(false)}
+        message={message}
+        severity={notificationSeverity}
+        duration={4000}
+      />
     </div>
   );
-}
+};

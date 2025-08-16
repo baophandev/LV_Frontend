@@ -283,7 +283,11 @@ const Header = () => {
                     }}
                   >
                     <div className="bg-gray-100 border rounded-lg w-12 h-12 mr-4 flex items-center justify-center">
-                      <div className="bg-gray-200 border-2 border-dashed rounded w-10 h-10" />
+                      <img
+                        className="w-full"
+                        src={`data:image/png;base64,${item.productAvatar.data}`}
+                        alt="#"
+                      />
                     </div>
                     <div>
                       <div className="font-medium text-gray-900">
@@ -293,7 +297,7 @@ const Header = () => {
                         {new Intl.NumberFormat("vi-VN", {
                           style: "currency",
                           currency: "VND",
-                        }).format(item.price)}
+                        }).format(item.firstVariantPrice)}
                       </div>
                     </div>
                   </Link>

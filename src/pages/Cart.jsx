@@ -9,6 +9,8 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import SelectAddressDialog from "../components/SelectAddressDialog";
 import OrderDialog from "../components/OrderDialog";
 import VariantSelector from "../components/VariantSelector";
+import UserNotification from "../components/UserNotification";
+import { getErrorMessage, getSuccessMessage } from "../utils/messageUtils";
 import {
   Table,
   TableBody,
@@ -43,6 +45,11 @@ export const Cart = () => {
   const [selectAll, setSelectAll] = useState(false);
   const user = useSelector((state) => state.user.user);
   const userId = user.id;
+
+  // Notification states
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationSeverity, setNotificationSeverity] = useState("info");
 
   const [address, setAddress] = useState(null);
 
@@ -141,11 +148,23 @@ export const Cart = () => {
   const handleDeleteItem = async (itemId) => {
     try {
       const response = await deleteCartItemApi({ userId, itemId });
+      setNotificationMessage(
+        getSuccessMessage("DELETE_SUCCESS", "Đã xóa sản phẩm khỏi giỏ hàng")
+      );
+      setNotificationSeverity("success");
+      setShowNotification(true);
       window.location.reload();
       return response;
     } catch (err) {
       console.error("Lỗi khi xóa sản phẩm khỏi giỏ hàng", err);
-      throw new Error("Lỗi khi xóa sản phẩm khỏi giỏ hàng", err);
+      const errorMsg = getErrorMessage(
+        err,
+        "Không thể xóa sản phẩm. Vui lòng thử lại."
+      );
+      setNotificationMessage(errorMsg);
+      setNotificationSeverity("error");
+      setShowNotification(true);
+      throw new Error(errorMsg);
     }
   };
 
@@ -186,6 +205,13 @@ export const Cart = () => {
       });
     } catch (error) {
       console.error("Lỗi cập nhật số lượng:", error);
+      const errorMsg = getErrorMessage(
+        error,
+        "Không thể cập nhật số lượng. Vui lòng thử lại."
+      );
+      setNotificationMessage(errorMsg);
+      setNotificationSeverity("error");
+      setShowNotification(true);
     }
   };
 
@@ -193,7 +219,9 @@ export const Cart = () => {
     console.log("handleEditVariant được gọi với item:", item);
     if (!item || !item.productId || !item.productVariantId) {
       console.error("Item không hợp lệ:", item);
-      alert("Không thể chỉnh sửa phân loại cho sản phẩm này");
+      setNotificationMessage("Không thể chỉnh sửa phân loại cho sản phẩm này");
+      setNotificationSeverity("warning");
+      setShowNotification(true);
       return;
     }
     setSelectedCartItem(item);
@@ -210,11 +238,20 @@ export const Cart = () => {
         newVariantId: newVariant.id,
       });
 
+      setNotificationMessage("Đã cập nhật phân loại sản phẩm thành công");
+      setNotificationSeverity("success");
+      setShowNotification(true);
       // Reload trang để cập nhật giỏ hàng
-      window.location.reload();
+      setTimeout(() => window.location.reload(), 1000);
     } catch (error) {
       console.error("Lỗi cập nhật variant:", error);
-      alert("Có lỗi xảy ra khi thay đổi phân loại sản phẩm");
+      const errorMsg = getErrorMessage(
+        error,
+        "Không thể thay đổi phân loại sản phẩm. Vui lòng thử lại."
+      );
+      setNotificationMessage(errorMsg);
+      setNotificationSeverity("error");
+      setShowNotification(true);
     }
   };
 
@@ -330,7 +367,6 @@ export const Cart = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      
                       <Tooltip title="Xóa khỏi giỏ hàng">
                         <IconButton
                           size="small"
@@ -435,6 +471,15 @@ export const Cart = () => {
         onClose={handleCloseVariantSelector}
         currentItem={selectedCartItem}
         onVariantSelect={handleVariantChange}
+      />
+
+      {/* User Notification */}
+      <UserNotification
+        open={showNotification}
+        onClose={() => setShowNotification(false)}
+        message={notificationMessage}
+        severity={notificationSeverity}
+        duration={3000}
       />
     </div>
   );

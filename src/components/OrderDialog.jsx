@@ -43,9 +43,8 @@ const OrderDialog = ({ open, onClose, order, address, totalPrice }) => {
         userId,
       });
       console.log(response);
-      alert("Đặt hàng thành công");
+      window.location.href = "/user/purchase";
       onClose();
-      window.location.reload();
     } catch (error) {
       console.error("Error creating order:", error);
     }

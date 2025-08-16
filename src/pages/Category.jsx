@@ -10,7 +10,6 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Pagination from "@mui/material/Pagination";
 import { useParams } from "react-router";
-import ThemeColor from "../constant/theme";
 // import Carousel from "../components/Carousel";
 
 export const Category = () => {
@@ -53,8 +52,8 @@ export const Category = () => {
     );
   return (
     <div className="p-5 w-full sm:w-3/4">
-      <div className="text-blue-500 p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white">
-        <span className="">
+      <div className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white">
+        <span className="text-blue-500">
           {categorys.find((category) => category.id === categoryId)?.name}
         </span>
       </div>

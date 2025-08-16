@@ -120,12 +120,7 @@ export const OrderDetail = () => {
     <div className="p-5 w-full sm:w-4/5">
       {orderDetail ? (
         <>
-          <div
-            className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white"
-            style={{
-              color: ThemeColor.MAIN_GRREN,
-            }}
-          >
+          <div className=" p-5 rounded-md mb-4 uppercase text-xl font-extrabold bg-white text-blue-500">
             {user.displayName || "Không rõ tên"}
           </div>
           <div className="flex gap-2">
@@ -305,6 +300,20 @@ export const OrderDetail = () => {
                     ))
                   : ""}
               </div>
+              <div className="bg-white px-3">
+                <span className="">Thời gian đặt hàng: </span>
+                <span className="">
+                  {new Date(orderDetail.orderDate).toLocaleString("vi-VN")}
+                </span>
+              </div>
+              {orderDetail.status === "DELIVERED" && (
+                <div className="bg-white px-3">
+                  <span className="">Thời gian nhận hàng: </span>
+                  <span className="">
+                    {new Date(orderDetail.receivedAt).toLocaleString("vi-VN")}
+                  </span>
+                </div>
+              )}
               <div className="flex w-full ml-auto p-5 bg-white">
                 <div className="ml-auto">
                   Thành tiền:{" "}

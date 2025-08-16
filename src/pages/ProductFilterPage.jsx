@@ -64,8 +64,7 @@ export function ProductFilterPage() {
   return (
     <div className="p-5 w-full sm:w-3/4 mx-auto">
       <div
-        className="text-white p-4 rounded-md mb-4 uppercase text-xl font-extrabold"
-        style={{ backgroundColor: ThemeColor.primary }}
+        className="bg-white text-blue-500 p-4 rounded-md mb-4 uppercase text-xl font-extrabold"
       >
         Kết quả lọc sản phẩm
       </div>

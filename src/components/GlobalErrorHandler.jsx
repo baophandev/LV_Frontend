@@ -43,8 +43,9 @@ const GlobalErrorHandler = ({ children }) => {
     const handleResourceError = (event) => {
       if (event.target.tagName === "IMG") {
         console.warn("Image loading failed:", event.target.src);
-        // Có thể thay thế bằng placeholder image
-        event.target.src = "/placeholder-image.png";
+        // Thay thế bằng placeholder image online
+        event.target.src =
+          "https://via.placeholder.com/300x300?text=Image+Not+Found";
       } else if (event.target.tagName === "SCRIPT") {
         console.error("Script loading failed:", event.target.src);
         showError(

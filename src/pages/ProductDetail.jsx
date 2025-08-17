@@ -4,6 +4,7 @@ import { fetchProduct } from "../redux/slices/productSlice";
 import Loading from "../components/Loading";
 import { useParams, useNavigate } from "react-router-dom";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
+import CompareIcon from "@mui/icons-material/Compare";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
@@ -182,6 +183,10 @@ export const ProductDetail = () => {
       setToastSeverity("error");
       setOpenToast(true);
     }
+  };
+
+  const handleCompareProduct = () => {
+    navigate(`/product/compare?product1=${productId}`);
   };
 
   return (
@@ -377,6 +382,15 @@ export const ProductDetail = () => {
                 {!token || !user || !user.id
                   ? "Đăng nhập để mua hàng"
                   : "Thêm vào giỏ hàng"}
+              </button>
+
+              <button
+                className="py-1 px-6 font-semibold rounded-2xl border bg-orange-100 text-orange-500 border-orange-200 hover:bg-orange-200 transition-colors"
+                onClick={handleCompareProduct}
+                title="So sánh sản phẩm này với sản phẩm khác"
+              >
+                <CompareIcon sx={{ fontSize: "18px", marginRight: "4px" }} />
+                So sánh
               </button>
             </div>
           </div>

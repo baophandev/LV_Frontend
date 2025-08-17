@@ -126,6 +126,15 @@ const router = createBrowserRouter([
             },
           },
           {
+            path: "product/compare",
+            async lazy() {
+              const { default: ProductCompare } = await import(
+                "../pages/ProductCompare"
+              );
+              return { Component: ProductCompare };
+            },
+          },
+          {
             path: "cart",
             async lazy() {
               let { Cart } = await import("../pages/Cart");

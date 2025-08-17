@@ -1,6 +1,7 @@
 import Logo from "../assets/Logo.png";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import CompareIcon from "@mui/icons-material/Compare";
 import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import * as React from "react";
@@ -409,6 +410,15 @@ const Header = () => {
                   >
                     <ShoppingCartOutlinedIcon fontSize="small" />
                     Đơn mua
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <Link
+                    to="/product/compare"
+                    className="text-gray-700 hover:text-blue-600 flex items-center gap-3 w-full"
+                  >
+                    <CompareIcon fontSize="small" />
+                    So sánh sản phẩm
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>

@@ -1,0 +1,191 @@
+/* Custom responsive styles for Home page */
+
+/* Text truncation utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Extra small screens (phones, 320px and up) */
+@media (max-width: 475px) {
+  .home-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .category-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .category-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    padding: 0 0.25rem;
+  }
+  
+  .product-card {
+    min-height: 280px;
+  }
+  
+  .swiper-slide {
+    padding: 0.125rem;
+  }
+  
+  .banner-height {
+    height: 35vh;
+  }
+  
+  .section-padding {
+    padding: 1rem 0.5rem;
+  }
+  
+  .text-responsive-xs {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  .button-responsive-xs {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Small screens (landscape phones, 576px and up) */
+@media (min-width: 475px) and (max-width: 640px) {
+  .banner-height {
+    height: 45vh;
+  }
+  
+  .section-padding {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    padding: 0 0.5rem;
+  }
+  
+  .product-card {
+    min-height: 300px;
+  }
+}
+
+/* Medium screens (tablets, 768px and up) */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .banner-height {
+    height: 60vh;
+  }
+  
+  .section-padding {
+    padding: 2rem 1.5rem;
+  }
+  
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  
+  /* Filter bar optimization for tablets */
+  .filter-mobile-tablet {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .filter-mobile-tablet select {
+    min-width: 120px;
+    max-width: 150px;
+  }
+}
+
+/* Large screens (desktops, 992px and up) */
+@media (min-width: 1024px) {
+  .banner-height {
+    height: 80vh;
+  }
+  
+  .section-padding {
+    padding: 4rem 2rem;
+  }
+  
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Ultra-wide screens (large desktops, 1400px and up) */
+@media (min-width: 1400px) {
+  .product-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Utility classes */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch-friendly buttons on mobile */
+@media (max-width: 768px) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .mobile-filter-button {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 40;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+}
+
+/* Loading states */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Focus states for accessibility */
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* Hover effects for desktop */
+@media (hover: hover) {
+  .hover-scale {
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+}

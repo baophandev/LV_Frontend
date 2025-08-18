@@ -99,3 +99,19 @@ export const resetPasswordApi = async ({token, newPassword, confirmPassword}) =>
     throw err;
   }
 }
+
+export const changePasswordApi = async ({currentPassword, newPassword}) => {
+  try{
+    const response = await axiosInstance.post('/user/change-password', {
+      currentPassword: currentPassword,
+      newPassword: newPassword
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response.data;
+  }catch(err){
+    throw err;
+  }
+}

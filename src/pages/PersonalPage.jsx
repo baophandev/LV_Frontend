@@ -1,13 +1,20 @@
 import { useSelector } from "react-redux";
-import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
-import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { updateUserApi } from "../api/userApi";
+import { updateUserApi, changePasswordApi } from "../api/userApi";
 import { useDispatch } from "react-redux";
 import { getMyInfo } from "../redux/slices/userSlice";
-import { Snackbar, Alert } from "@mui/material";
+import {
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+} from "@mui/material";
 
 export const PersonalPage = () => {
   const token = useSelector((state) => state.auth.token);
@@ -26,6 +33,15 @@ export const PersonalPage = () => {
   const [openToast, setOpenToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastSeverity, setToastSeverity] = useState("success");
+
+  // States cho dialog đổi mật khẩu
+  const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [passwordErrors, setPasswordErrors] = useState({});
 
   const handleChange = (field, value) => {
     setUpdateData((prev) => ({
@@ -66,6 +82,71 @@ export const PersonalPage = () => {
       setOpenToast(true);
     } catch (err) {
       setToastMessage("❌ Lỗi khi cập nhật thông tin. Vui lòng thử lại!");
+      setToastSeverity("error");
+      setOpenToast(true);
+    }
+  };
+
+  // Functions xử lý đổi mật khẩu
+  const handlePasswordChange = (field, value) => {
+    setPasswordData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+    // Xóa lỗi khi người dùng bắt đầu nhập
+    if (passwordErrors[field]) {
+      setPasswordErrors((prev) => ({
+        ...prev,
+        [field]: "",
+      }));
+    }
+  };
+
+  const validatePassword = () => {
+    const errors = {};
+
+    if (!passwordData.currentPassword) {
+      errors.currentPassword = "Vui lòng nhập mật khẩu hiện tại";
+    }
+
+    if (!passwordData.newPassword) {
+      errors.newPassword = "Vui lòng nhập mật khẩu mới";
+    } else if (passwordData.newPassword.length < 6) {
+      errors.newPassword = "Mật khẩu mới phải có ít nhất 6 ký tự";
+    }
+
+    if (!passwordData.confirmPassword) {
+      errors.confirmPassword = "Vui lòng nhập lại mật khẩu mới";
+    } else if (passwordData.newPassword !== passwordData.confirmPassword) {
+      errors.confirmPassword = "Mật khẩu nhập lại không khớp";
+    }
+
+    setPasswordErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleChangePassword = async () => {
+    if (!validatePassword()) return;
+
+    try {
+      await changePasswordApi({
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+      });
+
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setOpenPasswordDialog(false);
+      setToastMessage("🎉 Đổi mật khẩu thành công!");
+      setToastSeverity("success");
+      setOpenToast(true);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Lỗi khi đổi mật khẩu";
+      setToastMessage(`${errorMessage}`);
       setToastSeverity("error");
       setOpenToast(true);
     }
@@ -219,6 +300,13 @@ export const PersonalPage = () => {
               >
                 💾 Lưu thông tin
               </button>
+
+              <button
+                onClick={() => setOpenPasswordDialog(true)}
+                className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg mt-3"
+              >
+                🔐 Đổi mật khẩu
+              </button>
             </div>
           </div>
         </div>
@@ -227,7 +315,11 @@ export const PersonalPage = () => {
         open={openToast}
         autoHideDuration={4000}
         onClose={() => setOpenToast(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{
+          marginTop: "80px", // Thêm margin để tránh bị che bởi header
+          zIndex: 9999, // Đảm bảo hiển thị trên các element khác
+        }}
       >
         <Alert
           onClose={() => setOpenToast(false)}
@@ -247,6 +339,151 @@ export const PersonalPage = () => {
           {toastMessage}
         </Alert>
       </Snackbar>
+
+      {/* Dialog đổi mật khẩu */}
+      <Dialog
+        open={openPasswordDialog}
+        onClose={() => setOpenPasswordDialog(false)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: "16px",
+            border: "2px solid #FED7AA",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            background: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
+            color: "white",
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: "1.3rem",
+          }}
+        >
+          🔐 Đổi mật khẩu
+        </DialogTitle>
+        <DialogContent sx={{ backgroundColor: "#FFFBF5", padding: "24px" }}>
+          <div className="space-y-4">
+            <TextField
+              fullWidth
+              type="password"
+              label="Mật khẩu hiện tại"
+              value={passwordData.currentPassword}
+              onChange={(e) =>
+                handlePasswordChange("currentPassword", e.target.value)
+              }
+              error={!!passwordErrors.currentPassword}
+              helperText={passwordErrors.currentPassword}
+              variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "white",
+                  borderRadius: "12px",
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#3B82F6",
+                  },
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "#3B82F6",
+                },
+              }}
+            />
+
+            <TextField
+              fullWidth
+              type="password"
+              label="Mật khẩu mới"
+              value={passwordData.newPassword}
+              onChange={(e) =>
+                handlePasswordChange("newPassword", e.target.value)
+              }
+              error={!!passwordErrors.newPassword}
+              helperText={passwordErrors.newPassword}
+              variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "white",
+                  borderRadius: "12px",
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#3B82F6",
+                  },
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "#3B82F6",
+                },
+              }}
+            />
+
+            <TextField
+              fullWidth
+              type="password"
+              label="Nhập lại mật khẩu mới"
+              value={passwordData.confirmPassword}
+              onChange={(e) =>
+                handlePasswordChange("confirmPassword", e.target.value)
+              }
+              error={!!passwordErrors.confirmPassword}
+              helperText={passwordErrors.confirmPassword}
+              variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "white",
+                  borderRadius: "12px",
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#3B82F6",
+                  },
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "#3B82F6",
+                },
+              }}
+            />
+          </div>
+        </DialogContent>
+        <DialogActions
+          sx={{ backgroundColor: "#FFFBF5", padding: "16px 24px" }}
+        >
+          <Button
+            onClick={() => {
+              setOpenPasswordDialog(false);
+              setPasswordData({
+                currentPassword: "",
+                newPassword: "",
+                confirmPassword: "",
+              });
+              setPasswordErrors({});
+            }}
+            sx={{
+              color: "#6B7280",
+              borderColor: "#D1D5DB",
+              borderRadius: "12px",
+              "&:hover": {
+                backgroundColor: "#F3F4F6",
+                borderColor: "#9CA3AF",
+              },
+            }}
+            variant="outlined"
+          >
+            Hủy
+          </Button>
+          <Button
+            onClick={handleChangePassword}
+            sx={{
+              background: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
+              color: "white",
+              borderRadius: "12px",
+              "&:hover": {
+                background: "linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%)",
+              },
+            }}
+            variant="contained"
+          >
+            Lưu mật khẩu
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

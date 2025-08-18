@@ -19,7 +19,6 @@ import {
   getCurrentBannerApi,
   getProductDiscountedApi,
 } from "../api/productApi";
-import CountdownTimer from "../components/CountdownTimer";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -139,7 +138,7 @@ export const Home = () => {
           onClick={() => setIsFilterOpen(true)}
           className="flex items-center gap-2 bg-black text-white px-3 py-2 rounded-full shadow-lg text-sm"
         >
-          <FilterAltOutlinedIcon className="w-4 h-4" /> 
+          <FilterAltOutlinedIcon className="w-4 h-4" />
           <span>Lọc</span>
         </button>
       </div>
@@ -166,7 +165,9 @@ export const Home = () => {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-gray-700 mb-2 text-sm">Danh mục</label>
+                <label className="block text-gray-700 mb-2 text-sm">
+                  Danh mục
+                </label>
                 <select
                   onChange={(e) => handleChange("categoryId", e.target.value)}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
@@ -181,7 +182,9 @@ export const Home = () => {
               </div>
 
               <div>
-                <label className="block text-gray-700 mb-2 text-sm">Sắp xếp</label>
+                <label className="block text-gray-700 mb-2 text-sm">
+                  Sắp xếp
+                </label>
                 <div className="flex flex-col space-y-2">
                   <button
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm ${
@@ -317,7 +320,8 @@ export const Home = () => {
                 } transition-all`}
                 onClick={() => handleChange("sortDirection", "DESC")}
               >
-                <ArrowDownwardOutlinedIcon className="mr-1 w-3 h-3 sm:w-4 sm:h-4" /> Giá cao - thấp
+                <ArrowDownwardOutlinedIcon className="mr-1 w-3 h-3 sm:w-4 sm:h-4" />{" "}
+                Giá cao - thấp
               </button>
               <button
                 className={`px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 text-xs sm:text-sm font-light tracking-wide ${
@@ -327,7 +331,8 @@ export const Home = () => {
                 } transition-all`}
                 onClick={() => handleChange("sortDirection", "ASC")}
               >
-                <ArrowUpwardOutlinedIcon className="mr-1 w-3 h-3 sm:w-4 sm:h-4" /> Giá thấp - cao
+                <ArrowUpwardOutlinedIcon className="mr-1 w-3 h-3 sm:w-4 sm:h-4" />{" "}
+                Giá thấp - cao
               </button>
             </div>
 
@@ -345,7 +350,7 @@ export const Home = () => {
           <h3 className="text-white text-sm sm:text-base md:text-lg font-light tracking-wider">
             LỌC SẢN PHẨM
           </h3>
-          
+
           <div className="flex items-center gap-2 sm:gap-3">
             <select
               onChange={(e) => handleChange("categoryId", e.target.value)}
@@ -354,11 +359,13 @@ export const Home = () => {
               <option value="">Tất cả</option>
               {categorys?.map((category) => (
                 <option value={category.id} key={category.id}>
-                  {category.name.length > 10 ? category.name.substring(0, 10) + '...' : category.name}
+                  {category.name.length > 10
+                    ? category.name.substring(0, 10) + "..."
+                    : category.name}
                 </option>
               ))}
             </select>
-            
+
             <select
               onChange={(e) => handleChange("sortDirection", e.target.value)}
               className="bg-gray-700 border border-gray-600 text-white px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm focus:outline-none focus:border-white transition-all"
@@ -367,7 +374,7 @@ export const Home = () => {
               <option value="DESC">Giá cao - thấp</option>
               <option value="ASC">Giá thấp - cao</option>
             </select>
-            
+
             <button
               className="bg-white text-black px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm font-medium hover:bg-gray-200 transition-all"
               onClick={handleFilter}
@@ -389,9 +396,6 @@ export const Home = () => {
               <p className="text-gray-600 text-xs sm:text-sm md:text-base font-light">
                 Khuyến mãi đặc biệt trong thời gian có hạn
               </p>
-            </div>
-            <div className="mt-2 md:mt-0">
-              <CountdownTimer initialMinutes={180} />
             </div>
           </div>
 
@@ -462,7 +466,7 @@ export const Home = () => {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
-              {recmdProducts?.map((product) => (
+              {recmdProducts?.slice(0, 8).map((product) => (
                 <ProductCart
                   key={product.id}
                   id={product.id}
@@ -516,7 +520,13 @@ export const Home = () => {
               variant="outlined"
               shape="rounded"
               color="primary"
-              size={window.innerWidth < 640 ? "small" : window.innerWidth < 768 ? "medium" : "large"}
+              size={
+                window.innerWidth < 640
+                  ? "small"
+                  : window.innerWidth < 768
+                  ? "medium"
+                  : "large"
+              }
               page={currentPage + 1}
               onChange={(event, value) => handlePageClick(value)}
               className="border-gray-300"
